@@ -23,16 +23,16 @@ The largest general-purpose self-serve ticketing marketplace. It covers everythi
 - Strong in categories Luma doesn't cover: classes, workshops, nightlife, cultural, and community events.
 - Trusted checkout and refunds.
 
-## Gaps (relative to Firefly's goal)
+## Gaps (relative to Firefly Social's goal)
 
 1. **Transactional, not social.** The product ends at the ticket. Attendees cannot see each other, and there's no social graph.
 2. **Nothing at or after the event.** There is no way to find people inside, and no way to reconnect afterwards.
 3. **Quality and spam.** Low-cost listing has filled discovery with low-effort, duplicate, and "networking mixer" events. Users complain about clutter and surprise fees at checkout.
 4. **Organizer churn.** Eventbrite's own 2024 filings say pricing changes (organizer fees) hurt creator acquisition and retention and reduced event inventory.
 5. **Ownership uncertainty.** Bending Spoons has a well-documented pattern (Evernote, WeTransfer, Meetup) of deep layoffs and monetization pushes after acquisition. API and partner terms could change without notice.
-6. **No public data access.** Firefly cannot pull public Eventbrite events through the official API.
+6. **No public data access.** Firefly Social cannot pull public Eventbrite events through the official API.
 
-## What Firefly should take from it
+## What Firefly Social should take from it
 
 - Don't build on Eventbrite data. Treat Eventbrite events as **user-submitted links** ("paste an event you're going to"), not an aggregated feed.
 - Eventbrite's paid-ticket decline and organizer frustration is an opening. Hosts are looking for tools that make their events **better**, not just ticketed.

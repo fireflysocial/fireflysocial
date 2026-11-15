@@ -26,19 +26,19 @@ Luma is an event-page and ticketing tool aimed at hosts who want a good-looking 
 - A visible guest list (when enabled) already shows who is going, so guests can look people up before arriving.
 - City calendars and subscriptions create repeat attendance at a community level.
 
-## Gaps (relative to Firefly's goal)
+## Gaps (relative to Firefly Social's goal)
 
 1. **No in-room layer.** Check-in is a QR scan for the host. Nothing helps guests know who wants to meet, or find each other once inside.
 2. **Guest list ≠ intent.** Seeing 150 names does not tell you who came alone or who is open to talking. Guest lists also expose attendees to everyone who registered, with no consent beyond the host's setting.
 3. **No post-event connection.** After the event, guests get a feedback email or photos at most. Nothing turns a conversation into a second meeting.
 4. **Skewed toward tech and professional events.** Coverage of hobby, outdoor, and casual social events is thinner, and the vibe is networking, not friendship.
-5. **Closed data.** The API is scoped to calendars you manage. There is no public event search, so Firefly cannot legally aggregate Luma events without a partnership or the host's own API key.
+5. **Closed data.** The API is scoped to calendars you manage. There is no public event search, so Firefly Social cannot legally aggregate Luma events without a partnership or the host's own API key.
 
-## What Firefly should take from it
+## What Firefly Social should take from it
 
-- Partner with Luma hosts instead of scraping. A host can connect their own calendar API key (Luma Plus) or simply share a link, and Firefly layers on top.
+- Partner with Luma hosts instead of scraping. A host can connect their own calendar API key (Luma Plus) or simply share a link, and Firefly Social layers on top.
 - Copy the **calendar subscription** idea: following a recurring series is more valuable for friendship than one-off events.
-- RSVP questions are a natural place to ask "Do you want to meet people here? (Firefly)".
+- RSVP questions are a natural place to ask "Do you want to meet people here? (Firefly Social)".
 
 ## Sources
 

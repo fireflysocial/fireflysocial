@@ -17,7 +17,7 @@ The tools people use to meet others today fall into four groups, and each one st
 * **Approaching feels too risky.** Without knowing whether a stranger is open to talking, saying hello feels like a gamble, so most people stay on their phones instead.
 * **No one owns the follow up.** Even when a good first meeting happens, nothing brings the same people back together, and the connection fades.
 
-People who are looking for the same thing pass each other every day without ever finding out. Firefly is built to make that intent visible and to keep bringing the right people back together until a meaningful connection develops.
+People who are looking for the same thing pass each other every day without ever finding out. Firefly Social is built to make that intent visible and to keep bringing the right people back together until a meaningful connection develops.
 
 ## Competitor files
 
@@ -50,6 +50,6 @@ People who are looking for the same thing pass each other every day without ever
 | Pie | ✅ own feed | ⚠️ | ⚠️ "Sparked" events | ❌ | ❌ | ✅ | ✅ |
 | Brella/Swapcard | ❌ | ✅ | ✅ tables | ⚠️ | ❌ | ❌ | ✅ (org pays) |
 | Run clubs | ❌ | ❌ | ❌ | ❌ | ✅ weekly | ✅ | ✅ |
-| **Firefly (target)** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Firefly Social (target)** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 
 **Takeaway:** each column is solved by *someone*, but no one combines visible intent + in-room help + mutual opt-in + an engineered second meeting on top of **existing** events. The closest threats are **Partiful** (could ship platonic Crush) and **Timeleft** (could add recurring tables).

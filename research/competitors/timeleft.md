@@ -21,10 +21,10 @@ A Paris-founded app (first dinner 2023) that seats **six strangers at a restaura
 
 - **Solves the first meeting completely.** No approaching, no awkwardness about who to talk to, because the table is the group.
 - Group of 6 matches research on conversation size (see [science.md](../science.md)).
-- Ships a **mutual post-event rating**, the exact double opt-in mechanic Firefly plans.
+- Ships a **mutual post-event rating**, the exact double opt-in mechanic Firefly Social plans.
 - Strong press and social buzz ("dinner with strangers" content).
 
-## Gaps (relative to Firefly's goal)
+## Gaps (relative to Firefly Social's goal)
 
 1. **One-shot by default.** Each week is a new table. Seeing the same people again depends on the algorithm or on someone taking initiative in the chat, and most chats go quiet.
 2. **Expensive.** Subscription plus a restaurant meal each week is costly in Vancouver.
@@ -32,11 +32,11 @@ A Paris-founded app (first dinner 2023) that seats **six strangers at a restaura
 4. **Matching quality complaints.** Trustpilot reviews mention mismatched age ranges, no-shows, and tables of people seeking dating or networking.
 5. **Doesn't use existing events.** It creates its own events and doesn't help people at the hundreds of events already happening.
 
-## What Firefly should take from it
+## What Firefly Social should take from it
 
 - **Mutual post-event rating works** at scale and is socially acceptable. Validate the "who did you click with?" step with it.
 - Pre-event group chat 30 minutes before is a cheap fix for "finding each other in the room."
-- The biggest weakness is **no structured second meeting**. That's Firefly's step 6.
+- The biggest weakness is **no structured second meeting**. That's Firefly Social's step 6.
 
 ## Sources
 

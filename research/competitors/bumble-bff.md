@@ -22,7 +22,7 @@ The best-known friend-matching app. It started as a mode inside Bumble (2016), w
 - Mature safety stack (verification, block and report) worth copying.
 - The pivot to groups confirms the thesis that friendship forms in groups, not pairs.
 
-## Gaps (relative to Firefly's goal)
+## Gaps (relative to Firefly Social's goal)
 
 1. **Chat-first, meet-never.** Matches stall in messaging. Users report endless "hey!" threads and pen-pal limbo. Moving from chat to a plan takes effort that nobody owns.
 2. **Dating-app mechanics for friendship.** Swiping on faces feels evaluative. Many users report the app being used for dating or hookups anyway.
@@ -30,11 +30,11 @@ The best-known friend-matching app. It started as a mode inside Bumble (2016), w
 4. **No shared context.** Two strangers have to invent a reason to meet. There's no event to anchor it.
 5. **Business strain.** The parent company is cutting costs, and the friendship product hasn't proven it can earn money. Its long-term future is unclear.
 
-## What Firefly should take from it
+## What Firefly Social should take from it
 
 - **Anchor every connection in a shared event**, so the "where should we meet?" question is already answered.
 - Adopt Bumble's verification and block/report patterns rather than inventing new ones.
-- Groups-first was Bumble's answer *after* 1:1 failed. Firefly should start there.
+- Groups-first was Bumble's answer *after* 1:1 failed. Firefly Social should start there.
 
 ## Sources
 

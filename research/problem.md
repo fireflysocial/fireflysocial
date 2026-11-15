@@ -10,4 +10,4 @@ The city itself makes this worse. High living costs make casual outings expensiv
 
 Run clubs, events, and social apps exist, but they rarely bridge the gap between a first hello and a real friendship. Coordinating is too much effort, so people default to staying home.
 
-Firefly doesn't wait for people to find each other. It brings together like-minded people who genuinely want to connect, and keeps them meeting until acquaintances become friends and friends become a community.
+Firefly Social doesn't wait for people to find each other. It brings together like-minded people who genuinely want to connect, and keeps them meeting until acquaintances become friends and friends become a community.

@@ -19,11 +19,11 @@ A free, fun-to-use invite tool for parties and casual gatherings. It replaced Fa
 
 ## Strengths
 
-- **Built a social graph from real-world co-attendance.** "We were at the same party" is exactly the graph Firefly wants.
-- Crush is a **double-blind mutual opt-in after an event**. That's Firefly's step 5, already shipped at scale (for dating).
+- **Built a social graph from real-world co-attendance.** "We were at the same party" is exactly the graph Firefly Social wants.
+- Crush is a **double-blind mutual opt-in after an event**. That's Firefly Social's step 5, already shipped at scale (for dating).
 - Viral loop: every invite brings new users.
 
-## Gaps (relative to Firefly's goal)
+## Gaps (relative to Firefly Social's goal)
 
 1. **Mostly friends-of-friends.** Events are private and invite-only, so it strengthens existing circles and doesn't help newcomers break in.
 2. **Crush is romantic.** There is no platonic "I'd like to see you again" signal.
@@ -31,7 +31,7 @@ A free, fun-to-use invite tool for parties and casual gatherings. It replaced Fa
 4. **Privacy incidents.** In Oct 2025, TechCrunch found Partiful **was not stripping GPS metadata from uploaded photos** (including profile photos), and anyone could read the originals from its Firebase storage. It was fixed after the report.
 5. **US-centric.** Limited presence and network density in Canada.
 
-## What Firefly should take from it
+## What Firefly Social should take from it
 
 - A **platonic version of Crush** is a clear opening, and Partiful could ship it quickly. That's a competitive threat to watch.
 - The co-attendance graph ("people you've been to things with") is the right basis for recommending a second meeting.

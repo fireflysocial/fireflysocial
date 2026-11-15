@@ -21,7 +21,7 @@ Facebook was once the default for local events and is still the largest host of 
 - Unmatched reach and existing groups (e.g. Vancouver newcomer groups, hiking groups, "Girls Gone Vancouver"-style friend-finding groups).
 - Real names and an existing social graph.
 
-## Gaps (relative to Firefly's goal)
+## Gaps (relative to Firefly Social's goal)
 
 1. **Brand fatigue among under-30s.** Many target users don't open Facebook and see it as for parents and Marketplace.
 2. **Groups are noisy.** "Looking for friends" posts get a few comments and rarely turn into meetings.
@@ -29,10 +29,10 @@ Facebook was once the default for local events and is still the largest host of 
 4. **Privacy and trust baggage.** Many people won't share location or intent signals with Meta.
 5. **Events moved away.** Gen Z party invites moved to Partiful, and community events to Luma and Instagram.
 
-## What Firefly should take from it
+## What Firefly Social should take from it
 
 - Vancouver Facebook groups for newcomers and friend-finding are a **recruitment channel and source of user research** (posts are public evidence of unmet demand).
-- Meta's Local tab shows big platforms see the "just moved here" use case. Firefly's edge has to be in-person follow-through, not discovery.
+- Meta's Local tab shows big platforms see the "just moved here" use case. Firefly Social's edge has to be in-person follow-through, not discovery.
 
 ## Sources
 

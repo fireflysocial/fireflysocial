@@ -1,4 +1,4 @@
-# Firefly
+# Firefly Social
 
 ## Repository structure
 

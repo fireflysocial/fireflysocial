@@ -22,16 +22,16 @@ An IRL friendship-events app from Bonobos co-founder Andy Dunn. It lists group e
 - Recognized that a crowded event without structure doesn't create friendships, and added in-event grouping.
 - Strong founder narrative (Dunn writes publicly about loneliness).
 
-## Gaps (relative to Firefly's goal)
+## Gaps (relative to Firefly Social's goal)
 
 1. **Supply is paid for.** Paying per RSVP is expensive and may attract hosts chasing payouts rather than communities.
 2. **Owns the events.** It doesn't layer on top of the existing event ecosystem, which limits variety.
 3. **Follow-up still weak.** Coverage focuses on getting people to events, not on turning attendees into repeat contacts.
 4. **US only.** Not in Canada.
 
-## What Firefly should take from it
+## What Firefly Social should take from it
 
-- **Pie's crowding problem is Firefly's opportunity.** It confirms that "open event + no structure" doesn't produce connections, and small in-event groups are needed.
+- **Pie's crowding problem is Firefly Social's opportunity.** It confirms that "open event + no structure" doesn't produce connections, and small in-event groups are needed.
 - Host incentives can be cheaper than cash: data on who came back, a helper tool for icebreakers, free promotion.
 
 ## Sources
