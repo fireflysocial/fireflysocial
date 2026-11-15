@@ -1,5 +1,7 @@
 # Daily Hive: The free Vancouver group aiming to make the city friendlier
 
+> **Audit status (2026-11-15):** Daily Hive blocked retrieval. Article quotations, publication metadata and historical attendance figures remain unverified. The organizer’s own website independently describes free weekly walks; see https://vancitygirlswhowalk.com/walks/.
+
 | | |
 |---|---|
 | **Outlet** | Daily Hive |

@@ -1,5 +1,7 @@
 # BCIT News: "Vancouver Freeze: How social clubs are breaking the ice"
 
+> **Audit status (2026-11-15):** Full article access was blocked. Search excerpts provide partial corroboration, but exact interview quotations and participant counts were not independently reverified. The Vancouver Foundation statistic was checked against the primary report.
+
 | | |
 |---|---|
 | **Outlet** | BCIT News |
@@ -33,11 +35,11 @@
 ## Numbers
 
 - 2012 Vancouver Foundation: **1 in 4** residents spend more time alone than they'd like.
-- "A later survey in 2017 found that 67 per cent of people between the age 25 and 34 said they found it difficult to make new friends." ⚠️ **Not supported by the source reports.** The verified figure is 41% (2012, ages 25–34). See [vancouver-foundation-surveys.md](vancouver-foundation-surveys.md#correction-note).
+- "A later survey in 2017 found that 67 per cent of people between the age 25 and 34 said they found it difficult to make new friends." **Supported by the 2017 report**, printed p. 9 (PDF page 11). See [vancouver-foundation-surveys.md](vancouver-foundation-surveys.md#correction-note).
 - Lumi: **1,000+** participants, mostly mid-to-late twenties; events capped at **30 people**.
 
 ## Takeaways
 
-- Locals' friend groups date back to **high school**, so there's no slot for newcomers.
+- Interviewees describe established **high-school circles** as a barrier; this does not describe all locals or show that newcomers cannot join.
 - **Cost** is a real barrier: $15–20 per hangout adds up for people trying to meet many people.
 - Lumi's founders built the thing they wanted: small, capped events that let people meet "little by little."

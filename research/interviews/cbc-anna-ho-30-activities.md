@@ -1,8 +1,10 @@
 # CBC: "I live in Vancouver and I have no friends" — TikToker tries 30 activities
 
+> **Audit status (2026-11-15):** CBC and RCI blocked retrieval. A secondary republication was located at https://asiantribune.ca/i-live-in-vancouver-and-i-have-no-friends-tiktoker-tries-30-activities-to-meet-new-people/. It corroborates the central account, but original publication metadata and all quote attributions were not independently verified. An ambiguously attributed quotation was removed.
+
 | | |
 |---|---|
-| **Outlet** | CBC News (read via the Radio Canada International mirror; cbc.ca blocks automated access) |
+| **Outlet** | CBC News (original and RCI mirror blocked during this audit; secondary republication located) |
 | **Author** | Yasmine Ghania |
 | **Date** | January 16, 2025 |
 | **Link** | [RCI copy](https://ici.radio-canada.ca/rci/en/news/2132773/i-live-in-vancouver-and-i-have-no-friends-tiktoker-tries-30-activities-to-meet-new-people) · [CBC original](https://www.cbc.ca/lite/story/1.7430876) |
@@ -16,7 +18,6 @@
 | Anna Ho | 23, TikToker, **born and raised in Vancouver** |
 | Sofia Katrina | 20s, moved to Vancouver from Kelowna |
 | Dylan Wharndy | 20s |
-| Unnamed person | 20s, street interview |
 | Alexandra Friedman | Friendship coach since 2019, grew up in Seattle |
 | Kimberley Brownlee | UBC Canada Research Chair in Ethics and Political and Social Philosophy; studies loneliness |
 
@@ -29,8 +30,6 @@
 > "Everybody already had their circles of friends, and it was harder to get in with people that were tight-knit already" — **Sofia Katrina**, moved from Kelowna
 
 > "I'll meet friends at the bar. I'll meet friends just out and about." — **Dylan Wharndy** (the dissenting view)
-
-> "I think people just need to work on getting out of their comfort zone a little bit. I think everybody's a little bit lonely." — **Unnamed**, 20s
 
 > "People aren't very open to wanting to call you into being a close friend." — **Alexandra Friedman**, friendship coach
 

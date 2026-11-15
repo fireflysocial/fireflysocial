@@ -1,5 +1,7 @@
 # John Zada: "Vancouver the Lonely"
 
+> **Audit status (2026-11-15):** The author’s blog was accessible; the Substack version was restricted. Treat dates and wording specific to the Substack version as unverified.
+
 | | |
 |---|---|
 | **Outlet** | *Invisible Undercurrents* (Substack). An earlier version, "Why is Vancouver Considered the Loneliest City in Canada?", ran on johnzada.com |
@@ -40,7 +42,7 @@
 
 ## Takeaways
 
-- The most recent first-hand newcomer account in this folder (2026) matches the 2012–2025 accounts. **The freeze hasn't thawed.**
+- This 2026 essay describes experiences resembling earlier accounts. Anecdotes across years do not establish that regional loneliness rates stayed unchanged.
 - **"Leave me alone if I leave you alone"** describes a norm, not a personality type. Nobody makes the first move, so nobody gets invited.
 - Not following up ("don't call you back," "don't invite you out") is named again and again. It is the same follow-through gap as Zetta's funnel ([daily-hive-zetta-friend-tracking.md](daily-hive-zetta-friend-tracking.md)).
 - Goddard's "bonds of struggle" idea: shared challenges (a race, a project, a volunteer shift) may bond people faster than casual mixers.

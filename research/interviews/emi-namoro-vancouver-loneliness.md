@@ -1,5 +1,7 @@
 # Emi Namoro: "Is it really that hard to make friends in Vancouver?"
 
+> **Audit status (2026-11-15):** The page was accessible. Its publication date is not clearly established; treat it as an undated personal essay, not a representative survey.
+
 | | |
 |---|---|
 | **Outlet** | Personal digital story by Emi Namoro (SFU student, "Vancouver Loneliness Project") |

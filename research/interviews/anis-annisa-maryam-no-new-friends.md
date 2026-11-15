@@ -1,5 +1,7 @@
 # Anis Annisa Maryam: "No New Friends Vancouver?"
 
+> **Audit status (2026-11-15):** The original artist page could not be retrieved during this audit. Its date, quotation and biographical details remain unverified; the interpretation below was corrected to match the quotation already in the repository.
+
 | | |
 |---|---|
 | **Outlet** | Artist's website (artist statement for a portrait series) |
@@ -21,6 +23,6 @@ She also jokes that some friends need "scheduling a date approximately 76 busine
 ## Takeaways
 
 - The city's reputation reaches newcomers **in their first week**, which sets expectations low before anyone has tried.
-- The fear of looking like a **"tryhard"** is what stops people from reaching out. Firefly's visible intent removes that fear because everyone is there for the same reason.
-- **Scheduling friction** ("76 business days") is a real barrier even among existing friends. This supports defaulting to the next instance of an event people already attend.
+- The quoted statement prioritizes avoiding loneliness **over** fear of looking like a "tryhard." It does not show that fear stopped the artist from reaching out. Shared intent is a product hypothesis to test.
+- **Scheduling friction** ("76 business days") is illustrated humorously, not measured, in this account. This supports defaulting to the next instance of an event people already attend.
 - It's a hopeful story: she went from newcomer to "rarely lonely."

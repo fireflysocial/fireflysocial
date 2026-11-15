@@ -5,7 +5,7 @@
 | **Outlet** | Vancouver Magazine |
 | **Author** | Kerri Donaldson |
 | **Date** | May 19, 2025 |
-| **Link** | [vanmag.com](https://vanmag.com/?p=43083) |
+| **Link** | [vanmag.com](https://vanmag.com/city/events/we-should-be-friends-vancouver-meetup/) |
 | **Type** | Founder interview |
 
 ## Who was interviewed

@@ -1,44 +1,20 @@
 # Bumble BFF
 
-**Category:** Matching app (platonic)
-**Last researched:** 2026-11-15
+**Category:** Friendship matching and communities
+**Reviewed:** 2026-11-15
 
-## What it is
+The legacy Bumble For Friends app, BFF mode within Bumble, and the newer BFF app are different products. Bumble's [2025 annual report](https://s202.q4cdn.com/372973788/files/doc_downloads/2026/04/Bumble-Inc-Annual-Report-2025.pdf) dates the US BFF relaunch to September 2025 and describes individual matching and group tools. Regional migration details are in [Bumble support](https://support.bumble.com/hc/en-us/articles/30781191036317-Changes-to-Bumble-For-Friends-and-Bumble-BFF-Mode).
 
-The best-known friend-matching app. It started as a mode inside Bumble (2016), was spun out as "Bumble For Friends" (2023), and **relaunched in Sept 2025** as BFF, rebuilt on technology from **Geneva** (a group-chat and community app Bumble bought in 2024). Geneva was shut down and its users moved to BFF.
+| Area | Supported description |
+|------|-----------------------|
+| Discovery | The [Discover page](https://support.bumblebff.com/hc/en-us/articles/33949872719773-Using-the-Discover-page) lets users browse people and groups. Group discovery is live, not merely scheduled for February 2026. |
+| Groups | Group conversations and planning tools support in-person activities. |
+| Price | The [new BFF listing](https://play.google.com/store/apps/details?hl=en-US&id=com.genevachat.prod) advertises all features as free. Do not attribute legacy subscriptions to this app. |
+| Safety | BFF documents [photo verification](https://support.bumblebff.com/hc/en-us/articles/33950115257245-Verifying-your-photos). Bumble Date's safety features are not automatically BFF features. |
+| Business | The annual report says new BFF had generated no revenue as of December 31, 2025, while the legacy product generated revenue. This is a dated financial fact, not proof of failure. |
 
-## What it does
+## Implications for Firefly
 
-| Area | Details |
-|------|---------|
-| 1:1 matching | Swipe on profiles with interests and prompts. Mutual match unlocks chat. |
-| Groups (2025 relaunch) | Create and join interest-based groups and communities. Group *discovery* was scheduled for Feb 2026. |
-| Safety | Photo verification, optional ID verification badge, block and report (on or off app), private-image blur, snooze. 18+ only. |
-| Business | Freemium subscription. Bumble told investors Geneva had generated **no revenue** as of June 30, 2025. Bumble cut ~30% of staff (~240 roles) in June 2025. |
+Shared activities and group planning already exist in this competitor. Test whether host-supported introductions and recurring pods improve follow-through. A pivot does not prove that one-to-one friendship failed or groups always work better.
 
-## Strengths
-
-- Brand recognition: "Bumble BFF" is what most people mean by "friend app."
-- Mature safety stack (verification, block and report) worth copying.
-- The pivot to groups confirms the thesis that friendship forms in groups, not pairs.
-
-## Gaps (relative to Firefly Social's goal)
-
-1. **Chat-first, meet-never.** Matches stall in messaging. Users report endless "hey!" threads and pen-pal limbo. Moving from chat to a plan takes effort that nobody owns.
-2. **Dating-app mechanics for friendship.** Swiping on faces feels evaluative. Many users report the app being used for dating or hookups anyway.
-3. **Gender skew.** Mostly women. Men report few matches.
-4. **No shared context.** Two strangers have to invent a reason to meet. There's no event to anchor it.
-5. **Business strain.** The parent company is cutting costs, and the friendship product hasn't proven it can earn money. Its long-term future is unclear.
-
-## What Firefly Social should take from it
-
-- **Anchor every connection in a shared event**, so the "where should we meet?" question is already answered.
-- Adopt Bumble's verification and block/report patterns rather than inventing new ones.
-- Groups-first was Bumble's answer *after* 1:1 failed. Firefly Social should start there.
-
-## Sources
-
-- [TechCrunch: Bumble BFF's revamped app (Sept 18, 2025)](https://techcrunch.com/2025/09/18/bumble-bffs-revamped-app-is-here-focusing-on-friend-groups-and-community-building)
-- [WeRSM: BFF relaunch](https://wersm.com/bumble-bff-relaunches-with-new-focus-on-groups-and-community-building) · [Fast Company SA](https://fastcompany.co.za/fast-company/business/2025-09-19-bumbles-new-bff-app-aims-to-spark-the-great-friennassance)
-- [Yahoo Finance: Bumble buys Geneva](https://ca.finance.yahoo.com/news/bumble-buys-community-focused-app-204416253.html) · [Global Dating Insights: BFF spin-off](https://www.globaldatinginsights.com/featured/bumble-spins-off-bff-app-to-tap-into-demand-for-friendship/)
-- [Bumble safety centre](https://bumble.com/safety) · [Bumble support: safety features](https://support.bumble.com/hc/articles/28537051467293-Our-safety-features)
+Stalled-chat complaints may inform interview questions, but no representative conversion rate or current gender breakdown was verified. The earlier “chat-first, meet-never” and “mostly women” descriptions should not be presented as factual findings.

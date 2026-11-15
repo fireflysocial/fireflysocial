@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Outlet** | UBC Mental Health Awareness Club blog |
-| **Author** | Alexa Lizotte |
+| **Author** | Alexa Lizotte (explicit end-of-article credit); WordPress posting byline: Charlotte Aitken |
 | **Date** | November 14, 2017 |
 | **Link** | [blogs.ubc.ca](https://blogs.ubc.ca/ubcmhac/2017/11/14/isolated-and-international/) |
 | **Type** | Interviews with three international students (first names only) |

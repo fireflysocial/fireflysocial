@@ -5,14 +5,14 @@
 | **Outlet** | Vancouver Magazine |
 | **Author** | Kerri Donaldson |
 | **Date** | February 21, 2025 |
-| **Link** | [vanmag.com](https://vanmag.com/?p=41454) |
+| **Link** | [vanmag.com](https://vanmag.com/city/general/vancouver-mondays-run-club/) |
 | **Type** | Founder interview |
 
 ## Who was interviewed
 
 | Person | Descriptor |
 |---|---|
-| Veronica Skye | Founder of Mondays Run Club (April 2021). Moved from Toronto looking for connection |
+| Veronica Skye | Founder of Mondays Run Club. Moved from Toronto looking for connection |
 
 ## Quotes
 
@@ -26,11 +26,11 @@
 
 ## Numbers
 
-- Year one: a steady **~20** regulars. Now **150+** runners weekly, a seven-person leadership team, free, and "they've yet to miss a Monday."
+- Year one: a steady **~20** regulars. At the February 2025 publication date, **150+** runners weekly, a seven-person leadership team, free, and "they've yet to miss a Monday."
 
 ## Takeaways
 
 - Another founder who started a club **because she was a lonely newcomer**.
-- The social part (beer after) matters more than the run.
-- Consistency (never missing a Monday) is what built the community.
+- The article emphasizes post-run socializing; it does not measure its importance relative to running.
+- Consistent weekly meetings accompanied the club’s growth; the article does not isolate their causal effect.
 - At 150 people, the challenge shifts from "is anyone there?" to "how do I find the same people again?"

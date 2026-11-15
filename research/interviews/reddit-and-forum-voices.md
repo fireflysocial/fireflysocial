@@ -1,6 +1,6 @@
 # Reddit and forum voices (collected via news coverage)
 
-Reddit and its mirrors blocked direct fetching, so these are Reddit quotes **as reported by news outlets**, with the outlet credited. Follow the links to the original threads.
+These are selected Reddit quotes **as reported by news outlets**, not a systematically sampled set of interviews. Access varied: the linked October 2024 Reddit post was accessible but is a satirical post, so it does not substantiate the former search-snippet quotation. Daily Hive quotations remain unverified because access was blocked.
 
 | Source | Date | Link |
 |---|---|---|
@@ -8,7 +8,6 @@ Reddit and its mirrors blocked direct fetching, so these are Reddit quotes **as 
 | Narcity: "People Are Sharing How They Made New BFFs When They Moved To Vancouver" | Dec 20, 2021 | [narcity.com](https://www.narcity.com/vancouver/people-are-sharing-how-they-made-new-bffs-when-they-moved-to-vancouver-its-kinda-cute) |
 | Daily Hive, replies to Zetta H.'s post | Jan 22, 2025 | see [daily-hive-zetta-friend-tracking.md](daily-hive-zetta-friend-tracking.md) |
 | Violet Myles Substack, r/vancouver thread | Oct 24, 2023 | see [violet-myles-loneliest-city.md](violet-myles-loneliest-city.md) |
-| Search-result snippets of r/vancouver / r/askvan threads | 2024–2025 | [r/vancouver "Making friends in Vancouver" (Oct 2024)](https://www.reddit.com/r/vancouver/comments/1fw6mws/making_friends_in_vancouver/) |
 
 ## Quotes
 
@@ -16,7 +15,6 @@ Reddit and its mirrors blocked direct fetching, so these are Reddit quotes **as 
 
 > "came with the fear of reading articles about how hard it is to make friends, especially when you're a bit older." — **Original poster**, ~1 month in Vancouver, who now thinks the freeze is "a misunderstood myth" (Narcity, 2022)
 
-> "I've lived in eight cities in Canada (big and small), and Vancouver was by far the loneliest and hardest to make friends in." — Reddit commenter (from search-result snippet; not verified against the thread)
 
 > "I made only two attempts last year, got ghosted both times." — Reddit commenter (Daily Hive, 2025)
 
@@ -24,6 +22,6 @@ Reddit and its mirrors blocked direct fetching, so these are Reddit quotes **as 
 
 ## Takeaways
 
-- The thread pattern repeats every year: a newcomer asks how to make friends, many agree it's the hardest city they've lived in, and a minority says it's a myth if you put in the work.
+- The selected coverage includes both difficulty making friends and positive experiences; it cannot establish how common either experience is or a trend over time.
 - What helped, per the Narcity BFF thread: **Bumble BFF**, **music groups**, and recurring hobbies. The comments didn't render in the fetch, so these are Narcity's summaries.
 - Next step: read the threads directly in a browser and pull 15–20 verbatim comments.

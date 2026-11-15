@@ -16,7 +16,7 @@ The wings are muted and the glow is the only bright thing in the frame. That's t
 | Glow  | `#D9F84A` | The light. Use sparingly: one glow per composition |
 | Wing  | `#313C62` | Wings on dark backgrounds |
 
-On light backgrounds, the glow becomes Night and the wings become `#C9CFDE` (see `firefly-mark-light.svg`). Glow on white has too little contrast.
+On light backgrounds, the glow becomes Night and the wings become `#C9CFDE` (see `firefly-mark-light.svg`, which includes an opaque `#F5F6F0` background). Glow on white has too little contrast for text or an essential interface indicator.
 
 ## Files
 
@@ -30,5 +30,5 @@ On light backgrounds, the glow becomes Night and the wings become `#C9CFDE` (see
 ## Rules
 
 - Don't add gradients, glows, or outer shadows. The flat dot *is* the light.
-- Don't recolor the glow. Chartreuse is the brand.
+- Keep the primary glow chartreuse; the supplied light and monochrome variants are the exceptions.
 - Keep clear space of at least the glow's radius around the mark.

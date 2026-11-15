@@ -1,5 +1,7 @@
 # Daily Hive: Vancouverite tracked how many friends she made in a year
 
+> **Audit status (2026-11-15):** Daily Hive blocked retrieval. Exact quotations and the 305 / 34 / 2 counts remain reported, not independently reverified. Even if accurate, this is one person’s account, not a population conversion rate.
+
 | | |
 |---|---|
 | **Outlet** | Daily Hive |
@@ -44,7 +46,7 @@
 
 ## Takeaways
 
-- The best quantitative picture in this folder of the **acquaintance → friend drop-off**: 305 conversations became 2 real friends (<1%).
-- The bottleneck isn't meeting people, it's **follow-through**. Commenters name ghosting and lack of "longevity."
+- An illustrative quantitative account of the **acquaintance → friend drop-off**: 305 people spoken to, 34 she called friends, and 2 she spoke to regularly. This is one person's self-tracking, not a population friendship conversion rate.
+- The account suggests **follow-through** as one potential bottleneck; it does not isolate the cause. Commenters name ghosting and lack of "longevity."
 - Being ghosted makes people **stop trying**.
 - Her two friends stood out because of a small act of **reciprocal effort**.

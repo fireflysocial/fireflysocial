@@ -5,7 +5,7 @@
 
 ## What it is
 
-The largest general-purpose self-serve ticketing marketplace. It covers everything from concerts to workshops to singles nights. It was taken private by **Bending Spoons** (deal announced Dec 2, 2025, ~US$500M, $4.50/share). One vendor blog says the deal closed in March 2026. Bending Spoons also owns Meetup.
+A general-purpose self-serve ticketing marketplace. It covers everything from concerts to workshops to singles nights. It was taken private by **Bending Spoons** (deal announced Dec 2, 2025, ~US$500M, $4.50/share). Eventbrite's [SEC filing](https://www.sec.gov/Archives/edgar/data/1475115/000147511526000005/R23.htm) confirms completion on **March 10, 2026**. Bending Spoons also owns Meetup.
 
 ## What it does
 
@@ -15,7 +15,7 @@ The largest general-purpose self-serve ticketing marketplace. It covers everythi
 | Discovery | Consumer app and website with search by city, date, and category; personalized recommendations; "Eventbrite Ads" for promoted placement. |
 | Scale (FY2024) | 269.6M total tickets, 83.8M paid tickets (down 10% YoY). Net revenue $325.1M, flat. Revenue per paid ticket $3.88. |
 | Organizer tools | Email marketing, ads, check-in app, reporting. |
-| API | Org-scoped only. The **public Event Search API was shut down** (Dec 2019 to Feb 2020). You can read an event by ID or list events for an org or venue you have access to. |
+| API | The **public Event Search API was shut down** (Dec 2019 to Feb 2020). You can read an event by ID or list events for an org or venue you have access to. |
 
 ## Strengths
 
@@ -25,17 +25,17 @@ The largest general-purpose self-serve ticketing marketplace. It covers everythi
 
 ## Gaps (relative to Firefly Social's goal)
 
-1. **Transactional, not social.** The product ends at the ticket. Attendees cannot see each other, and there's no social graph.
-2. **Nothing at or after the event.** There is no way to find people inside, and no way to reconnect afterwards.
-3. **Quality and spam.** Low-cost listing has filled discovery with low-effort, duplicate, and "networking mixer" events. Users complain about clutter and surprise fees at checkout.
+1. **Ticketing focus.** The reviewed financial and API sources do not establish a Firefly-style friendship workflow; they are not sufficient to prove the absence of every attendee or social feature.
+2. **Follow-through to investigate.** Validate current attendee tools before claiming no in-event or post-event support exists.
+3. **Discovery quality hypothesis.** Relevance and fee clarity are questions for user interviews; no prevalence estimate for spam was verified here.
 4. **Organizer churn.** Eventbrite's own 2024 filings say pricing changes (organizer fees) hurt creator acquisition and retention and reduced event inventory.
-5. **Ownership uncertainty.** Bending Spoons has a well-documented pattern (Evernote, WeTransfer, Meetup) of deep layoffs and monetization pushes after acquisition. API and partner terms could change without notice.
-6. **No public data access.** Firefly Social cannot pull public Eventbrite events through the official API.
+5. **Platform dependency.** Ownership has changed. Monitor API and partner terms rather than predict changes from competitor commentary.
+6. **No general public-search endpoint.** This does not imply that all public-event retrieval by ID is unavailable.
 
 ## What Firefly Social should take from it
 
 - Don't build on Eventbrite data. Treat Eventbrite events as **user-submitted links** ("paste an event you're going to"), not an aggregated feed.
-- Eventbrite's paid-ticket decline and organizer frustration is an opening. Hosts are looking for tools that make their events **better**, not just ticketed.
+- Eventbrite's paid-ticket decline and organizer frustration is an opening. Whether local hosts want an additional social tool still requires interviews.
 
 ## Sources
 

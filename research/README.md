@@ -2,6 +2,8 @@
 
 Every research question should inform a decision. If it doesn't, cut it.
 
+Evidence reviewed on **2026-11-15**. Product recommendations are hypotheses, not results of a Firefly pilot. Historical reporting is not evidence of current pricing or availability. See the [audit and citation ledger](documentation-audit.md) before reusing claims externally; an accessible link alone does not verify every claim attributed to it.
+
 ## Contents
 
 | File | Purpose |

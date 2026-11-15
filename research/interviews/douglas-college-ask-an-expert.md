@@ -22,5 +22,5 @@
 
 ## Takeaways
 
-- An expert counterweight: big-city loneliness is common worldwide, so Firefly's model should transfer to other cities.
-- **Third spaces** (parks, community centres, libraries) are free and public, which makes them good venues for starter events. This links to the third-places lead in [science.md](../science.md).
+- An expert counterweight: big-city loneliness is common worldwide, so other cities may be worth studying; this does not validate transfer of Firefly's model.
+- **Third spaces** (parks, community centres, libraries) can offer free public space, although room bookings and activities may have fees; check terms when considering them as venues for starter events. This links to the third-places lead in [science.md](../science.md).

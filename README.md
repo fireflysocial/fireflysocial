@@ -1,5 +1,7 @@
 # Firefly Social
 
+Research and proposed product design; this repository does not contain an implemented app. See the [documentation audit](research/documentation-audit.md) for corrections, source-access limitations, and claims still awaiting verification.
+
 ## Repository structure
 
 ```
