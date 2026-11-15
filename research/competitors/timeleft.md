@@ -20,7 +20,7 @@ A Paris-founded app (first dinner 2023) that seats **six strangers at a restaura
 ## Strengths
 
 - **Solves the first meeting completely.** No approaching, no awkwardness about who to talk to, because the table is the group.
-- Group of 6 matches research on conversation size (see [science.md](../science.md)).
+- Small fixed tables are the right idea, though a table of 6 is above the ~4-person conversation cap and tends to split into two conversations (see [science.md](../science.md)). That is why Firefly Social uses pods of 3–5.
 - Ships a **mutual post-event rating**, the exact double opt-in mechanic Firefly Social plans.
 - Strong press and social buzz ("dinner with strangers" content).
 

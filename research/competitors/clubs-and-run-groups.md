@@ -32,4 +32,4 @@ These aren't apps but the **real competitor for "where people make friends."** R
 - [News Minimalist: Strava report on running clubs](https://newsminimalist.com/articles/running-clubs-gain-popularity-as-social-hubs-for-dating-and-fitness-strava-report-shows-767d7356) · [SGI Europe: Strava Year in Sport](https://www.sgieurope.com/consumer/stravas-latest-year-in-sport-report-highlights-preference-for-more-relaxed-workouts/112115.article)
 - [DatingNews: run clubs replacing apps](https://www.datingnews.com/industry-trends/running-clubs-why-modern-daters-are-swapping-apps-for-laps/) · [Irish News: run clubs, friendship and love](https://uk.irishnews.com/life/health/in-fitness-and-in-health-how-run-clubs-are-the-perfect-mix-of-community-friendship-and-even-love-AKGUE2YSARAE7PUPWR34ZBF7ME)
 - [Form Nutrition: 2025, the year of the run club](https://formnutrition.com/?p=1080753)
-- No Vancouver-specific data was found. Build that list in [organizers.md](../organizers.md).
+- Vancouver examples: Mondays Run Club (150+ runners weekly) and VanCity Girls Who Walk (70–200 per walk). See [interviews/](../interviews/synthesis.md) and [organizers.md](../organizers.md).

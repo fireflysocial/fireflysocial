@@ -1,10 +1,16 @@
 # Event Organizers (Vancouver)
 
-Potential partners running recurring events.
+Potential partners running recurring events. Started from the [interviews](interviews/synthesis.md) research (2026-11-15). Several founders started their clubs because they were lonely newcomers. "Not verified" = check before outreach.
 
 | Organizer / Event | Type | Frequency | Typical size | Platform (Luma, Meetup, etc.) | Notes |
 |-------------------|------|-----------|--------------|-------------------------------|-------|
-| | | | | | |
+| Mondays Run Club | Social run (5K seawall + beer) | Weekly, Mondays | 150+ | Not verified | Founded Apr 2021 by Veronica Skye after moving from Toronto. Free. [Source](interviews/vanmag-mondays-run-club.md) |
+| VanCity Girls Who Walk | Women's walking group | Weekly, Sundays | 70–80, up to 200 | Not verified | Founder Maryam Marissen, an immigrant who was lonely after moving. Free. [Source](interviews/daily-hive-girls-who-walk.md) |
+| We Should Be Friends | Social club (meetups, book club) | Recurring | 100+ at first meetup | Not verified | Founder Katrina Martin, moved from Ontario in 2017. [Source](interviews/vanmag-we-should-be-friends.md) |
+| Lumi | Social club for newcomers | Recurring | Capped at 30 per event; 1,000+ participants | Not verified | Co-founders Judy Lee and Serena Wong. Mostly mid-to-late 20s. [Source](interviews/bcit-news-lumi-social-clubs.md) |
+| Let's Adventure Vancouver | Social/outdoor group | Not verified | Not verified | Not verified | Founder Sebastian Breuninger, German expat. [Source](interviews/emi-namoro-vancouver-loneliness.md) |
+| VanCity Newcomers (20's-30's) | Newcomer socials | 1–2 per month | 5,500+ members | Meetup | [Meetup](https://www.meetup.com/vancity-newcomers-20s-30s/) |
+| Are you new in Vancouver? Come make friends! | Newcomer socials | Not verified | 7,300+ members | Meetup | [Meetup](https://www.meetup.com/vancouver-newcomers/) |
 
 ## What organizers might want from Firefly Social
 

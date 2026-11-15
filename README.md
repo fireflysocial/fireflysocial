@@ -13,6 +13,6 @@ research/
   science.md
 brand/                 # logo, colors, usage
 workflow/
-  v1-user-flow.md      # current draft user flow
+  v1-user-flow.md      # current draft user flow (v2 draft; filename kept)
   open-gaps.md         # gap → proposed fix → how we'll validate it
 ```

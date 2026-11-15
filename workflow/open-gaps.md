@@ -90,6 +90,6 @@ Each gap: what's wrong → proposed fix → how we'll validate it (research sour
 
 | # | Gap | Step | P | Proposed fix | How we'll validate |
 |---|-----|------|---|--------------|--------------------|
-| 46 | **No first-party user interviews yet** | — | P0 | 15 interviews: newcomers (< 1 yr in Vancouver), co-op students, run-club regulars. Fill [interviews/synthesis.md](../research/interviews/synthesis.md). | Synthesis complete before pilot design is frozen. |
-| 47 | **No Vancouver organizer list** | H | P1 | Build [organizers.md](../research/organizers.md) table: 30 recurring Vancouver events across categories. | List complete. 10 contacted. |
+| 46 | **No first-party user interviews yet** | — | P0 | 15 interviews: newcomers (< 1 yr in Vancouver), co-op students, run-club regulars. Add them to [interviews/](../research/interviews/synthesis.md). A synthesis of 15 pre-existing sources is already done; first-party interviews should probe the gap it found (people who tried a friendship app and quit). | Synthesis complete before pilot design is frozen. |
+| 47 | **No Vancouver organizer list** | H | P1 | Build [organizers.md](../research/organizers.md) table: 30 recurring Vancouver events across categories. **7 listed so far** (mostly running, walking, and newcomer groups; see #15 on category coverage). | List complete. 10 contacted. |
 | 48 | **Unverified assumption that people will mark themselves "open to meet" publicly** | 2, 4 | P1 | Concierge MVP: a manual pilot with a printed sign and a Google Form before building the app. | % of attendees who opt in when asked at the door. |
