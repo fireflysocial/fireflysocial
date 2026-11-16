@@ -26,7 +26,7 @@ Luma is an event-page and ticketing tool aimed at hosts who want a good-looking 
 - A visible guest list (when enabled) already shows who is going, so guests can look people up before arriving.
 - City calendars and subscriptions create repeat attendance at a community level.
 
-## Gaps (relative to Firefly Social's goal)
+## Gaps (relative to Firefly's goal)
 
 1. **No in-room layer.** Check-in is a QR scan for the host. Nothing helps guests know who wants to meet, or find each other once inside.
 2. **Guest list ≠ intent.** Seeing 150 names does not tell you who came alone or who is open to talking. Guest visibility depends on product settings; a guest list is not itself consent to a Firefly introduction.
@@ -34,11 +34,11 @@ Luma is an event-page and ticketing tool aimed at hosts who want a good-looking 
 4. **Skewed toward tech and professional events.** Coverage of hobby, outdoor, and casual social events is thinner, and the vibe is networking, not friendship.
 5. **Closed data.** The API is scoped to calendars you manage. The reviewed endpoint is not a general public-search feed. This technical limit does not by itself decide what aggregation is lawful; use authorized host integrations and review the applicable terms.
 
-## What Firefly Social should take from it
+## What Firefly should take from it
 
-- Partner with Luma hosts instead of scraping. A host can connect their own calendar API key (Luma Plus) or simply share a link, and Firefly Social layers on top.
+- Partner with Luma hosts instead of scraping. A host can connect their own calendar API key (Luma Plus) or simply share a link, and Firefly layers on top.
 - Copy the **calendar subscription** idea: following a recurring series is more valuable for friendship than one-off events.
-- RSVP questions are a natural place to ask "Do you want to meet people here? (Firefly Social)".
+- RSVP questions are a natural place to ask "Do you want to meet people here? (Firefly)".
 
 ## Sources
 

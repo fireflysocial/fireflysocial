@@ -19,12 +19,12 @@
 
 ## Two sides of the flow
 
-Firefly Social serves **attendees** (lonely or new-in-town people who want friends) and **hosts** (recurring event organizers). Hosts are the supply side and the safety partner.
+Firefly serves **attendees** (lonely or new-in-town people who want friends) and **hosts** (recurring event organizers). Hosts are the supply side and the safety partner.
 
 ### Host flow (runs in parallel)
 
-1. **Host onboarding.** Host connects a series (Luma calendar key, Meetup group, Instagram-run club, or manual entry) and turns on "Firefly Social at this event."
-2. **Setup per event.** Host picks a **meeting point** (e.g. "the table by the coffee bar, 6:45pm") and a time. Firefly Social generates a **rotating check-in QR** for the host to display, and gives the host a 60-second intro script.
+1. **Host onboarding.** Host connects a series (Luma calendar key, Meetup group, Instagram-run club, or manual entry) and turns on "Firefly at this event."
+2. **Setup per event.** Host picks a **meeting point** (e.g. "the table by the coffee bar, 6:45pm") and a time. Firefly generates a **rotating check-in QR** for the host to display, and gives the host a 60-second intro script.
 3. **During the event.** The host sees a live count of pods checked in (counts only, no names or picks). A separate moderation view exposes only the reported account and necessary case details, allowing removal without access to private picks.
 4. **After the event.** The host gets aggregate stats: Firefly attendees, % returning next time, newcomer retention, anonymous feedback. **Hosts never see individual intent or matches.**
 
@@ -43,10 +43,10 @@ Firefly Social serves **attendees** (lonely or new-in-town people who want frien
 
 ### 1. Discover
 
-- The home screen shows **this week's Firefly events**: partner-hosted events where Firefly Social is active, with recurring series ranked first ("Every Tue · Kits Beach Run Club").
+- The home screen shows **this week's Firefly events**: partner-hosted events where Firefly is active, with recurring series ranked first ("Every Tue · Kits Beach Run Club").
 - Each card shows: what it is, cost, **"Firefly corner at 6:45pm"**, and whether Firefly users are going ("5+ going" shown only above a threshold, otherwise "Be one of the first").
-- **Add your own:** paste any event link (Luma, Eventbrite, Meetup, Instagram). If 3+ Firefly users add the same event, Firefly Social invites that host to partner.
-- **Cold-start fallback:** if no partner event fits, Firefly Social suggests a **Firefly-run starter event** (e.g. a monthly newcomers' walk or games night) so there's always something to go to.
+- **Add your own:** paste any event link (Luma, Eventbrite, Meetup, Instagram). If 3+ Firefly users add the same event, Firefly invites that host to partner.
+- **Cold-start fallback:** if no partner event fits, Firefly suggests a **Firefly-run starter event** (e.g. a monthly newcomers' walk or games night) so there's always something to go to.
 
 ### 2. Join
 
@@ -56,7 +56,7 @@ Firefly Social serves **attendees** (lonely or new-in-town people who want frien
 
 ### 3. Before the event (24h → 30 min before)
 
-- **24h before:** Firefly Social forms **pods of 3–5** from RSVPs, balancing shared interests, newcomer status, and pod preferences. If someone has been in a pod with a person before and both said "keep meeting", they're placed together again.
+- **24h before:** Firefly forms **pods of 3–5** from RSVPs, balancing shared interests, newcomer status, and pod preferences. If someone has been in a pod with a person before and both said "keep meeting", they're placed together again.
 - **Pod reveal:** with explicit RSVP-time consent, assigned pod members see first names, photos, interests, and one prompt answer. This is a limited pre-event exception to room visibility; declining it opts the user out of the pod.
 - **Pod chat opens 30 min before** (copied from Timeleft): "I'm in the green jacket", "running 5 min late".
 - One **conversation starter** for the pod, escalating with how many times they've met (light at meeting 1, deeper by meeting 3; Aron 1997, Kardas 2022).
@@ -64,7 +64,7 @@ Firefly Social serves **attendees** (lonely or new-in-town people who want frien
 ### 4. At the event
 
 - **Check in** by scanning the host's rotating QR. Only then does the user become visible in the wider room, to others checked in at this event. Pre-event pod visibility is separately consented. QR codes can be relayed; check-in is a mitigation, not perfect proof of presence.
-- **Meet at the Firefly corner** at the set time. The host does a 60-second intro ("If you're here with Firefly Social, this is your pod"). No maps or distances.
+- **Meet at the Firefly corner** at the set time. The host does a 60-second intro ("If you're here with Firefly, this is your pod"). No maps or distances.
 - **Pod first, room second.** The pod spends the first ~20 min together. Afterwards, the user can see other checked-in Firefly attendees (cards: first name, photo, interests, an opener) and join their conversations.
 - **Optional mission:** one light challenge per event ("Find someone else who moved here this year"), from the strangers-intervention research (Sandstrom et al. 2022).
 - **Always available:** "Hide me" (instantly invisible), block, report, and leave.
@@ -82,9 +82,9 @@ Firefly Social serves **attendees** (lonely or new-in-town people who want frien
 
 ### 6. Second meeting (the critical step)
 
-- With every new connection or group, Firefly Social **suggests a specific next event**, not a general recommendation: "Kits Run Club is on again next Tuesday. Want to go together?" One tap means "I'm in", and both see it.
+- With every new connection or group, Firefly **suggests a specific next event**, not a general recommendation: "Kits Run Club is on again next Tuesday. Want to go together?" One tap means "I'm in", and both see it.
 - If the event is recurring, **the default is "same time next week"**, re-podded with the same people.
-- If no shared event fits within 21 days, Firefly Social suggests a **low-cost plan template** (coffee walk, food-truck lunch) with a date and time poll, in a public place.
+- If no shared event fits within 21 days, Firefly suggests a **low-cost plan template** (coffee walk, food-truck lunch) with a date and time poll, in a public place.
 - **Safety:** before a 1:1 plan outside an event, offer "share plans with a friend."
 - **Socials:** either person can choose to share Instagram or LinkedIn at any time after a match. Never automatic.
 
@@ -92,8 +92,8 @@ Firefly Social serves **attendees** (lonely or new-in-town people who want frien
 
 - **Circle view:** people the user has met 2+ times, with **estimated shared-event hours** and last shared attendance. Co-attendance is an exposure proxy, not proof that two people interacted for the event's entire duration.
 - **Fade alerts:** if a connection hasn't met in ~3 weeks, prompt with "Send a quick hi?" (Liu 2023) and suggest the next shared event.
-- **Pod graduation:** once a group has met 3+ times, Firefly Social offers to make them a **recurring circle** that books its own monthly plan, so Firefly Social steps back.
-- **Success check-in at 30 / 90 days:** the loneliness question again, and "Have you hung out with anyone from Firefly Social outside an event?"
+- **Pod graduation:** once a group has met 3+ times, Firefly offers to make them a **recurring circle** that books its own monthly plan, so Firefly steps back.
+- **Success check-in at 30 / 90 days:** the loneliness question again, and "Have you hung out with anyone from Firefly outside an event?"
 - **Give back:** users with established circles can become **pod hosts** (welcome newcomers at their regular event), which keeps supply going and gives people who've succeeded a reason to stay.
 
 ---

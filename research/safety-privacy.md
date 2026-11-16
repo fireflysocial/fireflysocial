@@ -2,7 +2,7 @@
 
 Historical examples and proposed controls, reviewed 2026-11-15. These are design requirements, not implemented protections or a completed legal/security assessment. Current product behavior can differ from older incident reports.
 
-**Why this matters most for Firefly Social:** step 4 tells a room of strangers "*this person, here, right now, wants to meet people.*" That is the most sensitive thing the product does. It is also the thing that makes it useful. Get it wrong and Firefly Social becomes a tool for finding vulnerable, alone people at a known location.
+**Why this matters most for Firefly:** step 4 tells a room of strangers "*this person, here, right now, wants to meet people.*" That is the most sensitive thing the product does. It is also the thing that makes it useful. Get it wrong and Firefly becomes a tool for finding vulnerable, alone people at a known location.
 
 ## How others do it
 
@@ -25,14 +25,14 @@ Historical examples and proposed controls, reviewed 2026-11-15. These are design
 
 Scope depends on the organization and activity. The table is a planning summary, not a completed compliance assessment.
 
-| Rule | What it means for Firefly Social |
+| Rule | What it means for Firefly |
 |------|---------------------------|
 | **BC PIPA** generally governs private-sector organizations in BC, subject to statutory scope and exceptions. Appropriate purposes, notice, and consent requirements apply, with exceptions specified in the Act. [Act](https://www.bclaws.gov.bc.ca/civix/document/id/complete/statreg/03063_01) | Every data point needs a stated purpose a user would find reasonable. "Open to meet" status and event attendance are personal information. |
 | **Tim Hortons app investigation (OPC + BC OIPC + AB + QC, 2022):** investigated extensive background location collection; the 2,700+ observations over five months concerned the complainant, not a per-user average. Found unreasonable. The investigation found inappropriate purposes and invalid consent. Consent alone cannot make an inappropriate collection reasonable; sensitive collection generally calls for express consent. | No background location. The current Firefly proposal collects no device coordinates. Any future proposal to add them requires a new purpose, consent, and privacy assessment. |
 | **PIPEDA** can apply to interprovincial/international personal-information flows in commercial activities. [OPC scope](https://www.priv.gc.ca/en/privacy-topics/privacy-laws-in-canada/the-personal-information-protection-and-electronic-documents-act-pipeda/r_o_p/02_05_d_26/). **Bill C-36**, introduced June 15, 2026, is at second reading in the House as of this review; it is **proposed, not enacted law**. [Parliament status](https://www.parl.ca/legisinfo/en/bill/45-1/c-36) | Minimize sensitive data and establish a retention and breach-response policy under applicable current law. Monitor C-36 separately; do not label its proposals current legal duties. |
 | Age: Firefly proposes an 18+ product policy; this is not a universal statutory minimum. | A phone number or selfie liveness check does not prove age. Define and validate age assurance separately. |
 
-## Principles for Firefly Social
+## Principles for Firefly
 
 1. **No maps, no distances, no live location. Ever.** Presence is **"checked in at this event"**, not coordinates. The venue may be public, but linking a named person to attendance **adds personal location information**. Avoiding coordinates removes distance-based leakage, not targeting, screenshots, or attendance inference.
 2. **Separate three visibility scopes.** Consenting assigned pod members see minimal pod profiles before the event. The wider room opens only after check-in and closes at event end + 1 hour. A limited post-event picker retains only eligible pod/met cards for up to 72 hours, without live-presence status. Explain each audience and expiry at opt-in; nobody can browse citywide live intent.
@@ -52,14 +52,14 @@ Scope depends on the organization and activity. The table is a planning summary,
 | Risk | Why it's hard | Mitigation to test |
 |------|---------------|--------------------|
 | **Targeting people who are alone.** "Open to meet" signals that someone came alone and wants to talk. A bad actor could buy a ticket specifically to find them. | Any visibility creates this, and it's the core feature. | Verification, check-in gating, women-only or gender-preference pods (opt-in), fast host-removal, report thresholds that auto-hide a user across all events. |
-| **Off-platform harassment after a match.** | Once socials are exchanged, Firefly Social loses control. | Delay socials: unlock in-app chat first, each user may explicitly share their own socials after a mutual match, as specified in the workflow. Block-and-report covers off-app behaviour (as Bumble does). |
+| **Off-platform harassment after a match.** | Once socials are exchanged, Firefly loses control. | Delay socials: unlock in-app chat first, each user may explicitly share their own socials after a mutual match, as specified in the workflow. Block-and-report covers off-app behaviour (as Bumble does). |
 | **Aggregate leakage.** "How many Firefly users are going" plus the event's public guest list could identify individuals at small events. | Small numbers are identifying (Strava heatmap lesson). | Show counts only above a threshold (e.g. "5+ going"). Do not expose a public named guest list; pre-event names are limited to consenting assigned pod members. |
 | **Screenshotting in-room cards.** | Can't prevent it technically. | Minimal card content, no last names, consider watermarking and platform-supported screenshot notices; neither prevents capture or detects an external camera. |
 | **Rejection still felt.** Seeing someone "open to meet" who doesn't pick you back could still sting. | The liking gap means people over-read silence. | Never show non-mutual outcomes. Frame matches as "keep meeting", not "chosen". |
 | **Dating drift.** | Run clubs and events are already seen as dating venues (see [run clubs](competitors/clubs-and-run-groups.md)). | Platonic policy, report category "unwanted romantic advance", and mixed or same-gender pod preferences. |
 | **Data breach of the "who-likes-whom" graph.** | Highly sensitive and embarrassing. | Encrypt opt-in choices, target deletion of non-mutual choices after 30 days, subject to applicable legal holds and retention duties; minimize retention. |
 | **Host misuse.** A host harvests the attendee interest data. | Hosts are partners, not data owners. | Hosts get aggregate analytics and only necessary case-specific moderation details, never individual connection choices. |
-| **Minors at all-ages events.** | Public events may include under-18s. | Firefly Social is 18+. Define an age-assurance process before pilot; liveness and phone verification alone do not enforce age. |
+| **Minors at all-ages events.** | Public events may include under-18s. | Firefly is 18+. Define an age-assurance process before pilot; liveness and phone verification alone do not enforce age. |
 
 ## Retention qualification
 

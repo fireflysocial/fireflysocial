@@ -19,11 +19,11 @@ A free, fun-to-use invite tool for parties and casual gatherings. It is an alter
 
 ## Strengths
 
-- **Built a social graph from real-world co-attendance.** "We were at the same party" is exactly the graph Firefly Social wants.
+- **Built a social graph from real-world co-attendance.** "We were at the same party" is exactly the graph Firefly wants.
 - Crush reveals identities on a mutual selection, but a non-mutual recipient still receives an anonymous notification and the last shared event. It is **not identical** to Firefly's proposed silent non-mutual choices.
 - Viral loop: every invite brings new users.
 
-## Gaps (relative to Firefly Social's goal)
+## Gaps (relative to Firefly's goal)
 
 1. **Public discovery exists.** Events default to private, but hosts can make them public and submit them to Explore. The earlier claim that all events are invite-only was incorrect. [Public events](https://help.partiful.com/en-us/articles/15525563-what-is-a-public-event) · [Explore](https://help.partiful.com/en-us/articles/15525568-what-is-the-partiful-explore-page)
 2. **Crush is romantic.** There is no platonic "I'd like to see you again" signal.
@@ -31,7 +31,7 @@ A free, fun-to-use invite tool for parties and casual gatherings. It is an alter
 4. **Historical privacy incident.** See the [TechCrunch investigation](https://techcrunch.com/2025/10/04/event-startup-partiful-wasnt-stripping-gps-locations-from-user-uploaded-photos/) and [privacy notes](../safety-privacy.md); do not assume the vulnerability remains present.
 5. **Canadian density unknown.** No local active-user measurement was verified.
 
-## What Firefly Social should take from it
+## What Firefly should take from it
 
 - A **platonic version of Crush** is a clear opening, and Partiful could ship it quickly. That's a competitive threat to watch.
 - The co-attendance graph ("people you've been to things with") is the right basis for recommending a second meeting.

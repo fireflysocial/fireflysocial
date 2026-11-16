@@ -10,4 +10,4 @@ Interviewees also describe possible practical barriers. [Accounts of cost, work,
 
 Run clubs, events, and social apps already support connection, including repeat contact in some products (see [competitors](competitors/README.md)). Our hypothesis is that making follow-through easier at existing recurring events can help people who currently struggle with it.
 
-Firefly Social proposes to bring together people who want platonic connections and help them meet repeatedly. Whether this produces lasting friendships is a question for the pilot, not an established outcome.
+Firefly proposes to bring together people who want platonic connections and help them meet repeatedly. Whether this produces lasting friendships is a question for the pilot, not an established outcome.

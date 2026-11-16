@@ -23,7 +23,7 @@ A general-purpose self-serve ticketing marketplace. It covers everything from co
 - Strong in categories Luma doesn't cover: classes, workshops, nightlife, cultural, and community events.
 - Trusted checkout and refunds.
 
-## Gaps (relative to Firefly Social's goal)
+## Gaps (relative to Firefly's goal)
 
 1. **Ticketing focus.** The reviewed financial and API sources do not establish a Firefly-style friendship workflow; they are not sufficient to prove the absence of every attendee or social feature.
 2. **Follow-through to investigate.** Validate current attendee tools before claiming no in-event or post-event support exists.
@@ -32,7 +32,7 @@ A general-purpose self-serve ticketing marketplace. It covers everything from co
 5. **Platform dependency.** Ownership has changed. Monitor API and partner terms rather than predict changes from competitor commentary.
 6. **No general public-search endpoint.** This does not imply that all public-event retrieval by ID is unavailable.
 
-## What Firefly Social should take from it
+## What Firefly should take from it
 
 - Don't build on Eventbrite data. Treat Eventbrite events as **user-submitted links** ("paste an event you're going to"), not an aggregated feed.
 - Eventbrite's paid-ticket decline and organizer frustration is an opening. Whether local hosts want an additional social tool still requires interviews.

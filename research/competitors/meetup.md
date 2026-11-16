@@ -23,7 +23,7 @@ The original "find people who share your interest" platform. It's built around *
 - Deep catalogue of niche hobbies (board games, hiking, language exchange) that event platforms miss.
 - Attendee lists and profiles already exist.
 
-## Gaps (relative to Firefly Social's goal)
+## Gaps (relative to Firefly's goal)
 
 1. **Walking in alone is still hard.** Established groups have regulars and inside jokes. Newcomers report feeling like outsiders, Host practices vary; whether newcomers receive introductions needs local investigation.
 2. **Quality varies.** Inactive or promotional groups are a discovery risk to investigate; their prevalence was not measured here.
@@ -32,11 +32,11 @@ The original "find people who share your interest" platform. It's built around *
 5. **Audience fit unknown.** Test perceptions locally rather than assume preferences from age.
 6. **Closed data.** API access needs Pro plus approval.
 
-## What Firefly Social should take from it
+## What Firefly should take from it
 
-- **Recurring groups are the right unit for friendship.** Firefly Social should prefer recurring events over one-offs (see [science.md](../science.md): repeated exposure).
+- **Recurring groups are the right unit for friendship.** Firefly should prefer recurring events over one-offs (see [science.md](../science.md): repeated exposure).
 - Interview organizers about pricing and unmet needs before assuming a local migration opportunity.
-- The newcomer problem ("I went once and nobody talked to me") is exactly the step-4 problem Firefly Social aims to solve.
+- The newcomer problem ("I went once and nobody talked to me") is exactly the step-4 problem Firefly aims to solve.
 
 ## Sources
 

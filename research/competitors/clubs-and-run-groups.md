@@ -14,7 +14,7 @@ These aren't apps but the **real competitor for "where people make friends."** R
 - Free or cheap, and they fit Vancouver's outdoor culture.
 - Often end with coffee or beer, a built-in "third place."
 
-## Gaps (relative to Firefly Social's goal)
+## Gaps (relative to Firefly's goal)
 
 1. **Hard to find.** Discovery runs on Instagram and word of mouth, across multiple directories and channels; this audit did not establish that no directory exists.
 2. **Walking in alone.** Large clubs may split by pace. Whether newcomers struggle to connect depends on host practices and should be observed locally.
@@ -22,10 +22,10 @@ These aren't apps but the **real competitor for "where people make friends."** R
 4. **Dating-scene drift.** Coverage of run clubs as "the new dating apps" makes some people (especially women) wary of being approached.
 5. **No bridge outside the club.** Club friendships can stay limited to the club ("run friends") and never move to other settings.
 
-## What Firefly Social should take from it
+## What Firefly should take from it
 
-- **Run clubs and other recurring clubs are Firefly Social's ideal launch partners.** They already have the repeated contact. Firefly Social adds visible intent, a newcomer buddy or pod, and a nudge to hang out outside the club.
-- Firefly Social needs a clear **platonic stance** so it doesn't add to the run-club dating dynamic.
+- **Run clubs and other recurring clubs are Firefly's ideal launch partners.** They already have the repeated contact. Firefly adds visible intent, a newcomer buddy or pod, and a nudge to hang out outside the club.
+- Firefly needs a clear **platonic stance** so it doesn't add to the run-club dating dynamic.
 
 ## Sources
 
