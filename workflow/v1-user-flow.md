@@ -43,14 +43,22 @@ Firefly serves **attendees** (lonely or new-in-town people who want friends) and
 
 ### 1. Discover
 
-- The home screen shows **this week's Firefly events**: partner-hosted events where Firefly is active, with recurring series ranked first ("Every Tue · Kits Beach Run Club").
-- Each card shows: what it is, cost, **"Firefly corner at 6:45pm"**, and whether Firefly users are going ("5+ going" shown only above a threshold, otherwise "Be one of the first").
-- **Add your own:** paste any event link (Luma, Eventbrite, Meetup, Instagram). If 3+ Firefly users add the same event, Firefly invites that host to partner.
-- **Cold-start fallback:** if no partner event fits, Firefly suggests a **Firefly-run starter event** (e.g. a monthly newcomers' walk or games night) so there's always something to go to.
+The home screen shows **this week's events** in two tiers:
+
+- **Partner events (ranked first):** host-run events where Firefly is active, with recurring series ranked first ("Every Tue · Kits Beach Run Club"). Each card shows what it is, cost, **"Firefly corner at 6:45pm"**, and whether Firefly users are going ("5+ going" shown only above a threshold, otherwise "Be one of the first").
+- **Around the city:** a wider list of public events with no partner host. For the pilot it's **curated by hand** by the Firefly team (no scraping; see [open-gaps.md](open-gaps.md) #2, #49). Cards show what it is, cost, and a **"Register on Luma / Eventbrite / Meetup ↗"** button. Pods are offered only at public venues with a talking component, and only once enough Firefly users are going (see #50).
+- **Promotion to partner:** if 3+ Firefly users register for the same Around-the-city event, Firefly invites that organizer to partner.
+- **Cold-start fallback:** if nothing fits, Firefly suggests a **Firefly-run starter event** (e.g. a monthly newcomers' walk or games night) so there's always something to go to. For these, Firefly (or a volunteer pod host) performs the host role.
 
 ### 2. Join
 
 - User RSVPs through the host's normal flow (Luma, Eventbrite, etc.) and taps **"I'm going, put me in a pod."**
+- **Register-and-return (Around-the-city events):**
+  1. Tapping **Register ↗** opens the event's own page (in-app browser where possible, so Firefly knows when it closes; otherwise detected when the app returns to the foreground).
+  2. On return, Firefly asks **"Did you register for Kits Comedy Night?"** with three answers: **Yes, I'm registered** / **Not yet, remind me** / **Not going**.
+  3. **Yes** has the same effect as "I'm going, put me in a pod." The answer is self-reported and not verified; actual attendance is confirmed at check-in (step 4).
+  4. **Not yet** or a dismissed prompt leaves a "Did you register for X?" card on the home screen rather than re-prompting. The card expires when pods form (24h before), since a later "yes" can't join a pod.
+  5. Free events with no registration skip the outbound step: the card shows **"I'm going"** directly.
 - **Commitment nudge:** "4 people will be counting on you." Users who skip without cancelling lose priority in future pods.
 - Users can cancel up to 24h before with no penalty.
 
@@ -63,7 +71,7 @@ Firefly serves **attendees** (lonely or new-in-town people who want friends) and
 
 ### 4. At the event
 
-- **Check in** by scanning the host's rotating QR. Only then does the user become visible in the wider room, to others checked in at this event. Pre-event pod visibility is separately consented. QR codes can be relayed; check-in is a mitigation, not perfect proof of presence.
+- **Check in** by scanning the host's rotating QR. Only then does the user become visible in the wider room, to others checked in at this event. Pre-event pod visibility is separately consented. QR codes can be relayed; check-in is a mitigation, not perfect proof of presence. At Around-the-city events there is no host QR; the check-in method there is an open question ([open-gaps.md](open-gaps.md) #50).
 - **Meet at the Firefly corner** at the set time. The host does a 60-second intro ("If you're here with Firefly, this is your pod"). No maps or distances.
 - **Pod first, room second.** The pod spends the first ~20 min together. Afterwards, the user can see other checked-in Firefly attendees (cards: first name, photo, interests, an opener) and join their conversations.
 - **Optional mission:** one light challenge per event ("Find someone else who moved here this year"), from the strangers-intervention research (Sandstrom et al. 2022).
@@ -102,7 +110,7 @@ Firefly serves **attendees** (lonely or new-in-town people who want friends) and
 
 | Step | Metric |
 |------|--------|
-| 1–2 | % of active users who RSVP to ≥1 Firefly event per month |
+| 1–2 | % of active users who RSVP to ≥1 Firefly event per month; for Around-the-city events, % of outbound Register taps confirmed "Yes" |
 | 3 | Pod fill rate; no-show rate |
 | 4 | Check-in rate; % meeting at the corner on time |
 | 5 | % completing "keep meeting"; mutual-match rate |
