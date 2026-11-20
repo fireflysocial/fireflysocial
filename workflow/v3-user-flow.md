@@ -2,6 +2,8 @@
 
 > Builds on the v2 draft ([v1-user-flow.md](v1-user-flow.md)) and folds in the proposed fix for every gap in [open-gaps.md](open-gaps.md). Each fix is tagged with its gap number, e.g. **[#11]**. The [gap traceability table](#gap-traceability) at the end maps all 52 gaps to where they're handled.
 
+**Platforms:** Firefly ships as **iOS and Android apps** (App Store and Google Play) plus a web version, from one codebase. Push notifications, QR check-in and the in-app browser in this flow assume the native apps. See [engineering/quality-and-ci.md §0](../engineering/quality-and-ci.md#0-platforms-ios-android-and-web).
+
 **Status:** proposed design, not implemented behavior. Putting a fix into the flow closes the gap *in the design* only. Targets, timings and group sizes still need pilot validation, and some gaps can only be closed by work outside the product (interviews, legal review). Those are listed as [pre-pilot gates](#pre-pilot-gates). See the [documentation audit](../research/documentation-audit.md).
 
 ## What changed from v2
@@ -105,7 +107,7 @@ These P0 and P1 gaps can't be closed by designing the flow. Each one must be don
 
 ### 0. Onboarding (≈3 minutes)
 
-- **Ways in:** the app store, a QR at a Firefly corner **[#19]**, or a partner channel (universities, co-op programs, employers, immigrant-services groups) aimed at people at high-need moments. **[#37]**
+- **Ways in:** the App Store or Google Play, a QR at a Firefly corner **[#19]**, or a partner channel (universities, co-op programs, employers, immigrant-services groups) aimed at people at high-need moments. **[#37]**
 - **Verify:**
   - Phone number, **one account per phone number**. **[#28]**
   - **Selfie liveness check**, required before a user can appear in any pod or room. **[#28]**

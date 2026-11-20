@@ -2,13 +2,57 @@
 
 Status: **Phases 1, 2 and 4 are implemented** (scaffold, local quality tooling, CI, E2E). Supabase is initialised locally with a pgTAP guardrail test, but no remote project, keys or migrations exist yet (Phase 3). Branch rules and repo security settings are applied in the GitHub UI (see §6).
 
-**Stack:** React + TypeScript (Vite), Supabase (Postgres, Auth, Storage), Vitest, Playwright, GitHub Actions, CodeRabbit. **Package manager:** npm. **Node:** 24 LTS (pinned in `.nvmrc`; run `nvm use`).
+**Platforms:** **iOS and Android apps** (App Store and Google Play) plus a **web** version, all built from one React codebase. The native apps wrap the web build with [Capacitor](https://capacitorjs.com/) (planned, see §0).
+
+**Stack:** React + TypeScript (Vite), Capacitor (planned), Supabase (Postgres, Auth, Storage), Vitest, Playwright, GitHub Actions, CodeRabbit. **Package manager:** npm. **Node:** 24 LTS (pinned in `.nvmrc`; run `nvm use`).
 
 ### Version pins to revisit
 | Pin | Why | Revisit when |
 |---|---|---|
 | TypeScript `~6.0` (not 7) | `typescript-eslint` supports TS `<6.1` only | typescript-eslint adds TS 7 support |
 | `overrides` for `eslint-plugin-jsx-a11y` → ESLint 10 | Plugin's peer range stops at ESLint 9; verified its rules still run on ESLint 10 | jsx-a11y publishes ESLint 10 support, then delete the override |
+
+---
+
+## 0. Platforms: iOS, Android and web
+
+Firefly is a phone-first product: QR check-in at the event, push notifications for pod reveal and "who would you like to keep meeting?", and the phone goes away after check-in. The attendee experience is built for **iOS and Android first**; the web version uses the same code.
+
+| Platform | Ships as | Role |
+|---|---|---|
+| **iOS** | App Store app (Capacitor shell around the web build) | Primary attendee app |
+| **Android** | Google Play app (Capacitor shell around the web build) | Primary attendee app |
+| **Web** | The Vite build, hosted | Day-to-day development and testing; early pilots before store release; possibly host tools on desktop (open decision) |
+
+### Why Capacitor (and not React Native)
+- One codebase and one UI for all three platforms; everything already set up (Vite, Vitest, Playwright, CI) keeps working.
+- Firefly's screens (event lists, pod cards, check-in, picks, chat) are standard app UI and don't need React Native's native rendering.
+- Native features come through Capacitor plugins: **push notifications** (APNs / FCM), **camera** (QR check-in, profile photos), **secure storage** (auth session), **deep links** (auth redirects, event links), in-app browser (register-and-return flow).
+- Escape hatch: if Firefly outgrows Capacitor, `src/lib` (logic) and `src/data` (Supabase access) carry over to React Native unchanged; only the UI is rewritten.
+
+### When Capacitor is added
+**Right before building auth or QR check-in**, whichever comes first. Until then there's nothing native to test, and an untested `ios/` / `android/` project would only drift. Adding it to the existing Vite app is a small step (`@capacitor/core`, `@capacitor/cli`, `npx cap add ios`, `npx cap add android`, `webDir: 'dist'`).
+
+### Build rules that apply now (so the apps drop in cleanly)
+- **Design mobile-first:** phone width first, 44×44 pt minimum touch targets, safe-area insets (`viewport-fit=cover` + `env(safe-area-inset-*)`).
+- **One wrapper for device features:** camera, push, storage, share, haptics, opening external links all go through `src/lib/platform/`. Feature code never calls browser-only or plugin APIs directly, so switching from web implementations to Capacitor plugins only touches that folder.
+- **No browser-only assumptions:** no `window.open` popups, no web push in place of native push, no reliance on cookies for auth (use Supabase's token session with a pluggable storage adapter), no hover-only interactions.
+- **Auth must work with deep links.** Prefer phone OTP (already the spec's verification method), which doesn't need redirects. Any magic-link or OAuth flow must return to the app via a deep link.
+
+### App store requirements to design for
+These are review requirements, not optional polish. Check the current store policies when building each one; they change.
+
+| Requirement | Apple App Store | Google Play |
+|---|---|---|
+| Report, block and moderation for user content | Required (guideline 1.2) | Required (user-generated content policy) |
+| Account deletion | In-app deletion required | In-app **and** a web link for deletion requests |
+| Data disclosure | Privacy "nutrition" labels | Data safety form |
+| Social sign-in | Sign in with Apple required if other third-party social logins are offered | n/a |
+| Age rating | 18+ (with the age-assurance pre-pilot gate) | Mature / 18+ content rating |
+| Developer account | Apple Developer Program, $99 USD/year; enrolling as an organisation needs a D-U-N-S number | One-time $25 USD; new **personal** accounts must run a closed test with a minimum number of testers before production, so an **organisation** account is recommended |
+
+### Native CI (later)
+macOS runners use about 10× the GitHub Actions minutes on private repos, so iOS builds don't run on every PR. Plan: web CI stays the required gate; native builds run locally at first, then via Xcode Cloud / Fastlane (or a hosted service) for TestFlight and Play internal testing before release.
 
 ---
 
@@ -93,7 +137,8 @@ Rules:
 - Once flows touch data: run against local Supabase with deterministic seed data (`supabase/seed.sql`).
 - Run an axe accessibility check on each key page.
 - Record traces and screenshots on failure, and upload them as CI artifacts.
-- Start with Chromium only. Add WebKit (Safari/iOS behaviour) and a mobile viewport once the flows stabilize.
+- Phone viewports are primary. Before the first real user flow lands, add a **mobile WebKit** project (iPhone; closest to the iOS WKWebView Capacitor uses) and a **mobile Chromium** project (Android; closest to Android WebView). Desktop Chromium stays as a secondary project.
+- Playwright tests the web layer only. Native-only behaviour (push, camera, deep links, store builds) is tested on iOS Simulator / Android Emulator; add Maestro flows for these once the native apps exist.
 
 ### 3.6 Definition of done for a PR
 - [ ] New or changed logic has unit tests
@@ -218,7 +263,7 @@ e2e/                         # Playwright specs
 
 **Phase 2: CI & branch rules**
 - [x] `ci.yml` with `lint`, `typecheck`, `unit`, `db`, `e2e`
-- [ ] Ruleset on `main` with these as required checks (GitHub UI, after the first CI run so the check names exist)
+- [x] Ruleset on `main` with these as required checks
 - [ ] Secret scanning + push protection, Dependabot alerts (GitHub UI)
 - [x] Dependabot version-update config
 
@@ -238,7 +283,15 @@ e2e/                         # Playwright specs
 **Phase 5: Environments**
 - [ ] Staging Supabase project (or branching)
 - [ ] Preview deploys per PR; optionally run Playwright against the preview URL
-- [ ] Sentry
+- [ ] Sentry (with the Capacitor SDK once native apps exist)
+
+**Phase 6: iOS and Android apps**
+- [ ] Mobile-first groundwork: safe areas, `src/lib/platform/` wrapper, mobile Playwright projects
+- [ ] Add Capacitor, `ios/` and `android/` projects (when auth or check-in starts)
+- [ ] Push notifications (APNs + FCM), camera QR scanning, deep links, secure session storage
+- [ ] Apple Developer and Google Play organisation accounts
+- [ ] Store requirements: account deletion, privacy labels / data safety, content rating, Sign in with Apple if needed
+- [ ] TestFlight + Play internal testing builds; native CI (Xcode Cloud / Fastlane)
 
 ---
 
@@ -246,5 +299,9 @@ e2e/                         # Playwright specs
 
 - **Routing / data fetching:** e.g. React Router + TanStack Query
 - **Hosting for previews:** Vercel / Netlify / Cloudflare Pages
+- **App ID / bundle ID** (e.g. `com.fireflysocial.app`): permanent once published to the stores; confirm the org and domain first
+- **Long-term role of the web version:** attendee web app, host tools only, or development/pilot only
+- **Push provider:** Capacitor push plugin (APNs/FCM) sending from Supabase Edge Functions, vs a hosted service
+- **Native build pipeline:** Xcode Cloud / Fastlane / a hosted service
 - **Staging strategy:** separate Supabase project vs Supabase branching
 - **Coverage threshold:** currently 80% on `src/lib/**`, no global threshold on UI. Revisit once there's real code.
