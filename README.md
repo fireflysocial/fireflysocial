@@ -1,6 +1,6 @@
 # Firefly
 
-Research, product design, and the web app (React + TypeScript + Vite, Supabase). The app is scaffolded with tooling and CI; features are not built yet.
+Research, product design, and the app: **iOS and Android apps plus a web version**, built from one React + TypeScript + Vite codebase with Supabase, wrapped for the app stores with Capacitor (planned). The app is scaffolded with tooling and CI; features are not built yet. See [engineering/quality-and-ci.md §0](engineering/quality-and-ci.md#0-platforms-ios-android-and-web) for the platform plan.
 
 ## Getting started
 
