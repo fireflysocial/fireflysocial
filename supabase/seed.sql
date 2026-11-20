@@ -1,0 +1,3 @@
+-- Deterministic seed data for local development, CI and E2E tests.
+-- Loaded automatically after migrations by `supabase db reset` / `supabase start`.
+-- Never put real user data here.

@@ -1,0 +1,15 @@
+dist
+coverage
+playwright-report
+test-results
+node_modules
+package-lock.json
+supabase/.temp
+src/types/database.ts
+
+# Research and product docs are hand-formatted prose
+research
+brand
+workflow
+engineering
+README.md
