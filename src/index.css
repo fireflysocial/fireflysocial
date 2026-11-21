@@ -38,6 +38,9 @@
 html {
   /* Remove the grey flash on tap in mobile WebKit; components provide their own pressed states. */
   -webkit-tap-highlight-color: transparent;
+  /* No pull-to-refresh or rubber-band scrolling of the whole app shell. Must be on the root
+     element: browsers apply the root's value to the viewport and don't propagate it from body. */
+  overscroll-behavior: none;
 }
 
 body {
@@ -49,8 +52,6 @@ body {
   display: grid;
   place-items: center;
   overflow-x: hidden;
-  /* No pull-to-refresh or rubber-band scrolling of the whole app shell. */
-  overscroll-behavior: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
