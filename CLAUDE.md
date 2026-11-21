@@ -33,20 +33,20 @@ Key documents (read the relevant ones before building a feature):
 
 ## 2. Stack
 
-| Area                   | Choice                                                                              |
-| ---------------------- | ----------------------------------------------------------------------------------- |
-| UI                     | React 19, TypeScript, Vite 8                                                        |
-| Native apps            | Capacitor wrapping the web build for iOS and Android (**planned**)                  |
-| Backend                | Supabase (Postgres, Auth, Storage, Edge Functions)                                  |
-| Unit / component tests | Vitest 5 + React Testing Library + jest-dom (jsdom)                                 |
-| E2E tests              | Playwright (Chromium) + `@axe-core/playwright`                                      |
-| DB tests               | pgTAP via `supabase test db`                                                        |
-| Lint / format          | ESLint 10 (typescript-eslint strict type-checked, react-hooks, jsx-a11y) + Prettier |
-| Git hooks              | Husky + lint-staged (lint + format staged files on commit)                          |
-| CI                     | GitHub Actions ([.github/workflows/ci.yml](.github/workflows/ci.yml))               |
-| Review                 | CodeRabbit on every PR                                                              |
-| Package manager        | **npm** (not pnpm or yarn)                                                          |
-| Node                   | **24** (pinned in `.nvmrc`; run `nvm use` first)                                    |
+| Area                   | Choice                                                                                                                |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| UI                     | React 19, TypeScript, Vite 8                                                                                          |
+| Native apps            | Capacitor wrapping the web build for iOS and Android (**planned**)                                                    |
+| Backend                | Supabase (Postgres, Auth, Storage, Edge Functions)                                                                    |
+| Unit / component tests | Vitest 5 + React Testing Library + jest-dom (jsdom)                                                                   |
+| E2E tests              | Playwright on mobile Safari (iPhone 17, WebKit), mobile Chrome (Pixel 10) and desktop Chrome + `@axe-core/playwright` |
+| DB tests               | pgTAP via `supabase test db`                                                                                          |
+| Lint / format          | ESLint 10 (typescript-eslint strict type-checked, react-hooks, jsx-a11y) + Prettier                                   |
+| Git hooks              | Husky + lint-staged (lint + format staged files on commit)                                                            |
+| CI                     | GitHub Actions ([.github/workflows/ci.yml](.github/workflows/ci.yml))                                                 |
+| Review                 | CodeRabbit on every PR                                                                                                |
+| Package manager        | **npm** (not pnpm or yarn)                                                                                            |
+| Node                   | **24** (pinned in `.nvmrc`; run `nvm use` first)                                                                      |
 
 ### Version pins: do not change without a reason
 
@@ -61,24 +61,25 @@ Key documents (read the relevant ones before building a feature):
 
 Run `nvm use` once per shell first.
 
-| Command                                   | Does                                                     |
-| ----------------------------------------- | -------------------------------------------------------- |
-| `npm run dev`                             | Vite dev server                                          |
-| `npm run build`                           | Typecheck + production build                             |
-| `npm run preview`                         | Serve the production build                               |
-| `npm run typecheck`                       | `tsc -b`                                                 |
-| `npm run lint` / `npm run lint:fix`       | ESLint, **zero warnings allowed**                        |
-| `npm run format` / `npm run format:check` | Prettier                                                 |
-| `npm test`                                | Vitest in watch mode                                     |
-| `npm run test:run`                        | Vitest once                                              |
-| `npm run test:coverage`                   | Vitest with coverage thresholds (what CI runs)           |
-| `npx vitest run src/path/file.test.ts`    | Run one test file                                        |
-| `npm run test:e2e`                        | Playwright (builds and previews the app automatically)   |
-| `npm run test:e2e:ui`                     | Playwright interactive UI                                |
-| `npm run db:start` / `db:stop`            | Start / stop local Supabase (**requires Docker**)        |
-| `npm run db:reset`                        | Recreate local DB from migrations + seed                 |
-| `npm run test:db`                         | pgTAP tests (local Supabase must be running)             |
-| `npm run db:types`                        | Regenerate `src/types/database.ts` from the local schema |
+| Command                                   | Does                                                                                                   |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `npm run dev`                             | Vite dev server                                                                                        |
+| `npm run dev:host`                        | Dev server reachable from a phone or tablet on the same Wi-Fi (see engineering/quality-and-ci.md §3.6) |
+| `npm run build`                           | Typecheck + production build                                                                           |
+| `npm run preview`                         | Serve the production build                                                                             |
+| `npm run typecheck`                       | `tsc -b`                                                                                               |
+| `npm run lint` / `npm run lint:fix`       | ESLint, **zero warnings allowed**                                                                      |
+| `npm run format` / `npm run format:check` | Prettier                                                                                               |
+| `npm test`                                | Vitest in watch mode                                                                                   |
+| `npm run test:run`                        | Vitest once                                                                                            |
+| `npm run test:coverage`                   | Vitest with coverage thresholds (what CI runs)                                                         |
+| `npx vitest run src/path/file.test.ts`    | Run one test file                                                                                      |
+| `npm run test:e2e`                        | Playwright (builds and previews the app automatically)                                                 |
+| `npm run test:e2e:ui`                     | Playwright interactive UI                                                                              |
+| `npm run db:start` / `db:stop`            | Start / stop local Supabase (**requires Docker**)                                                      |
+| `npm run db:reset`                        | Recreate local DB from migrations + seed                                                               |
+| `npm run test:db`                         | pgTAP tests (local Supabase must be running)                                                           |
+| `npm run db:types`                        | Regenerate `src/types/database.ts` from the local schema                                               |
 
 **Before saying a change is done**, run: `npm run lint && npm run typecheck && npm run test:run`, plus `npm run test:e2e` if UI or routing changed and `npm run test:db` if the schema changed (or say clearly that you couldn't run it, e.g. Docker isn't available).
 
@@ -220,8 +221,10 @@ Firefly tells strangers "this person is here and open to meeting people". Built 
 
 The same code runs in a mobile browser, the iOS app (WKWebView) and the Android app (Android WebView).
 
-- **Design at phone width first** (around 375 px), then scale up. Touch targets are at least 44×44 pt. No hover-only interactions.
-- **Respect safe areas** (notch, home indicator) with `env(safe-area-inset-*)`.
+- **Design at phone width first** (360 px, the narrowest common width), then check up to about 440 px (large iPhones), then scale up. Touch targets are at least 44×44 pt. No hover-only interactions.
+- **Respect safe areas** (notch, home indicator). `src/index.css` defines `--safe-top`, `--safe-right`, `--safe-bottom` and `--safe-left` (with `viewport-fit=cover` in `index.html`); use those variables for anything fixed to a screen edge, like headers, tab bars and bottom sheets.
+- **Use `dvh`, not `vh`,** for full-height layouts, so they fit when mobile browser toolbars show and hide.
+- Every E2E spec runs at iPhone 17 (402 px) and Pixel 10 (360 px) widths. Add a horizontal-scroll check for new pages, and spot-check UI changes on a real device (`npm run dev:host`).
 - **Device features go through `src/lib/platform/` only:** camera, push notifications, secure storage, share sheet, haptics, opening external links or the in-app browser. Feature code imports from there and never calls `navigator.*`, `window.open`, or Capacitor plugins directly. Each wrapper has a web implementation now and gets a native one when Capacitor is added.
 - **No browser-only assumptions:** no `window.open` popups, no web push as a substitute for native push, no cookie-based auth, no `alert`/`confirm`/`prompt` dialogs.
 - **Auth must survive the native apps:** prefer phone OTP (the spec's verification method). Any magic-link or OAuth flow must return via a deep link. Store the Supabase session through a pluggable storage adapter so it can move to secure native storage.
