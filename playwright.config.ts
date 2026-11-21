@@ -17,7 +17,16 @@ export default defineConfig({
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+  // Phones are the primary target (the native apps wrap this same build), so every spec runs on:
+  // - mobile-safari: iPhone 17 (402px), WebKit, closest to the iOS WKWebView that Capacitor uses
+  // - mobile-chrome: Pixel 10 (360px), Chromium, closest to the Android WebView; 360px is the
+  //   common width for mainstream Android phones and the narrowest we test, so layout bugs show up here first
+  // - desktop-chrome: secondary check for the web version
+  projects: [
+    { name: 'mobile-safari', use: { ...devices['iPhone 17'] } },
+    { name: 'mobile-chrome', use: { ...devices['Pixel 10'] } },
+    { name: 'desktop-chrome', use: { ...devices['Desktop Chrome'] } },
+  ],
   webServer: {
     // Test the production build, not the dev server.
     command: `npm run build && npm run preview -- --port ${String(PORT)} --strictPort`,

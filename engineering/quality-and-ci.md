@@ -137,10 +137,26 @@ Rules:
 - Once flows touch data: run against local Supabase with deterministic seed data (`supabase/seed.sql`).
 - Run an axe accessibility check on each key page.
 - Record traces and screenshots on failure, and upload them as CI artifacts.
-- Phone viewports are primary. Before the first real user flow lands, add a **mobile WebKit** project (iPhone; closest to the iOS WKWebView Capacitor uses) and a **mobile Chromium** project (Android; closest to Android WebView). Desktop Chromium stays as a secondary project.
+- Phone viewports are primary. Every spec runs on three Playwright projects:
+  - **`mobile-safari`**: iPhone 17, 402 px, WebKit. Closest to the iOS WKWebView Capacitor uses.
+  - **`mobile-chrome`**: Pixel 10, 360 px, Chromium. Closest to the Android WebView. 360 px is the common width for mainstream Android phones and the narrowest width tested, so layout bugs show up here first.
+  - Update these to the newest models Playwright ships when it adds them (`devices` in `@playwright/test`).
+  - **`desktop-chrome`**: secondary check for the web version.
+- Every page gets a "does not scroll horizontally" check, since that's the most common phone-layout bug.
+- `e2e/` has its own `tsconfig.e2e.json` with DOM types, for code passed to `page.evaluate()`.
 - Playwright tests the web layer only. Native-only behaviour (push, camera, deep links, store builds) is tested on iOS Simulator / Android Emulator; add Maestro flows for these once the native apps exist.
 
-### 3.6 Definition of done for a PR
+### 3.6 Testing on real devices
+Simulated viewports don't catch everything (real touch, safe areas, performance, keyboard behaviour). Spot-check UI changes on real hardware:
+
+1. `npm run dev:host`, then open the printed **Network** URL on the device (same Wi-Fi as the Mac).
+2. **Android phone:** turn on Developer options → USB debugging, plug into the Mac, open `chrome://inspect` in desktop Chrome for full DevTools.
+3. **iPad / iPhone:** turn on Settings → Apps → Safari → Advanced → Web Inspector, then Safari on the Mac → Develop → *device* for full DevTools. On iPad, Split View or Slide Over narrows Safari to roughly phone width.
+4. **iPhone sizes and safe areas:** the iOS Simulator in Xcode (free, every model).
+
+Real iPhone hardware is not available on the team yet; before the pilot, cover it with TestFlight testers, a borrowed device, or a cloud device service.
+
+### 3.7 Definition of done for a PR
 - [ ] New or changed logic has unit tests
 - [ ] Schema change → migration file + regenerated types + pgTAP tests for any new or changed RLS
 - [ ] UI change → component test; new key flow → E2E test
@@ -243,6 +259,7 @@ e2e/                         # Playwright specs
 | Script | Does |
 |---|---|
 | `dev` / `build` / `preview` | Vite dev server / production build / serve the build |
+| `dev:host` | Dev server reachable from phones and tablets on the same Wi-Fi |
 | `typecheck` | `tsc -b` |
 | `lint` / `lint:fix` | ESLint, zero warnings allowed |
 | `format` / `format:check` | Prettier |
@@ -286,7 +303,8 @@ e2e/                         # Playwright specs
 - [ ] Sentry (with the Capacitor SDK once native apps exist)
 
 **Phase 6: iOS and Android apps**
-- [ ] Mobile-first groundwork: safe areas, `src/lib/platform/` wrapper, mobile Playwright projects
+- [x] Mobile-first groundwork: `viewport-fit=cover` + safe-area CSS, mobile Playwright projects, horizontal-scroll check, `dev:host`
+- [ ] `src/lib/platform/` wrapper (created with the first device feature: camera, push or storage)
 - [ ] Add Capacitor, `ios/` and `android/` projects (when auth or check-in starts)
 - [ ] Push notifications (APNs + FCM), camera QR scanning, deep links, secure session storage
 - [ ] Apple Developer and Google Play organisation accounts

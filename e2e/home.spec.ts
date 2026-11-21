@@ -12,4 +12,13 @@ test.describe('home page', () => {
     const results = await new AxeBuilder({ page }).analyze()
     expect(results.violations).toEqual([])
   })
+
+  test('does not scroll horizontally', async ({ page }) => {
+    await page.goto('/')
+    const { scrollWidth, clientWidth } = await page.evaluate(() => ({
+      scrollWidth: document.documentElement.scrollWidth,
+      clientWidth: document.documentElement.clientWidth,
+    }))
+    expect(scrollWidth).toBeLessThanOrEqual(clientWidth)
+  })
 })
