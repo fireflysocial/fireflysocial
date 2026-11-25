@@ -3,11 +3,14 @@
 Each gap: what's wrong → proposed fix → how we'll validate it (research source, pilot event, etc.).
 
 - **Step** refers to [v1-user-flow.md](v1-user-flow.md) (v2 draft): 0 Onboarding · 1 Discover · 2 Join · 3 Before · 4 At event · 5 After · 6 Second meeting · 7 Ongoing · H Host flow · — Company-level.
-- **Priority:** **P0** = could kill the product or harm users; must solve before the first pilot. **P1** = must solve before scaling past the pilot. **P2** = matters later.
+- **Priority:** **P0** = could kill the product or harm users; must solve before the pilot of the phase it belongs to. **P1** = must solve before scaling past that pilot. **P2** = matters later.
+- **Phase (updated 2026-11-25):** the launch pilot is host-free and has no groups ([v4-user-flow.md](v4-user-flow.md)). A P0 marked *later phase* stays P0, but it blocks the group-features or host pilot, not the launch pilot.
 
 ## Summary: the 12 P0s
 
-1 Cold start · 2 Event data access · 3 Finding each other · 5 Mutual match, then nothing · 8 Targeting people who are alone · 9 Organizer incentive · 11 No-shows · 28 Account verification · 31 Privacy compliance · 32 Age assurance · 36 Retention when it works · 46 No first-party interviews yet
+**Block the launch pilot:** 2 Event data access · 8 Targeting people who are alone (at launch: the private going list) · 28 Account verification (one account per phone; selfie checks come with groups) · 31 Privacy compliance · 32 Age assurance · 46 No first-party interviews yet
+
+**Later phase (block the group-features or host pilot, not launch):** 1 Cold start · 3 Finding each other · 5 Mutual match, then nothing · 9 Organizer incentive · 11 No-shows · 36 Retention when it works
 
 ---
 
