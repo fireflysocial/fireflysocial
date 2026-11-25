@@ -47,7 +47,7 @@ Partner hosts and pod hosts are long-term (v3 host flow H1–H4).
 Firefly finds events itself instead of waiting for hosts to list them.
 
 1. **Search on a schedule, not per user.** A scheduled job (for example nightly) searches the web for upcoming Vancouver events by category and neighbourhood, using an AI model with web search. The provider (Claude, Gemini or another) is an open decision. Searching per category, not per user, keeps cost flat as users grow and means **no personal data is sent to the AI provider**.
-2. **Extract from the source page, never from memory.** For each candidate, the job fetches the event's own page and extracts structured fields: title, start and end time (`America/Vancouver`), venue name and address, price, category, registration link and source URL. A field the page doesn't state is left empty, not guessed. Every event keeps its source URL.
+2. **Extract from the source page, never from memory.** For each candidate, the job fetches the event's own page and extracts structured fields: title, start and end time (`America/Vancouver`), venue name and address, price, category, registration link and source URL, plus accessibility facts the page states (step-free access, a quieter venue, captions or hearing support). A field the page doesn't state is left empty, not guessed. Every event keeps its source URL.
 3. **Validate before it's shown.** Drop the event if the start time is in the past, the link doesn't resolve, or a required field is missing. Remove duplicates (the same event listed on several sites). Filter out events where you can't talk (#21).
 4. **Store and expire.** Events are saved in Supabase with an `expires_at` and deleted after they end.
 5. **Re-check before it matters.** About 24 hours before an event, re-fetch its page to catch cancellations, sell-outs and time changes (v3 #51).
@@ -72,7 +72,7 @@ The goal is to show a feed that feels personal before the person has done any re
 7. **Optional, skippable together on one screen:**
    - Neighbourhoods you'd happily go to (a list, never GPS)
    - Budget, defaulting to free / under $20 (v3 #16)
-   - "New to Vancouver?" and since when
+   - "New to Vancouver?" (yes / no). Launch purpose: newcomer-welcoming events (newcomer meetups, language exchanges, "new members welcome" nights) rank higher for people who say yes. No arrival date is asked at launch.
    - Accessibility needs: step-free, quieter venues, captions or hearing support (private, v3 #42)
 8. **Your feed:** onboarding ends on the first personal feed, so the first thing the person sees is the value.
 
@@ -81,6 +81,7 @@ The goal is to show a feed that feels personal before the person has done any re
 ### 1. The personal feed
 
 - **This week's events, ranked for this person** by interests, free times, budget, neighbourhoods and accessibility needs.
+- **Accessibility is never assumed.** An event whose page confirms a need the person set ranks higher and says so ("Step-free, per the organiser"). An event whose page says nothing is still shown, labelled "Accessibility not listed", never presented as confirmed. An event whose page states it doesn't meet a set need (for example, stairs only) is hidden for that person.
 - **Every card says why it's there:** "Because you like board games · Thursday evening · Free".
 - **One-tap feedback:** **More like this** / **Not for me** (with an optional reason: "too far", "too expensive", "not my thing"). Feedback updates the ranking right away.
 - **Save** an event to come back to it.

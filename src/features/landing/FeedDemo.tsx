@@ -19,12 +19,15 @@ export function FeedDemo() {
   const top = ranked[0]
 
   const toggle = (id: InterestId) => {
-    const next = new Set(picked)
-    if (next.has(id)) next.delete(id)
-    else next.add(id)
     const update = () => {
       flushSync(() => {
-        setPicked(next)
+        // Build from the latest state, so rapid taps never work from a stale selection.
+        setPicked((previous) => {
+          const next = new Set(previous)
+          if (next.has(id)) next.delete(id)
+          else next.add(id)
+          return next
+        })
       })
     }
     // Cards glide to their new places where the browser supports view transitions.

@@ -47,7 +47,7 @@ Success at launch: onboarding completed in under 2 minutes, a feed that feels pe
   - No location data, maps or distances, ever. Neighbourhoods are picked from a list.
   - The going list says where someone will be: owner-only (RLS), never shown to others at launch, deleted after the event.
   - Collect only what launch uses: no photo, selfie or socials until group features need them.
-  - No attendee counts below 5, no named guest lists.
+  - No attendee counts at launch, and no named guest lists. When group features arrive, counts may appear only at 5 or more (CLAUDE.md §8.6).
   - No dark patterns (no streaks, no fake urgency, no "someone liked you").
   - Later group features keep the v3 rules: minimal stranger cards, private mutual picks, one-tap block and report.
 - **Terminology:** use pod, pod-mate, keep meeting, pick, check in. Avoid match, date, swipe, like, lonely, track, locate.
@@ -57,7 +57,7 @@ Success at launch: onboarding completed in under 2 minutes, a feed that feels pe
 ## Brand Commitments
 
 - **Name and mark:** Firefly. The mark is a firefly at rest seen from above, with muted wings and one glowing tail ([brand/README.md](brand/README.md); assets in [brand/](brand/)). The mark's own rules apply: no gradients, glows or outer shadows on the mark, and clear space of at least the glow's radius. Glow (`#D9F84A`) is never used for text or essential indicators on light backgrounds.
-- **Brand palette** (binding): Night `#0E1424`, Glow `#D9F84A`, Wing `#313C62`. Glow is "the light": one glow per composition. Light-surface variant: wings `#C9CFDE` on `#F5F6F0`. Light and dark mode are both supported.
+- **Brand palette** (binding): Glow `#D9F84A` is "the light": one glow per composition. **Interface:** soft black `#050505` is the ground on dark surfaces, with warm neutrals; no blue in the interface (decided 2026-11-25). **Logo only:** Night `#0E1424` and Wing `#313C62` stay inside the logo files. Light-surface logo variant: wings `#C9CFDE` on `#F5F6F0`. Light and dark mode are both supported; the light interface is not designed yet.
 - **Voice (confirmed 2026-11-25): warm, plain, low-pressure.** Like a friendly regular at the run club. Short sentences, no hype, no guilt, gently encouraging. Example: "Your pod meets at the bike rack at 6:45."
 - **Story behind the mark:** in a quiet room (the informal "Vancouver Freeze"), Firefly makes one signal visible: _I'm here, and I'm open to meeting people._ Use "Vancouver Freeze" as a perceived local experience, never as a diagnosis or a claim that Vancouver is uniquely lonely.
 
