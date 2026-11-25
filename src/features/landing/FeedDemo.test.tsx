@@ -35,13 +35,14 @@ describe('FeedDemo', () => {
 
   it('starts with a couple of interests picked and a short, explained feed', () => {
     render(<FeedDemo />)
-    expect(screen.getByRole('button', { name: 'Board games' })).toHaveAttribute(
+    expect(screen.getByRole('button', { name: 'Tech & startups' })).toHaveAttribute(
       'aria-pressed',
       'true',
     )
     expect(screen.getByRole('button', { name: 'Outdoors' })).toHaveAttribute('aria-pressed', 'true')
     expect(feedTitles()).toHaveLength(4)
-    expect(screen.getByText('Because you like board games')).toBeInTheDocument()
+    expect(feedTitles()[0]).toBe('Startup founders meetup')
+    expect(screen.getAllByText('Because you like tech & startups')).toHaveLength(2)
   })
 
   it('re-ranks the feed when the visitor picks an interest', async () => {
@@ -50,23 +51,23 @@ describe('FeedDemo', () => {
     await user.click(screen.getByRole('button', { name: 'Crafts' }))
     await user.click(screen.getByRole('button', { name: 'Food & drink' }))
     expect(screen.getByRole('button', { name: 'Crafts' })).toHaveAttribute('aria-pressed', 'true')
-    expect(feedTitles()[0]).toBe('Board-game night')
-    expect(feedTitles()).toContain('Dumpling-making night')
-    expect(screen.getByRole('status')).toHaveTextContent('Top pick: Board-game night')
+    expect(feedTitles()[0]).toBe('Dumpling-making night')
+    expect(screen.getByText('Because you like food & drink and crafts')).toBeInTheDocument()
+    expect(screen.getByRole('status')).toHaveTextContent('Top pick: Dumpling-making night')
   })
 
   it('un-picks on a second tap', async () => {
     const user = userEvent.setup()
     render(<FeedDemo />)
-    const boardGames = screen.getByRole('button', { name: 'Board games' })
-    await user.click(boardGames)
-    expect(boardGames).toHaveAttribute('aria-pressed', 'false')
+    const tech = screen.getByRole('button', { name: 'Tech & startups' })
+    await user.click(tech)
+    expect(tech).toHaveAttribute('aria-pressed', 'false')
   })
 
   it('invites the visitor to pick something when nothing is picked', async () => {
     const user = userEvent.setup()
     render(<FeedDemo />)
-    await user.click(screen.getByRole('button', { name: 'Board games' }))
+    await user.click(screen.getByRole('button', { name: 'Tech & startups' }))
     await user.click(screen.getByRole('button', { name: 'Outdoors' }))
     expect(
       screen.getByText('Pick something you’re into and the list reorders.'),

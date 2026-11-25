@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { LandingPage } from './LandingPage.tsx'
 
-const HEADLINE = 'Make friends at the events you’d go to anyway.'
+const HEADLINE = 'Meet your people at the events you’d go to anyway.'
 
 describe('LandingPage', () => {
   it('leads with the promise', () => {
@@ -65,7 +65,7 @@ describe('LandingPage', () => {
       'No location, ever.',
       'Your plans stay yours.',
       'Only what’s needed.',
-      '18+ and friends only.',
+      '18+ and good intent only.',
       'Report anything.',
     ]) {
       expect(screen.getByRole('heading', { level: 3, name: promise })).toBeInTheDocument()

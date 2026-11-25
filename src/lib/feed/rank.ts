@@ -1,11 +1,16 @@
-/** Interests a person can pick in onboarding. Labels are everyday words, not categories. */
+/**
+ * Interests a person can pick in onboarding. Labels are everyday words, not categories. A sample
+ * across the kinds of events in the city, from startup meetups to run clubs, not a closed list.
+ */
 export const INTERESTS = [
-  { id: 'board-games', label: 'Board games' },
+  { id: 'tech', label: 'Tech & startups' },
+  { id: 'careers', label: 'Careers & networking' },
+  { id: 'arts', label: 'Arts & music' },
   { id: 'running', label: 'Running' },
+  { id: 'outdoors', label: 'Outdoors' },
+  { id: 'board-games', label: 'Board games' },
   { id: 'languages', label: 'Languages' },
   { id: 'crafts', label: 'Crafts' },
-  { id: 'outdoors', label: 'Outdoors' },
-  { id: 'books', label: 'Books' },
   { id: 'volunteering', label: 'Volunteering' },
   { id: 'food', label: 'Food & drink' },
 ] as const

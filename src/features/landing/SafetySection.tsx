@@ -12,8 +12,8 @@ const PROMISES = [
     body: 'A first name and what you’re into. No photo, no last name and no socials to get started.',
   },
   {
-    title: '18+ and friends only.',
-    body: 'Everyone agrees to the same pledge: no dating, no selling, no recruiting.',
+    title: '18+ and good intent only.',
+    body: 'Everyone agrees to the same pledge: no selling, no spam, no unwanted advances.',
   },
   {
     title: 'Report anything.',

@@ -24,11 +24,11 @@ export function Hero() {
       />
       <div className="hero__copy">
         <h1 id="hero-title" className="display hero__title">
-          Make friends at the events you’d go to anyway.
+          Meet your people at the events you’d go to anyway.
         </h1>
         <p className="hero__intro">
           Firefly finds events across Vancouver that fit you. Next, it’ll introduce you to the
-          people going too.
+          people going too: future friends, collaborators, maybe a co-founder.
         </p>
       </div>
       <div className="hero__foot">

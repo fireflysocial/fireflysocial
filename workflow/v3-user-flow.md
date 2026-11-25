@@ -26,7 +26,7 @@
 - **No live location, ever.** No maps, distances or background location. People find each other through a fixed meeting point and time. **[#3, #8, #31]**
 - **Collect only what's needed, and ask at the moment it matters.** Consent is in plain language and requested at each sensitive step (pod reveal, room visibility, sharing socials). **[#31]**
 - **The phone goes away at the event.** It's used at check-in and then put down. There's no in-event feed; picks happen afterwards. **[#18]**
-- **Platonic only.** Every user agrees to the platonic pledge, and the report options cover romantic advances and selling. **[#7]**
+- **Good intent only.** Every user agrees to the respect pledge, and the report options cover unwanted advances and selling or spam. **[#7]** (Revised 2026-11-25: Firefly is for people with a shared purpose, not friendship alone.)
 - **Positioned as "get more out of the events you already go to" and "new in town"**, never "lonely." The product says "pod" and "keep meeting," not "match." **[#38]**
 - **No dependence on any one platform.** Firefly's own RSVP layer works with any event; the relationship is with the host, not with Luma, Meetup or Eventbrite. **[#14]**
 - **Events must involve talking.** Concerts, loud bars and large-venue events aren't eligible. **[#21]**
@@ -55,7 +55,7 @@ These P0 and P1 gaps can't be closed by designing the flow. Each one must be don
 
 | Role | Who | Does |
 |------|-----|------|
-| **Attendee** | Newcomers and people who want more friends | Joins events, meets their pod, picks who to keep meeting |
+| **Attendee** | Newcomers and anyone looking for their people (friends, a network, collaborators) | Joins events, meets their pod, picks who to keep meeting |
 | **Partner host** | Organizer of a recurring event who has partnered with Firefly | Runs the event; optionally runs the Firefly corner |
 | **Pod host** | Experienced Firefly user, volunteering | Runs the Firefly corner in place of a busy host, or at events with no host **[#12, #36]** |
 | **Firefly team** | Staff | Vets hosts, curates the city list, runs starter events, handles all moderation **[#13, #44, #45, #49]** |
@@ -118,7 +118,7 @@ These P0 and P1 gaps can't be closed by designing the flow. Each one must be don
   - Optional ID badge for users who want extra trust. **[#28]**
 - **Profile (kept small):** first name, photo (EXIF and GPS removed on upload **[#30]**), neighbourhood (optional), 3–5 interests, "new to Vancouver?" with when, and 2 short "both-answer" prompts. **[#17]**
 - **Life stage (optional):** newly arrived, student or co-op, new grad, recently moved, other. Used to measure who benefits most; never shown to others. **[#37]**
-- **Platonic pledge:** "I'm here for friends. No dating, no selling, no recruiting." **[#7]**
+- **Respect pledge:** "I'm here to meet people with good intent. No selling, no spam, no unwanted advances." **[#7]**
 - **Preferences:**
   - Pod makeup: mixed / same gender / no preference. **[#7]**
   - Free times per week.
@@ -176,7 +176,7 @@ These P0 and P1 gaps can't be closed by designing the flow. Each one must be don
 - **Tap "met"** on the card of anyone met in the room, so they show up at pick time. **[#23]**
 - **Optional mission:** one light challenge ("Find someone else who moved here this year"). **[#20]**
 - **Then the phone goes away.** Target: under 2 minutes in the app during the event. **[#18]**
-- **Always available:** Hide me, block, report (with "unwanted romantic advance" and "selling or recruiting" options **[#7]**), leave, and **local crisis resources** **[#35]**. A host or Firefly can remove someone on the spot. **[#8]**
+- **Always available:** Hide me, block, report (with "unwanted advance" and "selling or spam" options **[#7]**), leave, and **local crisis resources** **[#35]**. A host or Firefly can remove someone on the spot. **[#8]**
 - **Live room visibility ends** one hour after the event. Pod and "met" cards stay in a restricted picker for 72 hours. Block or hide removes access immediately. **[#8]**
 
 ### 5. After the event (same night, within 2 hours)
@@ -268,7 +268,7 @@ All targets are proposals to confirm in the pilot.
 | 4 | Post-event drop-off | After (2h prompt, reminder, 72h) | Pilot test |
 | 5 | Mutual match, then nothing | Second meeting | Pilot test |
 | 6 | Groups vs. pairs | Before (pods, pilot variant); After (group consent) | Pilot test |
-| 7 | Dating and spam misuse | Principles; Onboarding (pledge, pod makeup); At event (report options); T&S (strikes) | Designed |
+| 7 | Unwanted advances and spam | Principles; Onboarding (pledge, pod makeup); At event (report options); T&S (strikes) | Designed |
 | 8 | Targeting people who are alone | Principles; Join (consent); At event; After (safety survey); threat-model gate | Gate |
 | 9 | Organizer incentive | H1 value offer; H4 stats; host-interview gate | Gate |
 | 10 | Business model | Business model | Later |

@@ -40,7 +40,7 @@ On light backgrounds, the glow becomes Night and the wings become `#C9CFDE` (see
 
 ## The motif: fireflies in step
 
-Some firefly species flash at random when apart and gradually flash in unison when they stay together. Firefly uses that as its visual story: a dark field of faint, independently blinking dots (strangers), five of which gather into a pod, turn Glow and fall into step week by week. It's the brand promise, repetition becoming friendship, made visible. On the landing page it is modelled with the Kuramoto synchrony model (`src/lib/fireflies/`).
+Some firefly species flash at random when apart and gradually flash in unison when they stay together. Firefly uses that as its visual story: a dark field of faint, independently blinking dots (strangers), five of which gather into a pod, turn Glow and fall into step week by week. It's the brand promise, repetition becoming connection, made visible. On the landing page it is modelled with the Kuramoto synchrony model (`src/lib/fireflies/`).
 
 - The crowd is drawn in warm firefly-white (`#E9E6CF`) at low opacity on black. Only the pod is Glow, so the screen still has one light.
 - **Call and response:** tapping the dark makes nearby fireflies flash back in a ripple, as real fireflies answer a signal. A single hairline ring marks the tap.
