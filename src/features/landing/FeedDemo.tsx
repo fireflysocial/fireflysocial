@@ -6,7 +6,7 @@ import { usePrefersReducedMotion } from './usePrefersReducedMotion.ts'
 
 /** How many events the phone shows: a short list that fits, not an endless feed. */
 const SHOWN = 4
-const STARTING_PICKS: readonly InterestId[] = ['board-games', 'outdoors']
+const STARTING_PICKS: readonly InterestId[] = ['tech', 'outdoors']
 
 /**
  * "Try it": tap interests and watch an example feed re-rank, each event saying why it's there.

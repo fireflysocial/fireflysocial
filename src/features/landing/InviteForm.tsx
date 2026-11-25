@@ -88,8 +88,8 @@ export function InviteForm({ onRequest }: InviteFormProps) {
         {status.kind === 'failed' ? status.message : ''}
       </p>
       <p id={hintId} className="invite__hint">
-        We’ll only use your email to tell you when Firefly opens. 18+ only. Friends only: no dating,
-        no selling.
+        We’ll only use your email to tell you when Firefly opens. 18+ only. Good intent only: no
+        selling, no spam.
       </p>
     </form>
   )

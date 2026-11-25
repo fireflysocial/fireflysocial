@@ -6,7 +6,7 @@ This file tells AI coding agents (and humans) how to work in this repository. Re
 
 ## 1. What Firefly is
 
-Firefly helps people in Vancouver make **platonic** friends at the events happening across the city: run clubs, board-game cafés, language exchanges. The problem it solves is follow-through, not supply: there are plenty of events, but they rarely turn into anything. Firefly finds events that fit each person, and over time brings together people going to the same events, takes the friction out of approaching, and helps connections grow with consent at every step. It is aimed at newcomers and people who want more friends, and is positioned as "get more out of the events you already go to", never as an app for lonely people.
+Firefly brings together people in Vancouver who share a sense of purpose, at the events happening across the city: startup meetups, run clubs, gallery openings, hackathons, language exchanges, volunteer days and every other kind of event. People come for different things: friendship, a professional network, collaborators, a co-founder (positioning broadened 2026-11-25 from platonic friendship only). The problem it solves is follow-through, not supply: there are plenty of events, but they rarely turn into anything. Firefly finds events that fit each person, and over time brings together people going to the same events, takes the friction out of approaching, and helps connections grow with consent at every step. It is aimed at newcomers and anyone looking for their people, and is positioned as "get more out of the events you already go to", never as an app for lonely people.
 
 **Launch scope (decided 2026-11-25):** an extremely easy onboarding and a personal event feed, with events found by AI-assisted search. No hosts and no groups at launch; groups, the Firefly corner, picks and chat come next, and hosts are long-term.
 
@@ -206,7 +206,7 @@ Firefly tells strangers "this person is here and open to meeting people". Built 
 8. **Check-in:** short-lived rotating QR or host confirmation, bound to the event and account, rate-limited. Don't store raw check-in tokens after use.
 9. **Data minimisation and expiry:** collect only what a feature needs, ask for consent at the moment it matters (pod reveal, room visibility, sharing socials), and build expiry into the data model (e.g. `expires_at` columns plus scheduled cleanup) rather than leaving it for later.
 10. **Hosts see aggregates only.** A role-limited moderation view may identify a _reported_ account. Hosts never see picks, private choices, or reporter identity without consent.
-11. **18+ only, platonic only.** The platonic pledge is part of onboarding. Report categories include unwanted romantic advances and selling.
+11. **18+ only, good intent only.** A respect pledge is part of onboarding: people are here to meet others with a shared purpose, with no selling, no spam and no unwanted advances. Report categories include unwanted advances and selling or spam.
 12. **No dark patterns:** no guilt streaks, no "someone liked you" upsells, no manipulative notifications.
 13. **Never log personal data** (names, phone numbers, photos, picks, reports, check-ins, interests, the going list) to the console, analytics or error tracking.
 14. **The going list is sensitive:** which events a person confirmed says where they will be and when. It is owner-only in RLS, never shown to anyone else until group features ask for consent, and expires after the event.
@@ -273,13 +273,14 @@ Use the brand palette from [brand/README.md](brand/README.md): Glow `#D9F84A` as
 
 Copy in the UI, notifications, code comments and docs should use Firefly's vocabulary:
 
-| Use                                                  | Avoid                         |
-| ---------------------------------------------------- | ----------------------------- |
-| pod, pod-mate                                        | match, date                   |
-| keep meeting, pick                                   | swipe, like, crush            |
-| new in town, meet people at events you already go to | lonely, loneliness, desperate |
-| check in                                             | track, locate                 |
-| host, partner host, pod host                         | admin (in user-facing copy)   |
+| Use                                                                  | Avoid                         |
+| -------------------------------------------------------------------- | ----------------------------- |
+| pod, pod-mate                                                        | match, date                   |
+| keep meeting, pick                                                   | swipe, like, crush            |
+| new in town, meet people at events you already go to                 | lonely, loneliness, desperate |
+| your people, a shared purpose (friends, collaborators, a co-founder) | "friends only", platonic      |
+| check in                                                             | track, locate                 |
+| host, partner host, pod host                                         | admin (in user-facing copy)   |
 
 Roles: **attendee** and **Firefly team** at launch; **partner host** and **pod host** (volunteer) are long-term. Event types: at launch every event is found by the pipeline, an **Around the city** event; **partner event** and **starter event** come with hosts. Use these names in code (types, enums, table names) so the code matches the spec.
 

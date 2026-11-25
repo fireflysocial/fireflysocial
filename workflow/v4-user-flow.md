@@ -24,7 +24,7 @@
 
 - **No location data, ever.** Users pick neighbourhoods they like from a list; Firefly never reads GPS, shows maps or distances, or tracks where anyone is ([CLAUDE.md §8](../CLAUDE.md)).
 - **Collect only what's needed, when it's needed.** If a feature at launch doesn't use a piece of data, onboarding doesn't ask for it.
-- **18+ and platonic only**, from day one, even before group features exist.
+- **18+ and good intent only**, from day one, even before group features exist: people come to meet others with a shared purpose (friendship, networking, collaborators, a co-founder), never to sell or spam (positioning broadened 2026-11-25 from platonic friendship only).
 - **"Get more out of the events you already go to" and "new in town"**, never "lonely."
 - **Events must involve talking.** Concerts, loud bars and large-venue events are filtered out of the feed (v3 #21).
 - **No dark patterns:** no streaks, no fake urgency, no manipulative notifications.
@@ -35,7 +35,7 @@
 
 | Role | Who | Does |
 |------|-----|------|
-| **Attendee** | Newcomers and people who want more friends | Onboards, gets a personal event feed, goes to events through Firefly |
+| **Attendee** | Newcomers and anyone looking for their people (friends, a network, collaborators) | Onboards, gets a personal event feed, goes to events through Firefly |
 | **Firefly team** | Staff | Runs and monitors the event pipeline, fixes bad listings, handles reports |
 
 Partner hosts and pod hosts are long-term (v3 host flow H1–H4).
@@ -65,9 +65,9 @@ The goal is to show a feed that feels personal before the person has done any re
 
 1. **Welcome:** one sentence on what Firefly is, then **Get started**.
 2. **Sign up:** phone number with a one-time code (works inside the iOS and Android apps; one account per number, v3 #28).
-3. **18+ and the platonic pledge:** "I'm 18 or older" plus "I'm here for friends. No dating, no selling, no recruiting." The full age-assurance method is still a pre-pilot gate (v3 #32).
+3. **18+ and the respect pledge:** "I'm 18 or older" plus "I'm here to meet people with good intent. No selling, no spam, no unwanted advances." The full age-assurance method is still a pre-pilot gate (v3 #32).
 4. **First name:** used to greet the person. No last name.
-5. **Interests (the core screen):** tap at least 3 from a set of chips, grouped loosely (Active, Games, Creative, Food & drink, Learning, Outdoors, Community). Chips use everyday words ("board games", "run clubs", "pottery").
+5. **Interests (the core screen):** tap at least 3 from a set of chips, grouped loosely (Tech & startups, Careers & networking, Arts & music, Active, Games, Creative, Food & drink, Learning, Outdoors, Community). Chips use everyday words ("startup meetups", "run clubs", "pottery").
 6. **When you're free:** weekday evenings / weekend days / weekend evenings (tap any).
 7. **Optional, skippable together on one screen:**
    - Neighbourhoods you'd happily go to (a list, never GPS)

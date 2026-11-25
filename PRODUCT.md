@@ -10,7 +10,7 @@ One React + Vite codebase ships as the web app and, wrapped with Capacitor (plan
 
 ## Users
 
-**Primary: attendees, newcomer-first** (confirmed 2026-11-25). When trade-offs come up, design for someone new to Vancouver, such as a co-op student or a recent arrival, on their phone. They want to meet people, and they already go to (or would go to) events: run clubs, board-game cafés, language exchanges. Their problem isn't finding events. It's that the events don't turn into anything: a friendly chat, "we should hang out sometime", then nothing. Long-time locals who want more friends use the same flows and need no separate design.
+**Primary: attendees, newcomer-first** (confirmed 2026-11-25). When trade-offs come up, design for someone new to Vancouver, such as a co-op student or a recent arrival, on their phone. They want to meet their people (friends, a professional network, collaborators, maybe a co-founder), and they already go to (or would go to) events across the city: startup meetups, run clubs, gallery openings, language exchanges and many more. Their problem isn't finding events. It's that the events don't turn into anything: a good conversation, "we should keep in touch", then nothing. Long-time locals looking for new connections use the same flows and need no separate design.
 
 **Internal: the Firefly team.** At launch they run and monitor the event pipeline, fix bad listings and handle reports.
 
@@ -20,7 +20,7 @@ Users are 18+ only.
 
 ## Product Purpose
 
-Firefly helps people in Vancouver make **platonic** friends at the events happening across the city. The long-term loop: Firefly finds events that fit each person → they go through Firefly → people going to the same events are brought together, with Firefly taking the friction out of approaching (the Firefly corner) → consensual socials sharing → connections that grow over repeated meetings.
+Firefly brings together people in Vancouver who share a sense of purpose (friendship, networking, collaborators, a co-founder) at the events happening across the city (positioning broadened 2026-11-25 from platonic friendship only). The long-term loop: Firefly finds events that fit each person → they go through Firefly → people going to the same events are brought together, with Firefly taking the friction out of approaching (the Firefly corner) → consensual socials sharing → connections that grow over repeated meetings.
 
 **Launch scope (confirmed 2026-11-25):** an extremely easy onboarding, and a feed of events picked for that person, found across the city by AI-assisted search and checked against each event's own page. Going is click-through plus "Did you register?". Groups, the Firefly corner, picks and chat come next. The current spec is [workflow/v4-user-flow.md](workflow/v4-user-flow.md).
 
@@ -28,7 +28,7 @@ Success at launch: onboarding completed in under 2 minutes, a feed that feels pe
 
 ## Positioning
 
-"Get more out of the events you already go to." Firefly is a layer on top of the whole city's events, not another event platform and not a new place to browse people. It is useful to one person on day one (events that fit them), and becomes social as more people go to the same events. What a neighbouring product can't truthfully copy is **turning event registrations into repeat meetings with the same people**, with consent at each step. It is never positioned as an app for lonely people, and it is not a dating or swipe app.
+"Get more out of the events you already go to." Firefly is a layer on top of the whole city's events, not another event platform and not a new place to browse people. It is useful to one person on day one (events that fit them), and becomes social as more people go to the same events. What a neighbouring product can't truthfully copy is **turning event registrations into repeat meetings with the same people**, with consent at each step. It is never positioned as an app for lonely people, and it is not a swipe app.
 
 ## Operating Context
 

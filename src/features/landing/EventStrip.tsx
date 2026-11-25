@@ -1,16 +1,20 @@
 const KINDS = [
+  'Startup meetups',
   'Run clubs',
-  'Board-game cafés',
+  'Gallery openings',
+  'Hackathons',
   'Language exchanges',
-  'Craft nights',
-  'Walks',
+  'Design meetups',
+  'Career meetups',
+  'Board-game cafés',
+  'Workshops',
   'Volunteering',
-  'Book clubs',
+  'Pitch nights',
   'Newcomer meetups',
 ] as const
 
 /**
- * The kinds of recurring events Firefly sits on top of, as one slow line of large type.
+ * A sample of the many kinds of events across the city that Firefly sits on top of, as one slow line of large type.
  * The list is read once by screen readers; the moving copy is decorative.
  */
 export function EventStrip() {

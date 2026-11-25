@@ -9,7 +9,7 @@ related_targets: []
 
 Scope: the web landing page at `/`, rendered by `src/features/landing/LandingPage.tsx`. Visitor mode: **Persuade**. Build path: code-led (no image generation on this machine).
 
-Audience: a newcomer to Vancouver (co-op student, recent arrival) on a phone, deciding whether Firefly is worth trying. Job: understand in seconds that Firefly finds events across Vancouver that fit them, and that it will introduce them to the people going too. Action: request an invite (UI only; the form saves nothing until the waitlist backend lands). Attendees only.
+Audience: a newcomer to Vancouver (co-op student, recent arrival) on a phone, looking for their people (friends, collaborators, maybe a co-founder), deciding whether Firefly is worth trying. Job: understand in seconds that Firefly finds events across Vancouver that fit them, and that it will introduce them to the people going too. Action: request an invite (UI only; the form saves nothing until the waitlist backend lands). Attendees only.
 
 Launch truth (v4, 2026-11-25): at launch Firefly is onboarding plus a personal event feed. Groups, the Firefly corner and picks come next and must be labelled as coming, never as shipped.
 
@@ -25,7 +25,7 @@ OWN-WORLD: Soft black #050505 edge to edge, warm white ink #F2F2EE, warm grey mu
 
 STORY: The visitor reads the promise, taps the dark and sees fireflies answer, tries the interest chips and watches a sample feed re-rank with reasons, learns how launch works, sees the coming pod-sync story labelled "Coming next", reads the safety promises, requests an invite.
 
-FIRST VIEWPORT: Full-height black field of drifting warm dots. Block header: mark cell, "Firefly / Vancouver", warm-white "Get an invite" cell. H1 bottom-left at display scale: "Make friends at the events you'd go to anyway." Intro line beside or below. Bottom row: "/// Tap the dark. They answer." left, "Scroll" cue right. Primary action: header invite cell.
+FIRST VIEWPORT: Full-height black field of drifting warm dots. Block header: mark cell, "Firefly / Vancouver", warm-white "Get an invite" cell. H1 bottom-left at display scale: "Meet your people at the events you'd go to anyway." (revised 2026-11-25 from "Make friends…": Firefly is for people with a shared purpose, not friendship alone) Intro line beside or below. Bottom row: "/// Tap the dark. They answer." left, "Scroll" cue right. Primary action: header invite cell.
 
 FORM: Lugano Living Lab-style civic grotesk minimalism, on black, fused with a Kuramoto-sync particle field that answers taps, plus a live re-ranking feed demo in a phone (Payy-style lime on black). seed: none (pinned) — the user: "make it like black or something with a very distinct firefly interface ... take more inspiration from superhero.io", choosing "Soft black #050505" and "Launch first, vision second", on top of the earlier pin "Beautiful https://www.luganolivinglab.ch/en. This is what it is".
 

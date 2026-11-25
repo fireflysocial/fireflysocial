@@ -47,8 +47,8 @@ export function SyncStory() {
         <div className="chapter">
           <p className="statement">Vancouver is full of people you’ve almost met.</p>
           <p className="chapter__note">
-            You see them at the run club, the board-game night, the language exchange. You chat
-            once. “We should hang out sometime.” Then nothing.
+            You see them at the run club, the startup meetup, the gallery opening. You chat once.
+            “We should keep in touch.” Then nothing.
           </p>
         </div>
 
@@ -70,8 +70,9 @@ export function SyncStory() {
         <div className="chapter chapter--last">
           <p className="statement">Until you’re in step.</p>
           <p className="chapter__note">
-            Friendship takes time together. One study puts it at 40 to 60 hours to go from stranger
-            to casual friend. Firefly will help those hours add up, one event at a time.
+            Real connections take time together. For friendship, one study puts it at 40 to 60 hours
+            to go from stranger to casual friend. Firefly will help those hours add up, one event at
+            a time.
           </p>
           <p className="source">
             Hall, J. A. (2019). How many hours does it take to make a friend? Journal of Social and

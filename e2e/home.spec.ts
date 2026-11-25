@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test, type Page } from '@playwright/test'
 
-const HEADLINE = 'Make friends at the events you’d go to anyway.'
+const HEADLINE = 'Meet your people at the events you’d go to anyway.'
 
 /** Scrolls to the end of the opening story (the sticky firefly field). */
 async function scrollToStoryEnd(page: Page) {
@@ -59,15 +59,17 @@ test.describe('landing page', () => {
     await page.goto('/')
     await page.getByRole('link', { name: 'How it picks' }).click()
     const feed = page.getByRole('list', { name: 'Example feed' })
-    await expect(feed.getByRole('listitem').first()).toContainText('Board-game night')
-    await page.getByRole('button', { name: 'Board games' }).click()
+    await expect(feed.getByRole('listitem').first()).toContainText('Startup founders meetup')
+    await page.getByRole('button', { name: 'Tech & startups' }).click()
     await page.getByRole('button', { name: 'Running' }).click()
     await expect(page.getByRole('button', { name: 'Running' })).toHaveAttribute(
       'aria-pressed',
       'true',
     )
     await expect(feed.getByRole('listitem').first()).toContainText('Saturday 5K social run')
-    await expect(feed.getByRole('listitem').first()).toContainText('Because you like running')
+    await expect(feed.getByRole('listitem').first()).toContainText(
+      'Because you like running and outdoors',
+    )
   })
 
   test('answers a tap on the dark without getting in the way', async ({ page }) => {
