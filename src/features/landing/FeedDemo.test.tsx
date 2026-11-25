@@ -1,6 +1,6 @@
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { FeedDemo } from './FeedDemo.tsx'
 
 function feedTitles() {
@@ -9,7 +9,30 @@ function feedTitles() {
     .map((item) => item.querySelector('.feed__title')?.textContent)
 }
 
+/** jsdom has no View Transitions API; give the document one that runs the update at once. */
+function stubViewTransitions() {
+  const startViewTransition = vi.fn((update: () => void) => {
+    update()
+  })
+  Object.defineProperty(document, 'startViewTransition', {
+    value: startViewTransition,
+    configurable: true,
+  })
+  return startViewTransition
+}
+
+function stubReducedMotion(reduce: boolean) {
+  vi.stubGlobal(
+    'matchMedia',
+    vi.fn(() => ({ matches: reduce, addEventListener: vi.fn(), removeEventListener: vi.fn() })),
+  )
+}
+
 describe('FeedDemo', () => {
+  afterEach(() => {
+    Reflect.deleteProperty(document, 'startViewTransition')
+  })
+
   it('starts with a couple of interests picked and a short, explained feed', () => {
     render(<FeedDemo />)
     expect(screen.getByRole('button', { name: 'Board games' })).toHaveAttribute(
@@ -49,5 +72,24 @@ describe('FeedDemo', () => {
       screen.getByText('Pick something you’re into and the list reorders.'),
     ).toBeInTheDocument()
     expect(screen.queryByText(/Because you like/)).not.toBeInTheDocument()
+  })
+
+  it('glides cards to their new places where view transitions are supported', async () => {
+    const startViewTransition = stubViewTransitions()
+    const user = userEvent.setup()
+    render(<FeedDemo />)
+    await user.click(screen.getByRole('button', { name: 'Crafts' }))
+    expect(startViewTransition).toHaveBeenCalledTimes(1)
+    expect(screen.getByRole('button', { name: 'Crafts' })).toHaveAttribute('aria-pressed', 'true')
+  })
+
+  it('skips the transition for reduced motion', async () => {
+    stubReducedMotion(true)
+    const startViewTransition = stubViewTransitions()
+    const user = userEvent.setup()
+    render(<FeedDemo />)
+    await user.click(screen.getByRole('button', { name: 'Crafts' }))
+    expect(startViewTransition).not.toHaveBeenCalled()
+    expect(screen.getByRole('button', { name: 'Crafts' })).toHaveAttribute('aria-pressed', 'true')
   })
 })

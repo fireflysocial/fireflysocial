@@ -73,22 +73,13 @@ export function FireflyField({
 
     let width = 0
     let height = 0
-    let swarm: Swarm | null = null
     let frameId = 0
     let lastTime = 0
     let clock = 0
     let visible = true
     const calls: Call[] = []
 
-    const drawStill = () => {
-      if (!swarm) return
-      const frame = storyAt(stillProgress)
-      // The still frame shows the end of its story: a lit pod flashes together.
-      if (frame.lit > 0) for (const firefly of swarm.pod) firefly.phase = 0
-      draw(context, swarm, frame, width, height, 0, [], 0)
-    }
-
-    const resize = () => {
+    const measure = () => {
       const box = canvas.getBoundingClientRect()
       width = box.width
       height = box.height
@@ -96,13 +87,27 @@ export function FireflyField({
       canvas.width = Math.round(width * ratio)
       canvas.height = Math.round(height * ratio)
       context.setTransform(ratio, 0, 0, ratio, 0, 0)
-      swarm ??= createSwarm({ seed, ambientCount: ambientCountFor(width, height) })
+    }
+
+    // The crowd is sized to the first measurement and kept as the field resizes.
+    measure()
+    const swarm: Swarm = createSwarm({ seed, ambientCount: ambientCountFor(width, height) })
+
+    const drawStill = () => {
+      const frame = storyAt(stillProgress)
+      // The still frame shows the end of its story: a lit pod flashes together.
+      if (frame.lit > 0) for (const firefly of swarm.pod) firefly.phase = 0
+      draw(context, swarm, frame, width, height, 0, [], 0)
+    }
+
+    const resize = () => {
+      measure()
       if (still) drawStill()
     }
 
     const tick = (now: number) => {
       frameId = requestAnimationFrame(tick)
-      if (!swarm || !visible) return
+      if (!visible) return
       const seconds = lastTime === 0 ? 0 : Math.min((now - lastTime) / 1000, MAX_FRAME_SECONDS)
       lastTime = now
       clock += seconds
@@ -113,7 +118,7 @@ export function FireflyField({
 
     const observer = new ResizeObserver(resize)
     observer.observe(canvas)
-    resize()
+    if (still) drawStill()
 
     // Stop drawing while the field is scrolled away or the tab is hidden: phones have batteries.
     const visibility = new IntersectionObserver(([entry]) => {
@@ -127,9 +132,9 @@ export function FireflyField({
     document.addEventListener('visibilitychange', onVisibilityChange)
 
     // Call and response: a tap on the dark (not on a link or control) makes nearby fireflies answer.
-    const target = callTarget?.current
+    // A still field doesn't answer, so it doesn't listen.
+    const target = still ? undefined : callTarget?.current
     const onCall = (event: PointerEvent) => {
-      if (!swarm || still) return
       if (event.target instanceof Element && event.target.closest('a, button, input, label')) {
         return
       }
@@ -253,7 +258,10 @@ function draw(
       const outward = firefly.slotX < -0.1 ? -1 : 1
       context.textAlign = outward < 0 ? 'right' : 'left'
       context.fillStyle = rgba(MUTED, formed)
-      context.fillText(POD_NAMES[index] ?? '', x + outward * (podDot * 2 + 6), y)
+      // The pod has POD_SIZE fireflies, one per name; the fallback only satisfies the type checker.
+      /* v8 ignore next -- @preserve */
+      const name = POD_NAMES[index] ?? ''
+      context.fillText(name, x + outward * (podDot * 2 + 6), y)
     }
   })
 }

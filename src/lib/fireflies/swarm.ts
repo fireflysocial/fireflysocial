@@ -100,6 +100,8 @@ export function advanceSwarm(swarm: Swarm, dt: number, coupling: number): void {
     dt,
   )
   swarm.pod.forEach((firefly, index) => {
+    // kuramotoStep returns one phase per input, so the fallback only satisfies the type checker.
+    /* v8 ignore next -- @preserve */
     firefly.phase = phases[index] ?? firefly.phase
   })
 }

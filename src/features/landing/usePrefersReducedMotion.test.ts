@@ -1,4 +1,6 @@
 import { act, renderHook } from '@testing-library/react'
+import { createElement } from 'react'
+import { renderToString } from 'react-dom/server'
 import { describe, expect, it, vi } from 'vitest'
 import { usePrefersReducedMotion } from './usePrefersReducedMotion.ts'
 
@@ -40,5 +42,13 @@ describe('usePrefersReducedMotion', () => {
       change(true)
     })
     expect(result.current).toBe(true)
+  })
+
+  it('assumes full motion when rendering on the server', () => {
+    stubMatchMedia(true)
+    function Probe() {
+      return usePrefersReducedMotion() ? 'reduce' : 'full'
+    }
+    expect(renderToString(createElement(Probe))).toBe('full')
   })
 })

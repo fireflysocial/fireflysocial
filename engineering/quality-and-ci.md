@@ -62,7 +62,7 @@ macOS runners use about 10× the GitHub Actions minutes on private repos, so iOS
 2. **Test at the right layer.** Use unit tests for logic, integration tests against a real local Supabase, and a small number of E2E tests for key user flows. Don't mock Supabase to test anything you could test against the real thing.
 3. **Fail early and locally.** Catch problems in the editor or pre-commit hook first, then CI. Production should never be the first place a problem shows up.
 4. **`main` is always deployable.** Nothing merges without green required checks.
-5. **No 100% coverage goal.** New logic ships with tests, and coverage thresholds act as a floor, not a target.
+5. **100% unit coverage of `src/`** (decided 2026-11-25; this replaces the earlier "no 100% goal" principle). Every statement, branch, function and line is covered by unit or component tests, and CI fails below 100%. New code ships with the tests that keep it there. See §3.8.
 
 ---
 
@@ -166,7 +166,17 @@ Real iPhone hardware is not available on the team yet; before the pilot, cover i
 - [ ] New or changed logic has unit tests
 - [ ] Schema change → migration file + regenerated types + pgTAP tests for any new or changed RLS
 - [ ] UI change → component test; new key flow → E2E test
+- [ ] `npm run test:coverage` still reports 100% on every metric
 - [ ] All CI checks green; CodeRabbit comments addressed or dismissed with a reason
+
+### 3.8 Coverage: 100%, and how to keep it
+
+`vitest.config.ts` enforces a global 100% threshold on statements, branches, functions and lines across `src/**`. The `unit` CI job runs `npm run test:coverage`, fails below it, writes a coverage table to the job summary and uploads the HTML report as the `coverage` artifact.
+
+- **Excluded:** test files, `src/test/**`, generated `src/types/**`, and `src/main.tsx` (it only mounts `<App />`; E2E covers it). Don't add to this list to get past the threshold.
+- **Hard-to-reach code:** restructure first, so impossible states don't exist (for example, create an object up front instead of keeping it nullable, or pair values instead of indexing a parallel array). Test browser-only paths with small fakes (see the `FireflyField` and `FeedDemo` tests).
+- **Ignore hints are a last resort**, only for code that provably can't run, such as a fallback that `noUncheckedIndexedAccess` forces on an index that's always in range. Put the reason on the line above and use `/* v8 ignore next -- @preserve */` (`@preserve` stops the build from stripping the comment). Never ignore code just because it's awkward to test.
+- **Node 24 is required.** On older Node, jsdom's dependencies crash at load time, so `vitest.config.ts` stops with a clear message telling you to run `nvm use`.
 
 ---
 
@@ -203,7 +213,7 @@ One workflow, `.github/workflows/ci.yml`, triggered on `pull_request` and `push`
 |---|---|
 | `lint` | `eslint .` and `prettier --check .` |
 | `typecheck` | `tsc --noEmit` |
-| `unit` | `vitest run --coverage` with thresholds enforced |
+| `unit` | `vitest run --coverage` with a 100% threshold on every metric → coverage table in the job summary → upload `coverage/` |
 | `db` | `supabase db start` (Postgres only; migrations applied from scratch) → `supabase test db` → type-drift check |
 | `e2e` | install Chromium → `playwright test` (builds + previews the app) → upload report on failure |
 
@@ -329,4 +339,3 @@ e2e/                         # Playwright specs
 - **Push provider:** Capacitor push plugin (APNs/FCM) sending from Supabase Edge Functions, vs a hosted service
 - **Native build pipeline:** Xcode Cloud / Fastlane / a hosted service
 - **Staging strategy:** separate Supabase project vs Supabase branching
-- **Coverage threshold:** currently 80% on `src/lib/**`, no global threshold on UI. Revisit once there's real code.

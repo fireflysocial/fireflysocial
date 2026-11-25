@@ -33,6 +33,8 @@ export interface RankedEvent {
 }
 
 export function interestLabel(id: InterestId): string {
+  // Every InterestId comes from INTERESTS, so the fallback only satisfies the type checker.
+  /* v8 ignore next -- @preserve */
   return INTERESTS.find((interest) => interest.id === id)?.label ?? id
 }
 

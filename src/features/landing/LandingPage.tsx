@@ -49,13 +49,13 @@ export function LandingPage({ onRequestInvite = requestInvite }: LandingPageProp
 /** Paints the mobile browser's toolbar black while this page is open, and restores it after. */
 function useNightBrowserChrome() {
   useEffect(() => {
-    const metas = Array.from(document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]'))
-    const previous = metas.map((meta) => meta.content)
-    for (const meta of metas) meta.content = GROUND
+    const saved = Array.from(
+      document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]'),
+      (meta) => ({ meta, content: meta.content }),
+    )
+    for (const { meta } of saved) meta.content = GROUND
     return () => {
-      metas.forEach((meta, index) => {
-        meta.content = previous[index] ?? meta.content
-      })
+      for (const { meta, content } of saved) meta.content = content
     }
   }, [])
 }
