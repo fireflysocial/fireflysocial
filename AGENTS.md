@@ -67,7 +67,7 @@ Key documents (read the relevant ones before building a feature):
 
 ## 3. Commands
 
-Run `nvm use` once per shell first.
+Run `nvm use` once per shell first. On older Node (e.g. 22), Vitest refuses to start and tells you to run `nvm use`: jsdom's dependencies need Node 24.
 
 | Command                                   | Does                                                                                                   |
 | ----------------------------------------- | ------------------------------------------------------------------------------------------------------ |
@@ -80,7 +80,7 @@ Run `nvm use` once per shell first.
 | `npm run format` / `npm run format:check` | Prettier                                                                                               |
 | `npm test`                                | Vitest in watch mode                                                                                   |
 | `npm run test:run`                        | Vitest once                                                                                            |
-| `npm run test:coverage`                   | Vitest with coverage thresholds (what CI runs)                                                         |
+| `npm run test:coverage`                   | Vitest with the 100% coverage threshold (what CI runs)                                                 |
 | `npx vitest run src/path/file.test.ts`    | Run one test file                                                                                      |
 | `npm run test:e2e`                        | Playwright (builds and previews the app automatically)                                                 |
 | `npm run test:e2e:ui`                     | Playwright interactive UI                                                                              |
@@ -89,7 +89,7 @@ Run `nvm use` once per shell first.
 | `npm run test:db`                         | pgTAP tests (local Supabase must be running)                                                           |
 | `npm run db:types`                        | Regenerate `src/types/database.ts` from the local schema                                               |
 
-**Before saying a change is done**, run: `npm run lint && npm run typecheck && npm run test:run`, plus `npm run test:e2e` if UI or routing changed and `npm run test:db` if the schema changed (or say clearly that you couldn't run it, e.g. Docker isn't available).
+**Before saying a change is done**, run: `npm run lint && npm run typecheck && npm run test:coverage` (it must stay at 100%), plus `npm run test:e2e` if UI or routing changed and `npm run test:db` if the schema changed (or say clearly that you couldn't run it, e.g. Docker isn't available).
 
 ---
 
@@ -102,7 +102,7 @@ src/
   index.css             # global tokens (brand palette, safe areas), self-hosted font, base styles
   test/setup.ts         # Vitest setup (jest-dom matchers, cleanup, canvas stub)
   assets/fonts/         # self-hosted WOFF2 fonts (Host Grotesk, SIL OFL)
-  lib/                  # pure logic, no React/Supabase imports (80% coverage threshold)
+  lib/                  # pure logic, no React/Supabase imports
     fireflies/          # landing-page field: seeded random, Kuramoto sync, swarm, scroll story
   data/                 # typed Supabase data-access functions (invites.ts is a stub for now)
   components/           # shared UI components (FireflyMark)
@@ -142,6 +142,11 @@ research/ workflow/ brand/   # product research, spec and brand (prose docs)
 
 Every change that adds or changes behaviour ships with tests **in the same PR**. Write the test first when practical.
 
+**Unit coverage of `src/` is 100%, and stays there.** `vitest.config.ts` enforces 100% statements, branches, functions and lines, and the `unit` CI job (`npm run test:coverage`) fails below it. Every new file, branch and function you add needs a unit or component test that runs it. Only test files, `src/test/**`, generated `src/types/**` and `src/main.tsx` (covered by E2E) are excluded. See [engineering/quality-and-ci.md §3.8](engineering/quality-and-ci.md#38-coverage-100-and-how-to-keep-it).
+
+- If code is hard to reach, restructure it so the impossible state can't exist, or test the browser-only path with a small fake. Don't widen the exclude list.
+- `/* v8 ignore next -- @preserve */` is allowed only for code that provably can't run (e.g. a `noUncheckedIndexedAccess` fallback on an index that's always in range), with the reason in a comment on the line above. Never use it to skip code that's merely awkward to test.
+
 | Layer       | Tool                          | Put it in                                               | Use it for                                                                                                                                                                                 |
 | ----------- | ----------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Unit        | Vitest                        | Next to the code: `foo.ts` → `foo.test.ts`              | Pure logic in `src/lib`: matching, pod formation, scheduling, date/time and timezone handling, validation, formatting                                                                      |
@@ -160,7 +165,7 @@ Conventions:
 - Tests must be deterministic: no real network, no random data without a fixed seed, no ordering dependence between tests.
 - **Canvas and animation:** jsdom has no canvas, so `src/test/setup.ts` makes `getContext` return `null` and canvas components must render safely without one. Keep the maths in `src/lib` (seeded, unit-tested); component tests that need drawing pass a small fake context. In E2E, prove the canvas actually painted and add a `test.use({ reducedMotion: 'reduce' })` case for anything that animates.
 - Never weaken, skip (`.skip`, `.only`), or delete a failing test to make CI pass. Fix the code, or explain why the test is wrong and ask.
-- Don't lower coverage thresholds in `vitest.config.ts`.
+- Don't lower the 100% coverage thresholds in `vitest.config.ts` or add exclusions to get past them.
 
 ---
 

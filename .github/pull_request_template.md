@@ -12,7 +12,7 @@
 
 ## Checklist
 
-- [ ] New or changed logic has unit tests
+- [ ] New or changed logic has unit tests, and `npm run test:coverage` stays at 100%
 - [ ] UI change has a component test; new key flow has an E2E test
 - [ ] Schema change: migration added, `npm run db:types` re-run, pgTAP tests cover new/changed RLS
 - [ ] No secrets, service-role keys or real user data committed

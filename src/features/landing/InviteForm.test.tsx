@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { act, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { InvitesNotOpenError } from '../../data/invites.ts'
@@ -57,6 +57,10 @@ describe('InviteForm', () => {
     const sending = screen.getByRole('button', { name: 'Sending…' })
     expect(sending).toBeDisabled()
     await user.click(sending)
+    // Any other way of submitting (not through the disabled button) is ignored too.
+    act(() => {
+      email.closest('form')?.requestSubmit()
+    })
     expect(onRequest).toHaveBeenCalledTimes(1)
     finish?.()
     expect(await screen.findByText(/You’re on the list/)).toBeInTheDocument()
