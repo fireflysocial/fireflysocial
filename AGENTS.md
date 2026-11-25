@@ -6,29 +6,32 @@ This file tells AI coding agents (and humans) how to work in this repository. Re
 
 ## 1. What Firefly is
 
-Firefly helps people in Vancouver make **platonic** friends by meeting the same small group ("pod") repeatedly at recurring real-world events they'd go to anyway: run clubs, board-game cafés, language exchanges. It is aimed at newcomers and people who want more friends, and is positioned as "get more out of the events you already go to", never as an app for lonely people.
+Firefly helps people in Vancouver make **platonic** friends at the events happening across the city: run clubs, board-game cafés, language exchanges. The problem it solves is follow-through, not supply: there are plenty of events, but they rarely turn into anything. Firefly finds events that fit each person, and over time brings together people going to the same events, takes the friction out of approaching, and helps connections grow with consent at every step. It is aimed at newcomers and people who want more friends, and is positioned as "get more out of the events you already go to", never as an app for lonely people.
+
+**Launch scope (decided 2026-11-25):** an extremely easy onboarding and a personal event feed, with events found by AI-assisted search. No hosts and no groups at launch; groups, the Firefly corner, picks and chat come next, and hosts are long-term.
 
 **Platforms: iOS and Android apps (App Store and Google Play) plus a web version, all from this one React codebase.** The native apps wrap the Vite web build with Capacitor (planned, not added yet). Treat the phone as the primary device for every attendee-facing feature. See section 9 ("Mobile-first and cross-platform") and [engineering/quality-and-ci.md §0](engineering/quality-and-ci.md#0-platforms-ios-android-and-web).
 
 Key documents (read the relevant ones before building a feature):
 
-| Document                                                       | Read it when                                                                                                                                               |
-| -------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [workflow/v3-user-flow.md](workflow/v3-user-flow.md)           | Building any user-facing feature. This is the **current product spec**: roles, event types, host flow, attendee flow (steps 0–7), trust & safety, metrics. |
-| [workflow/open-gaps.md](workflow/open-gaps.md)                 | A flow step references a gap number like **[#11]**.                                                                                                        |
-| [research/safety-privacy.md](research/safety-privacy.md)       | Touching profiles, visibility, check-in, picks, chat, photos, reports, blocking, or data retention.                                                        |
-| [engineering/quality-and-ci.md](engineering/quality-and-ci.md) | Changing tooling, tests, CI, or the Supabase workflow.                                                                                                     |
-| [brand/README.md](brand/README.md)                             | Doing any visual or UI work.                                                                                                                               |
-| [PRODUCT.md](PRODUCT.md)                                       | Doing any design work. Product truth for design (users, voice, principles, evidence that must never be invented), read by `/impeccable`.                   |
-| [DESIGN.md](DESIGN.md)                                         | Doing any visual or UI work. The design system (tokens, type, components, motion) as built; read by `/impeccable`.                                         |
-| `.impeccable/surfaces/*.md`                                    | Changing a designed surface. Each holds that page's brief and direction contract (e.g. the landing page's).                                                |
+| Document                                                       | Read it when                                                                                                                                          |
+| -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [workflow/v4-user-flow.md](workflow/v4-user-flow.md)           | Building any user-facing feature. This is the **current product spec** for launch: the event pipeline, onboarding, the personal feed, going, metrics. |
+| [workflow/v3-user-flow.md](workflow/v3-user-flow.md)           | Building group features (pods, the Firefly corner, picks, chat, check-in) or host features. Next phase and long-term; to be redesigned on top of v4.  |
+| [workflow/open-gaps.md](workflow/open-gaps.md)                 | A flow step references a gap number like **[#11]**.                                                                                                   |
+| [research/safety-privacy.md](research/safety-privacy.md)       | Touching profiles, visibility, check-in, picks, chat, photos, reports, blocking, or data retention.                                                   |
+| [engineering/quality-and-ci.md](engineering/quality-and-ci.md) | Changing tooling, tests, CI, or the Supabase workflow.                                                                                                |
+| [brand/README.md](brand/README.md)                             | Doing any visual or UI work.                                                                                                                          |
+| [PRODUCT.md](PRODUCT.md)                                       | Doing any design work. Product truth for design (users, voice, principles, evidence that must never be invented), read by `/impeccable`.              |
+| [DESIGN.md](DESIGN.md)                                         | Doing any visual or UI work. The design system (tokens, type, components, motion) as built; read by `/impeccable`.                                    |
+| `.impeccable/surfaces/*.md`                                    | Changing a designed surface. Each holds that page's brief and direction contract (e.g. the landing page's).                                           |
 
-`workflow/v1-user-flow.md` is the older v2 draft (the filename was kept). Use v3.
+`workflow/v1-user-flow.md` is the older v2 draft (the filename was kept). Use v4 for launch and v3 for later group and host features.
 
 ### Current status
 
 - **Built:** the public landing page (`src/features/landing/`), frontend only. Its invite form is UI only: `src/data/invites.ts` is a stub that always fails honestly until the waitlist table, RLS and pgTAP tests land in a follow-up PR. Don't deploy the page publicly before then.
-- No attendee or host product features exist yet.
+- **Next to build:** onboarding, the event pipeline and the personal feed ([v4](workflow/v4-user-flow.md)). No attendee features exist yet.
 - **Capacitor and the `ios/` / `android/` projects don't exist yet.** They're added right before auth or QR check-in is built. Until then, write code so it will work inside the native apps unchanged (section 9).
 - Supabase is initialised locally (`supabase/`) with no migrations. The cloud project exists, and its URL and publishable key go in `.env.local` (git-ignored).
 - The flow documents describe **proposed** behaviour, not implemented behaviour. Don't describe a design as shipped.
@@ -182,7 +185,7 @@ The database's Row Level Security is Firefly's real security boundary: the app (
 
 ## 8. Privacy and safety: non-negotiable engineering rules
 
-Firefly tells strangers "this person is here and open to meeting people". Built carelessly, it becomes a tool for finding people who are alone at a known place. These rules come from [research/safety-privacy.md](research/safety-privacy.md) and [workflow/v3-user-flow.md](workflow/v3-user-flow.md). If a task seems to conflict with one, **stop and ask**. Don't work around it.
+Firefly tells strangers "this person is here and open to meeting people". Built carelessly, it becomes a tool for finding people who are alone at a known place. These rules come from [research/safety-privacy.md](research/safety-privacy.md), [workflow/v3-user-flow.md](workflow/v3-user-flow.md) and [workflow/v4-user-flow.md](workflow/v4-user-flow.md). Rules about pods, rooms, picks, check-in and hosts apply from the moment those features are built. If a task seems to conflict with one, **stop and ask**. Don't work around it.
 
 1. **No location data, ever.** Don't use the Geolocation API, collect coordinates, show maps or distances, or track background location. People find each other through a fixed meeting point and time. Presence means "checked in at this event", nothing more.
 2. **Three separate visibility scopes**, each enforced in RLS, not just in the UI:
@@ -200,7 +203,9 @@ Firefly tells strangers "this person is here and open to meeting people". Built 
 10. **Hosts see aggregates only.** A role-limited moderation view may identify a _reported_ account. Hosts never see picks, private choices, or reporter identity without consent.
 11. **18+ only, platonic only.** The platonic pledge is part of onboarding. Report categories include unwanted romantic advances and selling.
 12. **No dark patterns:** no guilt streaks, no "someone liked you" upsells, no manipulative notifications.
-13. **Never log personal data** (names, phone numbers, photos, picks, reports, check-ins) to the console, analytics or error tracking.
+13. **Never log personal data** (names, phone numbers, photos, picks, reports, check-ins, interests, the going list) to the console, analytics or error tracking.
+14. **The going list is sensitive:** which events a person confirmed says where they will be and when. It is owner-only in RLS, never shown to anyone else until group features ask for consent, and expires after the event.
+15. **No personal data to AI providers.** Event search and extraction run as batch jobs per category and area, never with a user's interests, name or going list. Sending any user data to an AI API needs explicit sign-off (section 12).
 
 ---
 
@@ -248,11 +253,11 @@ The same code runs in a mobile browser, the iOS app (WKWebView) and the Android 
 
 ### Visual design
 
-Use the brand palette from [brand/README.md](brand/README.md): Night `#0E1424`, Glow `#D9F84A`, Wing `#313C62`.
+Use the brand palette from [brand/README.md](brand/README.md): Glow `#D9F84A` as the one light, on a **soft black `#050505`** interface ground with warm neutrals (ink `#F2F2EE`, muted `#9A9A92`). **No blue in the interface** (decided 2026-11-25): Night `#0E1424` and Wing `#313C62` stay inside the logo files only.
 
 - **Glow is for one highlight per screen**, and must never carry text or essential indicators on a white or light background (contrast is too low).
 - No gradients, glows or drop shadows on the mark.
-- Support light and dark mode. **Exception:** the public landing page is always Night, because the dark is its concept (decided 2026-11-25). App screens follow the system setting.
+- Support light and dark mode; dark mode uses the black ground. **Exception:** the public landing page is always dark, because the dark is its concept (decided 2026-11-25). App screens follow the system setting.
 - **Typeface:** Host Grotesk, self-hosted from `src/assets/fonts/` (`@font-face` in `src/index.css`). Never load fonts from a CDN such as Google Fonts: that sends every visitor's IP address to a third party.
 - **Motion:** every animation honours `prefers-reduced-motion` with a still alternative that still tells the story. Animate only what carries meaning, and pause canvas loops when they're off-screen or the tab is hidden.
 - Read [DESIGN.md](DESIGN.md) for tokens and components, and run `/impeccable` for design work. Never invent proof (users, partners, counts, testimonials); label example content as made up.
@@ -271,14 +276,14 @@ Copy in the UI, notifications, code comments and docs should use Firefly's vocab
 | check in                                             | track, locate                 |
 | host, partner host, pod host                         | admin (in user-facing copy)   |
 
-Roles in the spec: **attendee**, **partner host**, **pod host** (volunteer), **Firefly team**. Event types: **partner event**, **Around the city**, **starter event**. Use these names in code (types, enums, table names) so the code matches the spec.
+Roles: **attendee** and **Firefly team** at launch; **partner host** and **pod host** (volunteer) are long-term. Event types: at launch every event is found by the pipeline, an **Around the city** event; **partner event** and **starter event** come with hosts. Use these names in code (types, enums, table names) so the code matches the spec.
 
 ---
 
 ## 11. Docs and research conventions
 
 - When changing `research/` or `workflow/` docs: cite sources inline, use absolute dates (e.g. "reviewed 2026-11-15"), label proposals as proposals, and don't strengthen a claim beyond what its source says. See [research/documentation-audit.md](research/documentation-audit.md).
-- If you change behaviour that the spec describes, update [workflow/v3-user-flow.md](workflow/v3-user-flow.md) in the same PR, or note the divergence in the PR description.
+- If you change behaviour that the spec describes, update [workflow/v4-user-flow.md](workflow/v4-user-flow.md) (or v3 for group and host features) in the same PR, or note the divergence in the PR description.
 - If you change tooling, CI or the test setup, update [engineering/quality-and-ci.md](engineering/quality-and-ci.md) and this file. **Keep `CLAUDE.md` and `AGENTS.md` identical.**
 
 ---

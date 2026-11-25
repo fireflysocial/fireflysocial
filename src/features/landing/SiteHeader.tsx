@@ -15,8 +15,12 @@ export function SiteHeader() {
         </span>
       </a>
       <nav className="header__nav" aria-label="Sections">
+        <a href="#try">
+          <span className="muted">Try it</span>
+          <span>Your feed</span>
+        </a>
         <a href="#how-it-works">
-          <span className="muted">Before, during, after</span>
+          <span className="muted">Launch</span>
           <span>How it works</span>
         </a>
         <a href="#safety">

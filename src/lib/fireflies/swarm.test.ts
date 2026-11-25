@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest'
 import { orderParameter } from './sync.ts'
-import { POD_SIZE, advanceSwarm, ambientCountFor, createSwarm, podPoint } from './swarm.ts'
+import {
+  POD_SIZE,
+  advanceSwarm,
+  ambientCountFor,
+  answerCall,
+  createSwarm,
+  podPoint,
+} from './swarm.ts'
 
 const layout = { width: 400, height: 800, centerX: 200, centerY: 300, radius: 50 }
 
@@ -72,6 +79,60 @@ describe('advanceSwarm', () => {
     const swarm = createSwarm({ seed: 3, ambientCount: 0 })
     for (let i = 0; i < 360; i++) advanceSwarm(swarm, 1 / 60, 2.4)
     expect(orderParameter(swarm.pod.map((f) => f.phase))).toBeGreaterThan(0.95)
+  })
+})
+
+describe('answerCall', () => {
+  const size = { width: 400, height: 400 }
+  const options = { reach: 100, speed: 200 }
+
+  function crowdAt(points: [number, number][]) {
+    const swarm = createSwarm({ seed: 1, ambientCount: points.length })
+    swarm.ambient.forEach((firefly, index) => {
+      const [x, y] = points[index] ?? [0, 0]
+      firefly.x = x / size.width
+      firefly.y = y / size.height
+      firefly.phase = 2
+    })
+    return swarm
+  }
+
+  it('makes fireflies within reach answer, and leaves the rest alone', () => {
+    const swarm = crowdAt([
+      [200, 200],
+      [250, 200],
+      [390, 390],
+    ])
+    expect(answerCall(swarm, 200, 200, size.width, size.height, options)).toBe(2)
+    expect(swarm.ambient[2]?.phase).toBe(2)
+  })
+
+  it('flashes the nearest first, so the answer ripples outward', () => {
+    const swarm = crowdAt([
+      [200, 200],
+      [260, 200],
+    ])
+    answerCall(swarm, 200, 200, size.width, size.height, options)
+    const [near, far] = swarm.ambient
+    if (!near || !far) throw new Error('expected two fireflies')
+    // Seconds until each flash peaks (phase reaches a full cycle).
+    const untilFlash = (f: { phase: number; omega: number }) =>
+      (f.phase === 0 ? 0 : 2 * Math.PI - f.phase) / f.omega
+    expect(untilFlash(near)).toBeCloseTo(0)
+    expect(untilFlash(far)).toBeCloseTo(60 / options.speed)
+  })
+
+  it('records when each firefly answers, on the caller’s clock', () => {
+    const swarm = crowdAt([
+      [200, 200],
+      [260, 200],
+      [390, 390],
+    ])
+    answerCall(swarm, 200, 200, size.width, size.height, options, 10)
+    const [near, far, outside] = swarm.ambient
+    expect(near?.answerAt).toBeCloseTo(10)
+    expect(far?.answerAt).toBeCloseTo(10 + 60 / options.speed)
+    expect(outside?.answerAt).toBe(Number.NEGATIVE_INFINITY)
   })
 })
 

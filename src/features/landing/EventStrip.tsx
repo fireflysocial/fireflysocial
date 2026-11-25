@@ -17,7 +17,7 @@ export function EventStrip() {
   return (
     <section className="strip" aria-labelledby="strip-title">
       <h2 id="strip-title" className="visually-hidden">
-        Events Firefly works with
+        Events Firefly finds
       </h2>
       <ul className="visually-hidden">
         {KINDS.map((kind) => (

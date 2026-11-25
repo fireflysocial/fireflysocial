@@ -28,11 +28,14 @@
   --night: #0e1424;
   --glow: #d9f84a;
   --wing: #313c62;
+  /* The interface ground on dark surfaces (decided 2026-11-25). Night stays in the logo files. */
+  --black: #050505;
   /* Wing on light surfaces, and the light surface itself (brand/firefly-mark-light.svg). */
   --wing-light: #c9cfde;
   --paper: #f5f6f0;
 
-  --text: var(--wing);
+  /* Light mode is unbuilt; until it is, text is warm near-black, never blue. */
+  --text: #1a1a17;
   --bg: #ffffff;
 
   /* Device safe areas (notch, Dynamic Island, home indicator, Android gesture bar).
@@ -56,8 +59,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --text: #f4f5f9;
-    --bg: var(--night);
+    --text: #f2f2ee;
+    --bg: var(--black);
   }
 }
 
