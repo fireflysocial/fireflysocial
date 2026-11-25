@@ -93,7 +93,7 @@ The goal is to show a feed that feels personal before the person has done any re
 Firefly can't see other sites' guest lists, so going is self-reported in two steps:
 
 1. **Register ↗** opens the event's own page in the in-app browser. Firefly records the click as interest only.
-2. **On return:** "Did you register for Kits Comedy Night?" → **Yes, I'm going** / **Not yet, remind me** / **Not going** (v3 #52). A dismissed prompt becomes a quiet card on the feed, not a repeat pop-up.
+2. **On return:** "Did you register for Kits Comedy Night?" → **Yes, I'm going** / **Not yet, remind me** / **Not going** (v3 #52). A dismissed prompt becomes a quiet card on the feed, not a repeat pop-up. The card expires when the event starts at the latest; an earlier cut-off is not decided yet.
 3. **Free events with no registration** show **I'm going** directly.
 
 **Only a confirmed Yes counts as going.** A click alone doesn't: people browse, events sell out, and plans change. The going list is what group features will be built on, so it has to be trustworthy.
