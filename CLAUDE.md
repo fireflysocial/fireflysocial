@@ -45,6 +45,7 @@ Key documents (read the relevant ones before building a feature):
 | Git hooks              | Husky + lint-staged (lint + format staged files on commit)                                                            |
 | CI                     | GitHub Actions ([.github/workflows/ci.yml](.github/workflows/ci.yml))                                                 |
 | Review                 | CodeRabbit on every PR                                                                                                |
+| Design review          | Impeccable agent skill (`/impeccable`), vendored in `.claude/skills/`; see engineering/quality-and-ci.md §2           |
 | Package manager        | **npm** (not pnpm or yarn)                                                                                            |
 | Node                   | **24** (pinned in `.nvmrc`; run `nvm use` first)                                                                      |
 

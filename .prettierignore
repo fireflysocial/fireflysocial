@@ -13,3 +13,7 @@ brand
 workflow
 engineering
 README.md
+
+# Vendored Impeccable skill (managed by npx impeccable install/update)
+.claude/skills
+.claude/agents/impeccable-*.md
