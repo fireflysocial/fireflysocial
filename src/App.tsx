@@ -1,10 +1,7 @@
+import { LandingPage } from './features/landing/LandingPage.tsx'
+
 function App() {
-  return (
-    <main>
-      <h1>Firefly</h1>
-      <p>Meet people in Vancouver through things you already like doing.</p>
-    </main>
-  )
+  return <LandingPage />
 }
 
 export default App

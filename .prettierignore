@@ -17,3 +17,6 @@ README.md
 # Vendored Impeccable skill (managed by npx impeccable install/update)
 .claude/skills
 .claude/agents/impeccable-*.md
+
+# Impeccable design briefs and config (written by the impeccable CLI)
+.impeccable

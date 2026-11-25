@@ -83,6 +83,7 @@ macOS runners use about 10× the GitHub Actions minutes on private repos, so iOS
 | E2E | Playwright | Plus `@axe-core/playwright` for accessibility checks. |
 | AI review | CodeRabbit | Already set up. |
 | AI design review | [Impeccable](https://impeccable.style) skill for Claude Code (`.claude/skills/impeccable`) | Installed 2026-11-24 with `npx impeccable install --providers=claude --scope=project`; refresh with `npx impeccable update`. Gives agents `/impeccable` commands (`critique`, `audit`, `polish`, …). The automatic design hook lives in each developer's git-ignored `.claude/settings.local.json`, so rerun the installer to get it. `npx impeccable detect src/` runs the detector with no agent. Not in CI yet. |
+| Fonts | Self-hosted WOFF2 in `src/assets/fonts/`, declared in `src/index.css` | Host Grotesk (SIL OFL), a variable font: one file per subset covers every weight, about 32 KB in total. Fetched with `.claude/skills/impeccable/scripts/impeccable font-fetch "<Family>" --out src/assets/fonts`. Never load fonts from a CDN at runtime: it leaks visitors' IP addresses to a third party and fails offline. |
 | Security | GitHub secret scanning + push protection, Dependabot | CodeQL needs the paid GitHub Code Security add-on on private repos, so it's deferred. |
 | Error monitoring | Sentry | Add before launch. |
 
@@ -103,13 +104,16 @@ Test pure logic, with no network and no Supabase:
 - Zod schemas and form validation
 - Formatting and helper functions
 - Custom hooks that wrap pure logic
+- Animation and simulation maths, kept out of components. Example: the landing page's firefly field (`src/lib/fireflies/`) has a seeded random generator, the Kuramoto synchrony model, the swarm and the scroll-to-story mapping, all tested without a canvas (for instance, "a coupled pod reaches order parameter > 0.95 within 6 simulated seconds").
 
 **Location:** colocated next to the code, e.g. `src/lib/matching.ts` → `src/lib/matching.test.ts`.
 
 ### 3.2 Component tests (Vitest + React Testing Library)
 - Query elements the way a user finds them (`getByRole`, `getByLabelText`), not by test IDs where possible.
 - Test behaviour (what renders and what happens on click), not implementation details.
-- Mock the data layer at the module boundary or with MSW. Don't mock the Supabase client's internals.
+- Mock the data layer at the module boundary or with MSW. Don't mock the Supabase client's internals. Example: `LandingPage` takes an optional `onRequestInvite`, so tests pass their own function instead of mocking `src/data/invites.ts`.
+- **No canvas in jsdom.** `src/test/setup.ts` makes `HTMLCanvasElement.prototype.getContext` return `null` before every test (jsdom would otherwise log "Not implemented"), so canvas components must handle a missing context. A test that needs to check drawing mocks `getContext` with a small fake that records calls, and stubs `ResizeObserver`, `IntersectionObserver` and `requestAnimationFrame` with `vi.stubGlobal` (the setup file restores them after each test).
+- Hooks that read `matchMedia` (such as `usePrefersReducedMotion`) are tested by stubbing `window.matchMedia`; they must also work when it doesn't exist.
 
 ### 3.3 Database tests (pgTAP)
 Every table with RLS gets tests that act as different users (anonymous, user A, user B, organizer, attendee, non-attendee) and assert allowed **and** denied access. Example cases:
@@ -127,6 +131,7 @@ The typed data-access layer (`src/data/*`) runs against the real local Supabase 
 
 ### 3.5 E2E tests (Playwright)
 Cover the critical paths from the [v3 user flow](../workflow/v3-user-flow.md), and nothing more:
+0. The public landing page (`e2e/home.spec.ts`, done): headline and invite action visible, axe, no horizontal scroll, the firefly canvas actually paints, scrolling the story reveals the week counter, the header link reaches the invite form, form validation and the honest "not open yet" state, and a reduced-motion still frame.
 1. Sign up / sign in
 2. Browse and find an event
 3. RSVP / join
@@ -144,6 +149,7 @@ Rules:
   - Update these to the newest models Playwright ships when it adds them (`devices` in `@playwright/test`).
   - **`desktop-chrome`**: secondary check for the web version.
 - Every page gets a "does not scroll horizontally" check, since that's the most common phone-layout bug.
+- Anything that animates gets a `test.describe` block with `test.use({ reducedMotion: 'reduce' })` that checks the still alternative. Canvas content is invisible to locators, so check it by reading pixels in `page.evaluate()` (see `paintedPixels` in `e2e/home.spec.ts`).
 - `e2e/` has its own `tsconfig.e2e.json` with DOM types, for code passed to `page.evaluate()`.
 - Playwright tests the web layer only. Native-only behaviour (push, camera, deep links, store builds) is tested on iOS Simulator / Android Emulator; add Maestro flows for these once the native apps exist.
 
@@ -295,6 +301,7 @@ e2e/                         # Playwright specs
 
 **Phase 4: E2E**
 - [x] Playwright + axe; smoke spec for the home page
+- [x] Landing page spec (2026-11-25): story scroll, invite form, canvas paint check, reduced motion
 - [x] `e2e` job in CI
 - [ ] Sign-in and core-flow specs as features land
 
