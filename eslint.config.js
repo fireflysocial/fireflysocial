@@ -15,6 +15,8 @@ export default defineConfig([
     'test-results',
     'supabase/.temp',
     'src/types/database.ts',
+    // Vendored Impeccable skill (npx impeccable install); third-party code, not ours to lint
+    '.claude/skills',
   ]),
   {
     files: ['**/*.{ts,tsx}'],
