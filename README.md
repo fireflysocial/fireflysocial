@@ -33,7 +33,9 @@ research/
   science.md
 brand/                 # logo, colors, usage
 workflow/
-  v1-user-flow.md      # current draft user flow (v2 draft; filename kept)
+  v4-user-flow.md      # current spec for launch: onboarding, event pipeline, personal feed
+  v3-user-flow.md      # next phase: pods, Firefly corner, picks, chat; hosts (long-term)
+  v1-user-flow.md      # older v2 draft (filename kept)
   open-gaps.md         # gap → proposed fix → how we'll validate it
 engineering/
   quality-and-ci.md    # testing strategy, CI pipeline, branch protection, Supabase workflow

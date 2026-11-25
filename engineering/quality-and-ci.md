@@ -130,13 +130,12 @@ Also test: Postgres functions, triggers, constraints, and that every table in `p
 The typed data-access layer (`src/data/*`) runs against the real local Supabase with seed data. These tests catch query, type, and policy mismatches that mocks would hide. Run them as a separate Vitest project (`vitest --project integration`) so plain unit tests stay fast.
 
 ### 3.5 E2E tests (Playwright)
-Cover the critical paths from the [v3 user flow](../workflow/v3-user-flow.md), and nothing more:
-0. The public landing page (`e2e/home.spec.ts`, done): headline and invite action visible, axe, no horizontal scroll, the firefly canvas actually paints, scrolling the story reveals the week counter, the header link reaches the invite form, form validation and the honest "not open yet" state, and a reduced-motion still frame.
-1. Sign up / sign in
-2. Browse and find an event
-3. RSVP / join
-4. Register-and-return flow for "Around the city" events
-5. Core safety actions (report / block)
+Cover the critical paths from the [v4 user flow](../workflow/v4-user-flow.md) (launch) and, later, the [v3 user flow](../workflow/v3-user-flow.md) (group features), and nothing more:
+1. The public landing page (`e2e/home.spec.ts`, done): headline and invite action visible, axe, no horizontal scroll, the firefly canvas actually paints, scrolling the story reveals the week counter, the header link reaches the invite form, form validation and the honest "not open yet" state, and a reduced-motion still frame.
+2. Onboarding: sign up / sign in, interests, first personal feed (launch)
+3. Personal feed: feedback, save, and the register-and-return confirmation (launch)
+4. Core safety actions: report a listing now; report / block people once group features exist
+5. Group features (next phase): join a group, the Firefly corner, picks
 
 Rules:
 - Run against the production build (`vite build` + `vite preview`), which Playwright's `webServer` starts automatically.

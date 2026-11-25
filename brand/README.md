@@ -12,9 +12,10 @@ The wings are muted and the glow is the only bright thing in the frame. That's t
 
 | Name  | Hex       | Use |
 |-------|-----------|-----|
-| Night | `#0E1424` | Backgrounds, text on light |
+| Black | `#050505` | Interface ground on dark surfaces (from 2026-11-25). Warm neutrals sit on it: ink `#F2F2EE`, muted `#9A9A92`, firefly-white dots `#E9E6CF` |
+| Night | `#0E1424` | Inside the logo files, and text on light. No longer an interface colour: the interface has no blue |
 | Glow  | `#D9F84A` | The light. Use sparingly: one glow per composition |
-| Wing  | `#313C62` | Wings on dark backgrounds |
+| Wing  | `#313C62` | The mark's wings only, not interface fills |
 
 On light backgrounds, the glow becomes Night and the wings become `#C9CFDE` (see `firefly-mark-light.svg`, which includes an opaque `#F5F6F0` background). Glow on white has too little contrast for text or an essential interface indicator.
 
@@ -41,6 +42,7 @@ On light backgrounds, the glow becomes Night and the wings become `#C9CFDE` (see
 
 Some firefly species flash at random when apart and gradually flash in unison when they stay together. Firefly uses that as its visual story: a dark field of faint, independently blinking dots (strangers), five of which gather into a pod, turn Glow and fall into step week by week. It's the brand promise, repetition becoming friendship, made visible. On the landing page it is modelled with the Kuramoto synchrony model (`src/lib/fireflies/`).
 
-- The crowd is drawn in the light Wing colour (`#C9CFDE`) at low opacity. Only the pod is Glow, so the screen still has one light.
+- The crowd is drawn in warm firefly-white (`#E9E6CF`) at low opacity on black. Only the pod is Glow, so the screen still has one light.
+- **Call and response:** tapping the dark makes nearby fireflies flash back in a ripple, as real fireflies answer a signal. A single hairline ring marks the tap.
 - Dots are flat circles. A flash is shown by size and opacity, never by blur or bloom.
 - With reduced motion, show the end state: the pod gathered, lit and in step.

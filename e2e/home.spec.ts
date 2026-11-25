@@ -1,7 +1,7 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test, type Page } from '@playwright/test'
 
-const HEADLINE = 'Keep meeting the same faces.'
+const HEADLINE = 'Make friends at the events you’d go to anyway.'
 
 /** Scrolls to the end of the opening story (the sticky firefly field). */
 async function scrollToStoryEnd(page: Page) {
@@ -53,6 +53,29 @@ test.describe('landing page', () => {
   test('draws the firefly field', async ({ page }) => {
     await page.goto('/')
     await expect.poll(() => paintedPixels(page)).toBeGreaterThan(0)
+  })
+
+  test('lets the visitor pick interests and watch the example feed re-rank', async ({ page }) => {
+    await page.goto('/')
+    await page.getByRole('link', { name: 'How it picks' }).click()
+    const feed = page.getByRole('list', { name: 'Example feed' })
+    await expect(feed.getByRole('listitem').first()).toContainText('Board-game night')
+    await page.getByRole('button', { name: 'Board games' }).click()
+    await page.getByRole('button', { name: 'Running' }).click()
+    await expect(page.getByRole('button', { name: 'Running' })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    )
+    await expect(feed.getByRole('listitem').first()).toContainText('Saturday 5K social run')
+    await expect(feed.getByRole('listitem').first()).toContainText('Because you like running')
+  })
+
+  test('answers a tap on the dark without getting in the way', async ({ page }) => {
+    await page.goto('/')
+    const before = await page.evaluate(() => window.scrollY)
+    await page.locator('.hero').click({ position: { x: 120, y: 200 } })
+    await expect.poll(() => paintedPixels(page)).toBeGreaterThan(0)
+    expect(await page.evaluate(() => window.scrollY)).toBe(before)
   })
 
   test('tells the story as the visitor scrolls', async ({ page }) => {

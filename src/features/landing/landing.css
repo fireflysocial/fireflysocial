@@ -1,24 +1,33 @@
-/* Landing page. Always Night (see LandingPage.tsx). Grammar: edge-to-edge Night, very large
-   tight grotesk, hairline rules, two-line labels (muted over white), solid block header cells,
-   one Glow per screen. No cards, shadows or gradients. Phone first, from 360px. */
+/* Landing page. Always dark (see LandingPage.tsx). Grammar: edge-to-edge soft black, very
+   large tight grotesk, hairline rules, two-line labels (muted over white), solid block header
+   cells, one Glow per screen, no blue in the interface. No cards, shadows or gradients.
+   Phone first, from 360px. */
 
 html:has(.landing) {
   color-scheme: dark;
-  background: var(--night);
+  background: var(--black);
   scroll-behavior: smooth;
-  scrollbar-color: var(--wing) var(--night);
+  scrollbar-color: #2a2a27 var(--black);
 }
 
 .landing {
-  --ink: #f4f5f9;
-  --muted: #9aa3bf;
-  --rule: rgb(201 207 222 / 0.18);
-  --night-raised: #151c31;
-  --wing-hover: #3b4875;
+  /* Warm neutrals on soft black: no blue in the interface (decided 2026-11-25). */
+  --ink: #f2f2ee;
+  --ink-hover: #ffffff;
+  --muted: #9a9a92;
+  --rule: rgb(242 242 238 / 0.13);
+  --rule-strong: rgb(242 242 238 / 0.28);
+  --raised: #111111;
+  /* The drawn phone: bezel, camera island, and its small rounded details. */
+  --device-bezel: #1c1c1a;
+  --device-island: #000000;
+  --radius-device: 48px;
+  --radius-island: 13px;
+  --radius-device-detail: 3px;
   --glow-hover: #e6ff7a;
   --error: #ff9a8a;
-  /* Placeholder text: dimmer than Muted but still 5.15:1 on Night. */
-  --placeholder: #7d87a6;
+  /* Placeholder text: dimmer than Muted but still 5.06:1 on black. */
+  --placeholder: #7f7f78;
   --header: 56px;
   --gutter: clamp(16px, 2.4vw, 32px);
   --gutter-left: calc(var(--gutter) + var(--safe-left));
@@ -29,12 +38,14 @@ html:has(.landing) {
   --text-headline: clamp(2.25rem, 8.5vw, 4.5rem);
   --text-statement: clamp(1.875rem, 8.4vw, 3.5rem);
   --text-lede: clamp(1.1875rem, 2.4vw, 1.5rem);
+  --text-item: 1.125rem;
+  --text-input: clamp(1.25rem, 4vw, 1.75rem);
   --text-body: 1.0625rem;
   --text-label: 0.9375rem;
   --text-small: 0.8125rem;
 
   min-height: 100dvh;
-  background: var(--night);
+  background: var(--black);
   color: var(--ink);
   font-size: var(--text-body);
   line-height: 1.5;
@@ -50,7 +61,7 @@ html:has(.landing) {
 
 .landing ::selection {
   background: var(--glow);
-  color: var(--night);
+  color: var(--black);
 }
 
 .landing :where(h1, h2, h3, p, ul, ol, figure) {
@@ -62,7 +73,8 @@ html:has(.landing) {
   list-style: none;
 }
 
-.landing a {
+/* :where() keeps this at zero specificity, so components can set their own link colours. */
+.landing :where(a) {
   color: inherit;
   text-decoration: none;
 }
@@ -102,7 +114,7 @@ html:has(.landing) {
   z-index: 20;
   padding: 12px 16px;
   background: var(--ink);
-  color: var(--night);
+  color: var(--black);
   transform: translateY(-200%);
 }
 
@@ -168,7 +180,7 @@ html:has(.landing) {
   align-items: stretch;
   height: calc(var(--header) + var(--safe-top));
   padding: var(--safe-top) var(--safe-right) 0 var(--safe-left);
-  background: var(--night);
+  background: var(--black);
   border-bottom: 1px solid var(--rule);
 }
 
@@ -207,14 +219,21 @@ html:has(.landing) {
   gap: 10px;
   margin-left: auto;
   padding: 0 var(--gutter);
-  background: var(--wing);
+  background: var(--ink);
+  color: var(--black);
   font-size: var(--text-label);
+  font-weight: 500;
   white-space: nowrap;
   transition: background-color 200ms ease-out;
 }
 
 .header__invite:hover {
-  background: var(--wing-hover);
+  background: var(--ink-hover);
+}
+
+.header__invite:focus-visible {
+  outline-offset: -4px;
+  outline-color: var(--black);
 }
 
 @media (width >= 900px) {
@@ -337,43 +356,66 @@ html:has(.landing) {
   padding-bottom: calc(var(--safe-bottom) + 120px);
 }
 
-.chapter--opening {
+/* Hero ------------------------------------------------------------------------------------ */
+
+.hero {
+  position: relative;
   display: grid;
-  grid-template-rows: 1fr auto 1fr auto auto;
-  gap: 0;
-  padding-bottom: calc(var(--safe-bottom) + 20px);
+  grid-template-rows: 1fr auto auto;
+  min-height: 100dvh;
+  padding: calc(var(--header) + var(--safe-top) + 24px) var(--gutter-right)
+    calc(var(--safe-bottom) + 16px) var(--gutter-left);
+  overflow: hidden;
+  /* The field answers taps; don't let a tap also select text or flash a highlight. */
+  -webkit-user-select: none;
+  user-select: none;
 }
 
-.story__kinds {
+.hero > :not(.field) {
+  position: relative;
+}
+
+.hero__copy {
   grid-row: 2;
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  font-size: var(--text-small);
-}
-
-.opening {
-  grid-row: 4;
   display: grid;
   gap: 20px;
-  padding-bottom: 28px;
+  padding-bottom: 24px;
 }
 
-.opening__intro {
-  max-width: 36ch;
+.hero__title {
+  max-width: 13ch;
+}
+
+.hero__intro {
+  max-width: 34ch;
   font-size: var(--text-lede);
   line-height: 1.4;
   text-wrap: pretty;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.hero__foot {
+  grid-row: 3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.hero__hint {
+  color: var(--muted);
+  font-size: var(--text-small);
 }
 
 .cue {
-  grid-row: 5;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  justify-self: end;
   min-height: 44px;
+  margin-left: auto;
   font-size: var(--text-label);
+  white-space: nowrap;
 }
 
 .cue .arrow {
@@ -382,11 +424,7 @@ html:has(.landing) {
 }
 
 @media (width >= 900px) {
-  .story__kinds {
-    font-size: var(--text-label);
-  }
-
-  .opening {
+  .hero__copy {
     grid-template-columns: minmax(0, 1fr) minmax(0, 22rem);
     align-items: end;
     column-gap: var(--gutter);
@@ -453,7 +491,7 @@ html:has(.landing) {
 
   .row__body {
     padding-top: 4px;
-    font-size: 1.125rem;
+    font-size: var(--text-item);
   }
 
   .row--timed {
@@ -466,117 +504,181 @@ html:has(.landing) {
   }
 }
 
-/* Pod preview ----------------------------------------------------------------------------- */
+/* Feed demo ------------------------------------------------------------------------------- */
 
-.pod {
+.demo {
   display: grid;
   gap: 56px;
 }
 
-.pod__text {
+.demo__text {
   display: grid;
   gap: 24px;
   align-content: start;
 }
 
-.pod__lede {
+.demo__lede {
   max-width: 36ch;
   color: var(--muted);
   font-size: var(--text-lede);
   line-height: 1.4;
+  text-wrap: pretty;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.chips__label {
+  flex-basis: 100%;
+  margin-bottom: 4px;
+  color: var(--muted);
+  font-size: var(--text-label);
+}
+
+/* Square, like every control on the page. Picked = solid warm white. */
+.chip {
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--rule-strong);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: var(--text-body);
+  cursor: pointer;
+  transition:
+    background-color 180ms ease-out,
+    color 180ms ease-out,
+    border-color 180ms ease-out;
+}
+
+.chip:hover {
+  border-color: var(--ink);
+}
+
+.chip[aria-pressed='true'] {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--black);
+}
+
+.chip:active {
+  transform: scale(0.97);
 }
 
 .phone {
   justify-self: center;
-  width: min(100%, 360px);
+  width: min(100% - 16px, 360px);
 }
 
+/* A phone drawn in code: bezel, screen inset, status bar, camera island, home indicator. */
 .phone__screen {
+  position: relative;
   display: grid;
-  gap: 20px;
-  padding: 28px 20px 24px;
-  border: 1px solid var(--rule);
-  border-radius: 40px;
-  background: var(--night-raised);
+  align-content: start;
+  gap: 8px;
+  min-height: 600px;
+  padding: 14px 22px 40px;
+  border: 1px solid var(--rule-strong);
+  border-radius: var(--radius-device);
+  background: var(--raised);
+  /* The bezel: a solid frame around the screen (not a shadow). */
+  outline: 8px solid var(--device-bezel);
 }
 
-.phone__event {
+.phone__status {
   display: grid;
-  gap: 10px;
-  padding-bottom: 18px;
-  border-bottom: 1px solid var(--rule);
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  margin: 0 -4px 14px;
+  font-size: var(--text-small);
+  font-weight: 500;
 }
 
-.phone__event .label span:last-child {
-  font-size: 1.375rem;
+.phone__island {
+  width: 92px;
+  height: 26px;
+  border-radius: var(--radius-island);
+  background: var(--device-island);
+}
+
+.phone__battery {
+  justify-self: end;
+  width: 24px;
+  height: 11px;
+  border: 1px solid var(--ink);
+  border-radius: var(--radius-device-detail);
+  position: relative;
+}
+
+.phone__battery::after {
+  position: absolute;
+  inset: 1px 30% 1px 1px;
+  border-radius: calc(var(--radius-device-detail) - 2px);
+  background: var(--ink);
+  content: '';
+}
+
+.phone__home {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  width: 120px;
+  height: 5px;
+  border-radius: var(--radius-device-detail);
+  background: var(--ink);
+  opacity: 0.55;
+  transform: translateX(-50%);
+}
+
+.phone__heading span:last-child {
+  font-size: 1.5rem;
   letter-spacing: -0.02em;
 }
 
-.phone__meet {
-  font-size: var(--text-label);
-}
-
-.phone__pod {
+.feed__item {
   display: grid;
-  gap: 14px;
-}
-
-.person {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.person__initial {
-  display: grid;
-  place-items: center;
-  flex: none;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--wing);
-  font-size: 1.0625rem;
-}
-
-.person__text {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  font-size: var(--text-small);
-  line-height: 1.35;
-}
-
-.person__name {
-  font-size: var(--text-body);
-}
-
-.phone__prompt {
-  display: flex;
-  flex-direction: column;
   gap: 4px;
-  padding-top: 18px;
+  padding: 16px 0;
   border-top: 1px solid var(--rule);
-  font-size: var(--text-label);
-  line-height: 1.4;
 }
 
-.phone__prompt .muted {
+.feed__title {
+  font-size: var(--text-item);
+  letter-spacing: -0.01em;
+}
+
+.feed__place {
+  color: var(--muted);
   font-size: var(--text-small);
 }
 
-.phone__chat {
+.feed__why {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: var(--text-label);
+  gap: 8px;
+  margin-top: 2px;
+  font-size: var(--text-small);
 }
 
-/* The one Glow on this screen: the pod chat about to open. */
-.phone__dot {
-  width: 10px;
-  height: 10px;
+/* The one Glow on this screen: the best fit. */
+.feed__dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: var(--glow);
+}
+
+.feed__empty {
+  padding-top: 8px;
+  border-top: 1px solid var(--rule);
+  color: var(--muted);
+  font-size: var(--text-label);
 }
 
 .phone__caption {
@@ -586,11 +688,29 @@ html:has(.landing) {
   text-align: center;
 }
 
+/* Reordered feed cards glide to their new places (view transitions, where supported). */
+::view-transition-group(*) {
+  animation-duration: 420ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
 @media (width >= 900px) {
-  .pod {
+  .demo {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     column-gap: var(--gutter);
-    align-items: center;
+    /* Top-aligned: as the feed changes height, the chips never move under the pointer. */
+    align-items: start;
+    /* Less space above, so the whole phone and its "Example events" caption fit on screen. */
+    padding-top: clamp(64px, 8vw, 112px);
+  }
+
+  .feed__item {
+    padding: 13px 0;
   }
 }
 
@@ -690,7 +810,7 @@ html:has(.landing) {
   color: var(--ink);
   font: inherit;
   /* 16px or more, so iOS Safari doesn't zoom in on focus. */
-  font-size: clamp(1.25rem, 4vw, 1.75rem);
+  font-size: var(--text-input);
   letter-spacing: -0.01em;
 }
 
@@ -718,7 +838,7 @@ html:has(.landing) {
   border: 0;
   border-radius: 0;
   background: var(--glow);
-  color: var(--night);
+  color: var(--black);
   font: inherit;
   font-size: var(--text-body);
   font-weight: 500;
@@ -732,7 +852,7 @@ html:has(.landing) {
 
 .invite__submit:disabled {
   cursor: progress;
-  background: var(--wing-light);
+  background: var(--muted);
 }
 
 .invite__submit:focus-visible {

@@ -65,6 +65,26 @@ describe('FireflyField', () => {
     expect(cancelFrame).toHaveBeenCalled()
   })
 
+  it('listens for taps on its call target, and stops when removed', () => {
+    withCanvas()
+    const target = document.createElement('section')
+    const add = vi.spyOn(target, 'addEventListener')
+    const remove = vi.spyOn(target, 'removeEventListener')
+    const { unmount } = render(
+      <FireflyField progress={{ current: 0 }} still={false} callTarget={{ current: target }} />,
+    )
+    expect(add).toHaveBeenCalledWith('pointerdown', expect.any(Function))
+    unmount()
+    expect(remove).toHaveBeenCalledWith('pointerdown', expect.any(Function))
+  })
+
+  it('draws only the crowd as a still frame when its story is at the start', () => {
+    const { context } = withCanvas()
+    render(<FireflyField progress={{ current: 0 }} still stillProgress={0} />)
+    expect(context.arc).toHaveBeenCalled()
+    expect(context.fillText).not.toHaveBeenCalled()
+  })
+
   it('draws one still frame, with the pod named and gathered, for reduced motion', () => {
     const { context, requestFrame } = withCanvas()
     render(<FireflyField progress={{ current: 0 }} still />)

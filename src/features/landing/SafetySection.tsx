@@ -1,23 +1,23 @@
 const PROMISES = [
   {
     title: 'No location, ever.',
-    body: 'No maps, no distances, no live location. You meet at a set place and time, and that’s all anyone needs to know.',
+    body: 'No maps, no distances, no tracking. You pick neighbourhoods you like from a list.',
   },
   {
-    title: 'Picks stay private.',
-    body: 'Nobody finds out who picked them. Chat only opens when two people both choose to keep meeting.',
+    title: 'Your plans stay yours.',
+    body: 'Only you can see which events you’re going to.',
   },
   {
-    title: 'Small cards for strangers.',
-    body: 'First name, photo and a few interests. No last name, workplace or socials until you decide to share them.',
-  },
-  {
-    title: 'Block and report from every card.',
-    body: 'One tap. Blocks are permanent, work both ways, and keep you out of each other’s pods.',
+    title: 'Only what’s needed.',
+    body: 'A first name and what you’re into. No photo, no last name and no socials to get started.',
   },
   {
     title: '18+ and friends only.',
     body: 'Everyone agrees to the same pledge: no dating, no selling, no recruiting.',
+  },
+  {
+    title: 'Report anything.',
+    body: 'Flag a wrong listing in one tap. When you can meet people through Firefly, block and report will be on every card.',
   },
 ] as const
 
@@ -25,7 +25,7 @@ export function SafetySection() {
   return (
     <section className="section" id="safety" aria-labelledby="safety-title">
       <h2 id="safety-title" className="headline">
-        Easy to meet. Hard to find.
+        Private by default.
       </h2>
       <ul className="rows">
         {PROMISES.map((promise) => (

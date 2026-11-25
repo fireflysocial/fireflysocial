@@ -3,11 +3,33 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { LandingPage } from './LandingPage.tsx'
 
+const HEADLINE = 'Make friends at the events you’d go to anyway.'
+
 describe('LandingPage', () => {
   it('leads with the promise', () => {
     render(<LandingPage />)
+    expect(screen.getByRole('heading', { level: 1, name: HEADLINE })).toBeInTheDocument()
+  })
+
+  it('has every section a visitor needs, launch first and vision second', () => {
+    render(<LandingPage />)
+    expect(screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual([
+      'Tell it what you like. Watch it pick.',
+      'How it works',
+      'Coming next: Then, the people going too.',
+      'Events Firefly finds',
+      'Private by default.',
+      'Get an invite.',
+    ])
+  })
+
+  it('labels what is coming next as coming, not as shipped', () => {
+    render(<LandingPage />)
+    const comingNext = document.getElementById('coming-next')
+    if (!comingNext) throw new Error('coming-next section missing')
+    expect(within(comingNext).getByText('Coming next')).toBeInTheDocument()
     expect(
-      screen.getByRole('heading', { level: 1, name: 'Keep meeting the same faces.' }),
+      within(comingNext).getByText('Firefly will put a few of you together.'),
     ).toBeInTheDocument()
   })
 
@@ -15,23 +37,11 @@ describe('LandingPage', () => {
     render(<LandingPage />)
     for (const line of [
       'Vancouver is full of people you’ve almost met.',
-      'Firefly puts five of you in a pod.',
-      'Same run. Same five. Week after week.',
+      'Same event. Same faces. Week after week.',
       'Until you’re in step.',
     ]) {
       expect(screen.getByText(line)).toBeInTheDocument()
     }
-  })
-
-  it('has every section a visitor needs, in order', () => {
-    render(<LandingPage />)
-    expect(screen.getAllByRole('heading', { level: 2 }).map((h) => h.textContent)).toEqual([
-      'How it works',
-      'Your pod, the night before.',
-      'Events Firefly works with',
-      'Easy to meet. Hard to find.',
-      'Get an invite.',
-    ])
   })
 
   it('points every invite link at the invite form', () => {
@@ -42,21 +52,21 @@ describe('LandingPage', () => {
     expect(document.getElementById('invite')).toContainElement(screen.getByLabelText('Email'))
   })
 
-  it('labels the example pod as made up', () => {
+  it('labels the example feed as made up', () => {
     render(<LandingPage />)
-    expect(screen.getByText('Example pod. Names and details are made up.')).toBeInTheDocument()
     expect(
-      within(screen.getByRole('list', { name: 'Example pod' })).getAllByRole('listitem'),
-    ).toHaveLength(5)
+      screen.getByText('Example events. Real listings come from across Vancouver.'),
+    ).toBeInTheDocument()
   })
 
-  it('promises the safety rules from the spec', () => {
+  it('promises the privacy rules that apply at launch', () => {
     render(<LandingPage />)
     for (const promise of [
       'No location, ever.',
-      'Picks stay private.',
-      'Block and report from every card.',
+      'Your plans stay yours.',
+      'Only what’s needed.',
       '18+ and friends only.',
+      'Report anything.',
     ]) {
       expect(screen.getByRole('heading', { level: 3, name: promise })).toBeInTheDocument()
     }
@@ -77,13 +87,13 @@ describe('LandingPage', () => {
     expect(await screen.findByText(/Invites aren’t open yet/)).toBeInTheDocument()
   })
 
-  it('paints the browser toolbar Night while open and restores it after', () => {
+  it('paints the browser toolbar black while open and restores it after', () => {
     const meta = document.createElement('meta')
     meta.name = 'theme-color'
     meta.content = '#ffffff'
     document.head.append(meta)
     const { unmount } = render(<LandingPage />)
-    expect(meta.content).toBe('#0e1424')
+    expect(meta.content).toBe('#050505')
     unmount()
     expect(meta.content).toBe('#ffffff')
     meta.remove()

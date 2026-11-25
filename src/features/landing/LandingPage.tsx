@@ -1,16 +1,18 @@
 import { useEffect } from 'react'
 import { requestInvite, type RequestInvite } from '../../data/invites.ts'
 import { EventStrip } from './EventStrip.tsx'
+import { FeedDemo } from './FeedDemo.tsx'
+import { Hero } from './Hero.tsx'
 import { HowItWorks } from './HowItWorks.tsx'
 import { InviteSection } from './InviteSection.tsx'
-import { PodPreview } from './PodPreview.tsx'
 import { SafetySection } from './SafetySection.tsx'
 import { SiteFooter } from './SiteFooter.tsx'
 import { SiteHeader } from './SiteHeader.tsx'
 import { SyncStory } from './SyncStory.tsx'
 import './landing.css'
 
-const NIGHT = '#0e1424'
+/** The page's ground: soft black (decided 2026-11-25). */
+const GROUND = '#050505'
 
 interface LandingPageProps {
   /** Where invite requests go. Defaults to the real data function; tests pass their own. */
@@ -18,8 +20,8 @@ interface LandingPageProps {
 }
 
 /**
- * The public landing page. Always Night, whatever the visitor's light/dark setting: the dark
- * is the concept (decided 2026-11-25). App screens follow the system setting as usual.
+ * The public landing page. Always dark (soft black), whatever the visitor's light/dark setting:
+ * the dark is the concept (decided 2026-11-25). App screens follow the system setting as usual.
  */
 export function LandingPage({ onRequestInvite = requestInvite }: LandingPageProps) {
   useNightBrowserChrome()
@@ -31,9 +33,10 @@ export function LandingPage({ onRequestInvite = requestInvite }: LandingPageProp
       </a>
       <SiteHeader />
       <main>
-        <SyncStory />
+        <Hero />
+        <FeedDemo />
         <HowItWorks />
-        <PodPreview />
+        <SyncStory />
         <EventStrip />
         <SafetySection />
         <InviteSection onRequest={onRequestInvite} />
@@ -43,12 +46,12 @@ export function LandingPage({ onRequestInvite = requestInvite }: LandingPageProp
   )
 }
 
-/** Paints the mobile browser's toolbar Night while this page is open, and restores it after. */
+/** Paints the mobile browser's toolbar black while this page is open, and restores it after. */
 function useNightBrowserChrome() {
   useEffect(() => {
     const metas = Array.from(document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]'))
     const previous = metas.map((meta) => meta.content)
-    for (const meta of metas) meta.content = NIGHT
+    for (const meta of metas) meta.content = GROUND
     return () => {
       metas.forEach((meta, index) => {
         meta.content = previous[index] ?? meta.content

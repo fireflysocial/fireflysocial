@@ -13,8 +13,7 @@ export function InviteSection({ onRequest }: InviteSectionProps) {
       </h2>
       <div className="invite__body">
         <p className="invite__lede">
-          Firefly is starting small, with a few recurring events in one Vancouver neighbourhood.
-          Leave your email and we’ll tell you when the first pods open.
+          Firefly is starting in Vancouver. Leave your email and we’ll tell you when it opens.
         </p>
         <InviteForm onRequest={onRequest} />
       </div>

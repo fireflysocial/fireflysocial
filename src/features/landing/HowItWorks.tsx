@@ -1,23 +1,23 @@
 const STEPS = [
   {
-    when: 'Before',
-    title: 'Pick an event you’d go to anyway',
-    body: 'Run clubs, board-game cafés, language exchanges, walks. Tap “I’m going, put me in a pod.” Free and under-$20 events come first.',
+    when: 'Two minutes',
+    title: 'Tell Firefly what you like',
+    body: 'Sign up with your phone number, pick a few interests and when you’re free. No photo, no profile to perfect.',
   },
   {
-    when: 'The day before',
-    title: 'Meet your pod on your phone',
-    body: 'Pods form 24 hours before. You see first names, photos, a few interests and one prompt answer. Pod chat opens 30 minutes before, for “I’m in the green jacket.”',
+    when: 'Every week',
+    title: 'Get a short list that fits',
+    body: 'Events from across Vancouver, each with a line on why it’s there. Tap “Not for me” and the list learns.',
   },
   {
-    when: 'At the event',
-    title: 'Check in, then put the phone away',
-    body: 'Find the Firefly corner, say hi, and get on with the run, the game or the conversation. The app is for the first two minutes, not the whole night.',
+    when: 'When you’re in',
+    title: 'Register where you normally would',
+    body: 'Firefly opens the event’s own page. Come back, tap “I’m going”, and get a reminder before it starts.',
   },
   {
-    when: 'After',
-    title: 'Pick who you’d like to keep meeting',
-    body: 'Picks are private. If you both pick each other, chat opens and Firefly suggests the next event you could go to together.',
+    when: 'Coming next',
+    title: 'Meet the people going too',
+    body: 'A few people going to the same event, introduced the day before, meeting at a set spot. No walking up to strangers cold.',
   },
 ] as const
 

@@ -6,7 +6,10 @@ describe('App', () => {
   it('opens on the landing page', () => {
     render(<App />)
     expect(
-      screen.getByRole('heading', { level: 1, name: 'Keep meeting the same faces.' }),
+      screen.getByRole('heading', {
+        level: 1,
+        name: 'Make friends at the events you’d go to anyway.',
+      }),
     ).toBeInTheDocument()
   })
 })

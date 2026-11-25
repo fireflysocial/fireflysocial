@@ -20,6 +20,8 @@ export interface AmbientFirefly {
   omega: number
   /** Relative dot size, around 1. */
   size: number
+  /** Animation-clock second at which this firefly answers a call; -Infinity if it hasn't. */
+  answerAt: number
 }
 
 /** One of the five pod-mates. */
@@ -55,6 +57,7 @@ export function createSwarm({ seed, ambientCount }: SwarmOptions): Swarm {
     phase: between(random, 0, TAU),
     omega: TAU / between(random, 2.6, 6.5),
     size: between(random, 0.7, 1.4),
+    answerAt: Number.NEGATIVE_INFINITY,
   }))
   const pod: PodFirefly[] = Array.from({ length: POD_SIZE }, (_, index) => {
     // A fixed pentagon, point up: every pod-mate has its own side, so name labels never collide.
@@ -99,6 +102,42 @@ export function advanceSwarm(swarm: Swarm, dt: number, coupling: number): void {
   swarm.pod.forEach((firefly, index) => {
     firefly.phase = phases[index] ?? firefly.phase
   })
+}
+
+export interface CallOptions {
+  /** How far the call carries, in pixels. */
+  reach: number
+  /** How fast the answer spreads outward, in pixels per second. */
+  speed: number
+}
+
+/**
+ * A call into the dark at pixel point (x, y): every stranger within reach answers with a flash,
+ * nearest first, so the answers ripple outward like real fireflies replying to a signal.
+ * `now` is the current animation-clock second; each answering firefly records when it answers
+ * (`answerAt`) so the renderer can make the answer stand out. Mutates the crowd and returns
+ * how many answered.
+ */
+export function answerCall(
+  swarm: Swarm,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  { reach, speed }: CallOptions,
+  now = 0,
+): number {
+  let answered = 0
+  for (const firefly of swarm.ambient) {
+    const distance = Math.hypot(firefly.x * width - x, firefly.y * height - y)
+    if (distance > reach) continue
+    // A flash peaks at phase 0, so set each phase that far behind 0: it flashes after `delay`.
+    const delay = distance / speed
+    firefly.phase = wrapPhase(-firefly.omega * delay)
+    firefly.answerAt = now + delay
+    answered++
+  }
+  return answered
 }
 
 export interface PodLayout {

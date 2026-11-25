@@ -46,7 +46,7 @@ export function InviteForm({ onRequest }: InviteFormProps) {
   if (status.kind === 'sent') {
     return (
       <p className="invite__done" role="status">
-        You’re on the list. We’ll email you when pods open.
+        You’re on the list. We’ll email you when Firefly opens.
       </p>
     )
   }
