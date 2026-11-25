@@ -1,6 +1,6 @@
 # Firefly
 
-Firefly brings together people in Vancouver who share a sense of purpose, at the events happening across the city: startup meetups, run clubs, gallery openings, hackathons, language exchanges and every other kind of event. People come for friendship, a professional network, collaborators or a co-founder. This repository holds the research, the product design and the app: **iOS and Android apps plus a web version**, built from one React + TypeScript + Vite codebase with Supabase, wrapped for the app stores with Capacitor (planned). See [engineering/quality-and-ci.md §0](engineering/quality-and-ci.md#0-platforms-ios-android-and-web) for the platform plan.
+Firefly brings together people in Vancouver who share a sense of purpose, at the events happening across the city: startup meetups, run clubs, gallery openings, hackathons, language exchanges and many other events where people get to talk (concerts, loud bars and large venues are left out of the feed). People come for friendship, a professional network, collaborators or a co-founder. This repository holds the research, the product design and the app: **iOS and Android apps plus a web version**, built from one React + TypeScript + Vite codebase with Supabase, wrapped for the app stores with Capacitor (planned). See [engineering/quality-and-ci.md §0](engineering/quality-and-ci.md#0-platforms-ios-android-and-web) for the platform plan.
 
 **Launch scope (decided 2026-11-25):** an easy onboarding and a personal event feed, with events found by AI-assisted search ([workflow/v4-user-flow.md](workflow/v4-user-flow.md)). Groups, the Firefly corner, picks and chat come next; hosts are long-term ([workflow/v3-user-flow.md](workflow/v3-user-flow.md)).
 
@@ -24,7 +24,7 @@ Never commit `.env.local`, and never put the Supabase secret (service-role) key 
 
 ## Checks
 
-All of these run in CI ([.github/workflows/ci.yml](.github/workflows/ci.yml)) on every pull request, and `main` only accepts changes through a PR with every check green.
+All of these run in CI ([.github/workflows/ci.yml](.github/workflows/ci.yml)) on pull requests targeting `main`, and `main` only accepts changes through a PR with every check green.
 
 | Command | Checks |
 |---|---|
