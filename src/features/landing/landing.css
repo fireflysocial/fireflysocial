@@ -1,0 +1,826 @@
+/* Landing page. Always Night (see LandingPage.tsx). Grammar: edge-to-edge Night, very large
+   tight grotesk, hairline rules, two-line labels (muted over white), solid block header cells,
+   one Glow per screen. No cards, shadows or gradients. Phone first, from 360px. */
+
+html:has(.landing) {
+  color-scheme: dark;
+  background: var(--night);
+  scroll-behavior: smooth;
+  scrollbar-color: var(--wing) var(--night);
+}
+
+.landing {
+  --ink: #f4f5f9;
+  --muted: #9aa3bf;
+  --rule: rgb(201 207 222 / 0.18);
+  --night-raised: #151c31;
+  --wing-hover: #3b4875;
+  --glow-hover: #e6ff7a;
+  --error: #ff9a8a;
+  /* Placeholder text: dimmer than Muted but still 5.15:1 on Night. */
+  --placeholder: #7d87a6;
+  --header: 56px;
+  --gutter: clamp(16px, 2.4vw, 32px);
+  --gutter-left: calc(var(--gutter) + var(--safe-left));
+  --gutter-right: calc(var(--gutter) + var(--safe-right));
+  --space-section: clamp(96px, 16vw, 200px);
+
+  --text-display: clamp(2.75rem, 13vw, 6rem);
+  --text-headline: clamp(2.25rem, 8.5vw, 4.5rem);
+  --text-statement: clamp(1.875rem, 8.4vw, 3.5rem);
+  --text-lede: clamp(1.1875rem, 2.4vw, 1.5rem);
+  --text-body: 1.0625rem;
+  --text-label: 0.9375rem;
+  --text-small: 0.8125rem;
+
+  min-height: 100dvh;
+  background: var(--night);
+  color: var(--ink);
+  font-size: var(--text-body);
+  line-height: 1.5;
+  caret-color: var(--glow);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (width >= 900px) {
+  .landing {
+    --header: 72px;
+  }
+}
+
+.landing ::selection {
+  background: var(--glow);
+  color: var(--night);
+}
+
+.landing :where(h1, h2, h3, p, ul, ol, figure) {
+  margin: 0;
+}
+
+.landing :where(ul, ol) {
+  padding: 0;
+  list-style: none;
+}
+
+.landing a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.landing :focus-visible {
+  outline: 2px solid var(--glow);
+  outline-offset: 3px;
+}
+
+.landing :where([id]) {
+  scroll-margin-top: calc(var(--header) + var(--safe-top));
+}
+
+.muted {
+  color: var(--muted);
+}
+
+/* Keeps a phrase on one line, so headlines break only where they read well. */
+.nowrap {
+  white-space: nowrap;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip {
+  position: fixed;
+  top: calc(var(--safe-top) + 8px);
+  left: calc(var(--safe-left) + 8px);
+  z-index: 20;
+  padding: 12px 16px;
+  background: var(--ink);
+  color: var(--night);
+  transform: translateY(-200%);
+}
+
+.skip:focus-visible {
+  transform: none;
+}
+
+/* Two-line label: muted context over the white fact. */
+.label,
+.header__name,
+.header__nav a,
+.row__title,
+.footer__line {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: var(--text-label);
+  line-height: 1.3;
+}
+
+.arrow {
+  width: 1.25em;
+  height: 1.25em;
+  flex: none;
+}
+
+/* Display type ---------------------------------------------------------------------------- */
+
+.display {
+  font-size: var(--text-display);
+  font-weight: 400;
+  line-height: 0.94;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.headline {
+  font-size: var(--text-headline);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.statement {
+  max-width: 20ch;
+  font-size: var(--text-statement);
+  font-weight: 400;
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+/* Header ---------------------------------------------------------------------------------- */
+
+.header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 10;
+  display: flex;
+  align-items: stretch;
+  height: calc(var(--header) + var(--safe-top));
+  padding: var(--safe-top) var(--safe-right) 0 var(--safe-left);
+  background: var(--night);
+  border-bottom: 1px solid var(--rule);
+}
+
+.header__home {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.header__mark {
+  display: grid;
+  place-items: center;
+  width: var(--header);
+  height: 100%;
+  border-right: 1px solid var(--rule);
+}
+
+.header__mark svg {
+  width: 62%;
+  height: 62%;
+}
+
+.header__name {
+  font-size: var(--text-label);
+  line-height: 1.2;
+}
+
+.header__nav {
+  display: none;
+}
+
+.header__invite {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+  padding: 0 var(--gutter);
+  background: var(--wing);
+  font-size: var(--text-label);
+  white-space: nowrap;
+  transition: background-color 200ms ease-out;
+}
+
+.header__invite:hover {
+  background: var(--wing-hover);
+}
+
+@media (width >= 900px) {
+  .header__home {
+    gap: 24px;
+    width: 30%;
+  }
+
+  .header__nav {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+  }
+
+  .header__nav a {
+    font-size: var(--text-label);
+    line-height: 1.2;
+  }
+
+  .header__nav a:hover span:last-child {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+  }
+
+  .header__invite {
+    min-width: 200px;
+    justify-content: space-between;
+  }
+}
+
+/* The story ------------------------------------------------------------------------------- */
+
+.story {
+  position: relative;
+}
+
+.story__stage {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.field {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.story__hud {
+  position: absolute;
+  inset: calc(var(--header) + var(--safe-top) + 20px) var(--gutter-right) auto var(--gutter-left);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  pointer-events: none;
+}
+
+.story__hud > * {
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 500ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.story__hud > [data-shown='true'] {
+  opacity: 1;
+  transform: none;
+}
+
+.story__week {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: var(--text-label);
+  line-height: 1.2;
+}
+
+.story__week-number {
+  font-size: var(--text-statement);
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.story__chapters {
+  position: relative;
+  margin-top: -100dvh;
+}
+
+.chapter {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 20px;
+  min-height: 100dvh;
+  padding: calc(var(--header) + var(--safe-top) + 96px) var(--gutter-right)
+    calc(var(--safe-bottom) + 72px) var(--gutter-left);
+}
+
+.chapter__note {
+  max-width: 34ch;
+  color: var(--muted);
+  font-size: var(--text-lede);
+  line-height: 1.4;
+  text-wrap: pretty;
+}
+
+.source {
+  max-width: 48ch;
+  color: var(--muted);
+  font-size: var(--text-small);
+  line-height: 1.4;
+}
+
+.chapter--last {
+  padding-bottom: calc(var(--safe-bottom) + 120px);
+}
+
+.chapter--opening {
+  display: grid;
+  grid-template-rows: 1fr auto 1fr auto auto;
+  gap: 0;
+  padding-bottom: calc(var(--safe-bottom) + 20px);
+}
+
+.story__kinds {
+  grid-row: 2;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: var(--text-small);
+}
+
+.opening {
+  grid-row: 4;
+  display: grid;
+  gap: 20px;
+  padding-bottom: 28px;
+}
+
+.opening__intro {
+  max-width: 36ch;
+  font-size: var(--text-lede);
+  line-height: 1.4;
+  text-wrap: pretty;
+}
+
+.cue {
+  grid-row: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  justify-self: end;
+  min-height: 44px;
+  font-size: var(--text-label);
+}
+
+.cue .arrow {
+  width: 1em;
+  height: 1em;
+}
+
+@media (width >= 900px) {
+  .story__kinds {
+    font-size: var(--text-label);
+  }
+
+  .opening {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 22rem);
+    align-items: end;
+    column-gap: var(--gutter);
+  }
+}
+
+/* Sections -------------------------------------------------------------------------------- */
+
+.section {
+  padding: var(--space-section) var(--gutter-right) 0 var(--gutter-left);
+}
+
+.rows {
+  margin-top: clamp(48px, 8vw, 96px);
+  border-bottom: 1px solid var(--rule);
+}
+
+.row {
+  display: grid;
+  gap: 12px;
+  padding: 28px 0 32px;
+  border-top: 1px solid var(--rule);
+}
+
+.row__title {
+  font-size: clamp(1.375rem, 3.4vw, 2rem);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+/* Timed rows (How it works): when | title, with the body under the title. On wide screens,
+   when | title | body, the body lining up with the other sections' right column. */
+.row--timed {
+  grid-template-columns: 6.75rem minmax(0, 1fr);
+  column-gap: 16px;
+  align-items: baseline;
+}
+
+.row__when {
+  color: var(--muted);
+  font-size: var(--text-label);
+  line-height: 1.3;
+}
+
+.row--timed .row__body {
+  grid-column: 1 / -1;
+}
+
+.row__body {
+  max-width: 52ch;
+  color: var(--muted);
+  font-size: var(--text-body);
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+@media (width >= 900px) {
+  .row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: var(--gutter);
+    padding: 36px 0 44px;
+  }
+
+  .row__body {
+    padding-top: 4px;
+    font-size: 1.125rem;
+  }
+
+  .row--timed {
+    grid-template-columns: minmax(0, 0.35fr) minmax(0, 0.65fr) minmax(0, 1fr);
+  }
+
+  .row--timed .row__body {
+    grid-column: 3;
+    padding-top: 0;
+  }
+}
+
+/* Pod preview ----------------------------------------------------------------------------- */
+
+.pod {
+  display: grid;
+  gap: 56px;
+}
+
+.pod__text {
+  display: grid;
+  gap: 24px;
+  align-content: start;
+}
+
+.pod__lede {
+  max-width: 36ch;
+  color: var(--muted);
+  font-size: var(--text-lede);
+  line-height: 1.4;
+}
+
+.phone {
+  justify-self: center;
+  width: min(100%, 360px);
+}
+
+.phone__screen {
+  display: grid;
+  gap: 20px;
+  padding: 28px 20px 24px;
+  border: 1px solid var(--rule);
+  border-radius: 40px;
+  background: var(--night-raised);
+}
+
+.phone__event {
+  display: grid;
+  gap: 10px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.phone__event .label span:last-child {
+  font-size: 1.375rem;
+  letter-spacing: -0.02em;
+}
+
+.phone__meet {
+  font-size: var(--text-label);
+}
+
+.phone__pod {
+  display: grid;
+  gap: 14px;
+}
+
+.person {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.person__initial {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--wing);
+  font-size: 1.0625rem;
+}
+
+.person__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  font-size: var(--text-small);
+  line-height: 1.35;
+}
+
+.person__name {
+  font-size: var(--text-body);
+}
+
+.phone__prompt {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 18px;
+  border-top: 1px solid var(--rule);
+  font-size: var(--text-label);
+  line-height: 1.4;
+}
+
+.phone__prompt .muted {
+  font-size: var(--text-small);
+}
+
+.phone__chat {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--text-label);
+}
+
+/* The one Glow on this screen: the pod chat about to open. */
+.phone__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--glow);
+}
+
+.phone__caption {
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: var(--text-small);
+  text-align: center;
+}
+
+@media (width >= 900px) {
+  .pod {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: var(--gutter);
+    align-items: center;
+  }
+}
+
+/* Event strip ----------------------------------------------------------------------------- */
+
+.strip {
+  margin-top: var(--space-section);
+  padding: 28px 0;
+  overflow: hidden;
+  border-block: 1px solid var(--rule);
+}
+
+.strip__track {
+  display: flex;
+  width: max-content;
+  animation: strip-scroll 60s linear infinite;
+}
+
+.strip__line {
+  display: flex;
+  flex: none;
+  font-size: var(--text-headline);
+  line-height: 1;
+  letter-spacing: -0.035em;
+  white-space: nowrap;
+}
+
+.strip__line > span {
+  display: inline-flex;
+  align-items: center;
+}
+
+.strip__sep {
+  display: inline-block;
+  width: 0.16em;
+  height: 0.16em;
+  margin: 0 0.5em;
+  border-radius: 50%;
+  background: var(--muted);
+}
+
+@keyframes strip-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .strip__track {
+    animation: none;
+  }
+}
+
+/* Invite ---------------------------------------------------------------------------------- */
+
+.invite {
+  display: grid;
+  gap: 40px;
+  padding-bottom: var(--space-section);
+}
+
+.invite__body {
+  display: grid;
+  gap: 40px;
+}
+
+.invite__lede {
+  max-width: 38ch;
+  color: var(--muted);
+  font-size: var(--text-lede);
+  line-height: 1.4;
+}
+
+.invite__form {
+  display: grid;
+  gap: 10px;
+  max-width: 640px;
+}
+
+.invite__label {
+  font-size: var(--text-label);
+}
+
+.invite__field {
+  display: grid;
+  gap: 12px;
+}
+
+.invite__input {
+  width: 100%;
+  min-height: 56px;
+  padding: 0 0 8px;
+  border: 0;
+  border-bottom: 1px solid var(--muted);
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  /* 16px or more, so iOS Safari doesn't zoom in on focus. */
+  font-size: clamp(1.25rem, 4vw, 1.75rem);
+  letter-spacing: -0.01em;
+}
+
+.invite__input::placeholder {
+  color: var(--placeholder);
+}
+
+.invite__input:focus-visible {
+  outline: none;
+  border-bottom: 2px solid var(--glow);
+}
+
+.invite__input[aria-invalid='true'] {
+  border-bottom-color: var(--error);
+}
+
+/* The one Glow in this section: the action. */
+.invite__submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 56px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 0;
+  background: var(--glow);
+  color: var(--night);
+  font: inherit;
+  font-size: var(--text-body);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 200ms ease-out;
+}
+
+.invite__submit:hover {
+  background: var(--glow-hover);
+}
+
+.invite__submit:disabled {
+  cursor: progress;
+  background: var(--wing-light);
+}
+
+.invite__submit:focus-visible {
+  outline-color: var(--ink);
+}
+
+.invite__error,
+.invite__status {
+  font-size: var(--text-label);
+}
+
+/* Reserve one line for messages so the layout doesn't jump; the status line shares it. */
+.invite__error {
+  min-height: 1.5em;
+}
+
+.invite__status:empty {
+  display: none;
+}
+
+.invite__error {
+  color: var(--error);
+}
+
+.invite__hint {
+  color: var(--muted);
+  font-size: var(--text-small);
+  line-height: 1.45;
+}
+
+.invite__done {
+  font-size: var(--text-lede);
+}
+
+@media (width >= 600px) {
+  .invite__field {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+  }
+}
+
+@media (width >= 900px) {
+  .invite__body {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: var(--gutter);
+  }
+}
+
+/* Footer ---------------------------------------------------------------------------------- */
+
+.footer {
+  display: grid;
+  gap: 64px;
+  padding: 40px var(--gutter-right) calc(var(--safe-bottom) + 24px) var(--gutter-left);
+  border-top: 1px solid var(--rule);
+}
+
+.footer__line {
+  font-size: var(--text-lede);
+  line-height: 1.3;
+}
+
+.footer__base {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.footer__word {
+  display: flex;
+  align-items: center;
+  gap: 0.12em;
+  font-size: var(--text-display);
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+}
+
+.footer__mark {
+  width: 0.9em;
+  height: 0.9em;
+  flex: none;
+}
+
+.footer__meta {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--text-small);
+  text-align: right;
+}

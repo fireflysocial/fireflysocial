@@ -1,0 +1,398 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-25T15:38:50+00:00",
+  "title": "Design System: Firefly",
+  "extensions": {
+    "colorMeta": {
+      "night": {
+        "role": "neutral",
+        "displayName": "Night",
+        "canonical": "#0E1424",
+        "tonalRamp": [
+          "oklch(15% 0.019 268)",
+          "oklch(26% 0.029 268)",
+          "oklch(38% 0.034 268)",
+          "oklch(49% 0.034 268)",
+          "oklch(61% 0.034 268)",
+          "oklch(72% 0.030 268)",
+          "oklch(84% 0.020 268)",
+          "oklch(95% 0.007 268)"
+        ]
+      },
+      "glow": {
+        "role": "primary",
+        "displayName": "Glow",
+        "canonical": "#D9F84A",
+        "tonalRamp": [
+          "oklch(15% 0.108 119)",
+          "oklch(26% 0.165 119)",
+          "oklch(38% 0.193 119)",
+          "oklch(49% 0.193 119)",
+          "oklch(61% 0.193 119)",
+          "oklch(72% 0.171 119)",
+          "oklch(84% 0.117 119)",
+          "oklch(95% 0.040 119)"
+        ]
+      },
+      "wing": {
+        "role": "secondary",
+        "displayName": "Wing",
+        "canonical": "#313C62",
+        "tonalRamp": [
+          "oklch(15% 0.038 271)",
+          "oklch(26% 0.058 271)",
+          "oklch(38% 0.067 271)",
+          "oklch(49% 0.067 271)",
+          "oklch(61% 0.067 271)",
+          "oklch(72% 0.060 271)",
+          "oklch(84% 0.041 271)",
+          "oklch(95% 0.014 271)"
+        ]
+      },
+      "wing-light": {
+        "role": "secondary",
+        "displayName": "Wing Light",
+        "canonical": "#C9CFDE",
+        "tonalRamp": [
+          "oklch(15% 0.012 268)",
+          "oklch(26% 0.019 268)",
+          "oklch(38% 0.022 268)",
+          "oklch(49% 0.022 268)",
+          "oklch(61% 0.022 268)",
+          "oklch(72% 0.019 268)",
+          "oklch(84% 0.013 268)",
+          "oklch(95% 0.005 268)"
+        ]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "#F5F6F0",
+        "tonalRamp": [
+          "oklch(15% 0.004 114)",
+          "oklch(26% 0.007 114)",
+          "oklch(38% 0.008 114)",
+          "oklch(49% 0.008 114)",
+          "oklch(61% 0.008 114)",
+          "oklch(72% 0.007 114)",
+          "oklch(84% 0.005 114)",
+          "oklch(95% 0.002 114)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#F4F5F9",
+        "tonalRamp": [
+          "oklch(15% 0.003 275)",
+          "oklch(26% 0.005 275)",
+          "oklch(38% 0.005 275)",
+          "oklch(49% 0.005 275)",
+          "oklch(61% 0.005 275)",
+          "oklch(72% 0.005 275)",
+          "oklch(84% 0.003 275)",
+          "oklch(95% 0.001 275)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted",
+        "canonical": "#9AA3BF",
+        "tonalRamp": [
+          "oklch(15% 0.024 271)",
+          "oklch(26% 0.036 271)",
+          "oklch(38% 0.042 271)",
+          "oklch(49% 0.042 271)",
+          "oklch(61% 0.042 271)",
+          "oklch(72% 0.037 271)",
+          "oklch(84% 0.025 271)",
+          "oklch(95% 0.009 271)"
+        ]
+      },
+      "night-raised": {
+        "role": "neutral",
+        "displayName": "Night Raised",
+        "canonical": "#151C31",
+        "tonalRamp": [
+          "oklch(15% 0.024 269)",
+          "oklch(26% 0.036 269)",
+          "oklch(38% 0.042 269)",
+          "oklch(49% 0.042 269)",
+          "oklch(61% 0.042 269)",
+          "oklch(72% 0.037 269)",
+          "oklch(84% 0.025 269)",
+          "oklch(95% 0.009 269)"
+        ]
+      },
+      "wing-hover": {
+        "role": "secondary",
+        "displayName": "Wing Hover",
+        "canonical": "#3B4875",
+        "tonalRamp": [
+          "oklch(15% 0.043 271)",
+          "oklch(26% 0.066 271)",
+          "oklch(38% 0.077 271)",
+          "oklch(49% 0.077 271)",
+          "oklch(61% 0.077 271)",
+          "oklch(72% 0.068 271)",
+          "oklch(84% 0.047 271)",
+          "oklch(95% 0.016 271)"
+        ]
+      },
+      "glow-hover": {
+        "role": "primary",
+        "displayName": "Glow Hover",
+        "canonical": "#E6FF7A",
+        "tonalRamp": [
+          "oklch(15% 0.090 118)",
+          "oklch(26% 0.137 118)",
+          "oklch(38% 0.161 118)",
+          "oklch(49% 0.161 118)",
+          "oklch(61% 0.161 118)",
+          "oklch(72% 0.142 118)",
+          "oklch(84% 0.097 118)",
+          "oklch(95% 0.034 118)"
+        ]
+      },
+      "error": {
+        "role": "error",
+        "displayName": "Error Coral",
+        "canonical": "#FF9A8A",
+        "tonalRamp": [
+          "oklch(15% 0.070 30)",
+          "oklch(26% 0.106 30)",
+          "oklch(38% 0.124 30)",
+          "oklch(49% 0.124 30)",
+          "oklch(61% 0.124 30)",
+          "oklch(72% 0.110 30)",
+          "oklch(84% 0.075 30)",
+          "oklch(95% 0.026 30)"
+        ]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Rule",
+        "canonical": "rgb(201 207 222 / 0.18)",
+        "tonalRamp": [
+          "oklch(15% 0.012 268)",
+          "oklch(26% 0.019 268)",
+          "oklch(38% 0.022 268)",
+          "oklch(49% 0.022 268)",
+          "oklch(61% 0.022 268)",
+          "oklch(72% 0.019 268)",
+          "oklch(84% 0.013 268)",
+          "oklch(95% 0.005 268)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The H1, the invite H2 and the footer wordmark."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section H2s and the marquee line."
+      },
+      "statement": {
+        "displayName": "Statement",
+        "purpose": "One sentence per story chapter; the field caption week number."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Row titles (H3)."
+      },
+      "lede": {
+        "displayName": "Lede",
+        "purpose": "Chapter notes, section ledes, footer line; usually Muted."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Row bodies and names; tabular figures on."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Two-line labels, header, nav, form label and messages."
+      },
+      "small": {
+        "displayName": "Small",
+        "purpose": "Sources, captions, interests, footer meta."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Field caption (HUD) reveal: opacity and an 8px rise over 500ms, by chapter."
+      },
+      {
+        "name": "duration-reveal",
+        "value": "500ms",
+        "purpose": "Field caption reveal duration."
+      },
+      {
+        "name": "state-change",
+        "value": "200ms ease-out",
+        "purpose": "Background-colour hover on the header invite cell and the submit block."
+      },
+      {
+        "name": "marquee",
+        "value": "60s linear infinite",
+        "purpose": "Event strip loop; disabled under prefers-reduced-motion."
+      },
+      {
+        "name": "field-sync",
+        "value": "Kuramoto coupling 0 to 2.4 over scroll progress 0.58 to 0.86; gather 0.32 to 0.5; lit 0.4 to 0.52 (smoothstep)",
+        "purpose": "Scroll-driven fireflies-in-step field; reduced motion draws one still, synced end frame; loop pauses off-screen and on tab hide; max step 1/20 s; pixel ratio capped at 2."
+      },
+      {
+        "name": "reduced-motion-global",
+        "value": "animation and transition durations 0.01ms",
+        "purpose": "Global prefers-reduced-motion clamp in src/index.css."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "base",
+        "value": "360px"
+      },
+      {
+        "name": "form-row",
+        "value": "600px"
+      },
+      {
+        "name": "field-narrow",
+        "value": "720px"
+      },
+      {
+        "name": "wide",
+        "value": "900px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Header Invite Cell",
+      "kind": "nav",
+      "refersTo": "header-cell-invite",
+      "description": "Solid Wing block cell flush right in the block header; the header-level call to action.",
+      "html": "<a class=\"ds-header-invite\" href=\"#invite\">Get an invite<svg class=\"ds-arrow\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"square\" aria-hidden=\"true\"><path d=\"M6 18 18 6M8 6h10v10\"/></svg></a>",
+      "css": ".ds-header-invite { display: inline-flex; align-items: center; justify-content: space-between; gap: 10px; min-width: 200px; height: 72px; padding: 0 32px; background: #313C62; color: #F4F5F9; font-family: 'Host Grotesk', system-ui, sans-serif; font-size: 0.9375rem; text-decoration: none; white-space: nowrap; transition: background-color 200ms ease-out; } .ds-header-invite:hover { background: #3B4875; } .ds-header-invite:focus-visible { outline: 2px solid #D9F84A; outline-offset: 3px; } .ds-arrow { width: 1.25em; height: 1.25em; flex: none; }"
+    },
+    {
+      "name": "Block Header",
+      "kind": "nav",
+      "refersTo": "header-cell-invite",
+      "description": "Night bar of square cells: mark cell, two-line name, two-line nav links, Wing invite cell.",
+      "html": "<header class=\"ds-header\"><a class=\"ds-header-home\" href=\"#top\"><span class=\"ds-header-mark\"><svg viewBox=\"0 0 512 512\" aria-hidden=\"true\"><path d=\"M249,96 A200,200 0 0 1 132,326 A200,200 0 0 1 249,96 Z\" fill=\"#313C62\"/><path d=\"M380,326 A200,200 0 0 1 263,96 A200,200 0 0 1 380,326 Z\" fill=\"#313C62\"/><circle cx=\"256\" cy=\"348\" r=\"72\" fill=\"#D9F84A\"/></svg></span><span class=\"ds-two\"><span>Firefly</span><span class=\"ds-muted\">Vancouver</span></span></a><nav class=\"ds-header-nav\"><a href=\"#how\"><span class=\"ds-muted\">Before, during, after</span><span class=\"ds-link\">How it works</span></a><a href=\"#safety\"><span class=\"ds-muted\">Built in</span><span class=\"ds-link\">Safety</span></a></nav><a class=\"ds-header-cell\" href=\"#invite\">Get an invite</a></header>",
+      "css": ".ds-header { display: flex; align-items: stretch; height: 72px; background: #0E1424; color: #F4F5F9; border-bottom: 1px solid rgb(201 207 222 / 0.18); font-family: 'Host Grotesk', system-ui, sans-serif; font-size: 0.9375rem; line-height: 1.2; } .ds-header a { color: inherit; text-decoration: none; } .ds-header-home { display: flex; align-items: center; gap: 24px; width: 30%; } .ds-header-mark { display: grid; place-items: center; width: 72px; height: 100%; border-right: 1px solid rgb(201 207 222 / 0.18); } .ds-header-mark svg { width: 62%; height: 62%; } .ds-two, .ds-header-nav a { display: flex; flex-direction: column; } .ds-muted { color: #9AA3BF; } .ds-header-nav { display: flex; gap: 40px; align-items: center; } .ds-header-nav a:hover .ds-link { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; } .ds-header a:focus-visible { outline: 2px solid #D9F84A; outline-offset: 3px; } .ds-header-cell { display: flex; align-items: center; margin-left: auto; padding: 0 32px; background: #313C62; transition: background-color 200ms ease-out; } .ds-header-cell:hover { background: #3B4875; }"
+    },
+    {
+      "name": "Glow Submit Block",
+      "kind": "button",
+      "refersTo": "button-submit",
+      "description": "Square Glow block with Night text; the one Glow in the invite section.",
+      "html": "<button class=\"ds-btn-submit\" type=\"button\">Request invite<svg class=\"ds-arrow\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"square\" aria-hidden=\"true\"><path d=\"M4 12h16M13 5l7 7-7 7\"/></svg></button>",
+      "css": ".ds-btn-submit { display: inline-flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 56px; padding: 0 20px; border: 0; border-radius: 0; background: #D9F84A; color: #0E1424; font-family: 'Host Grotesk', system-ui, sans-serif; font-size: 1.0625rem; font-weight: 500; cursor: pointer; transition: background-color 200ms ease-out; } .ds-btn-submit:hover { background: #E6FF7A; } .ds-btn-submit:focus-visible { outline: 2px solid #F4F5F9; outline-offset: 3px; } .ds-btn-submit:disabled { background: #C9CFDE; cursor: progress; } .ds-arrow { width: 1.25em; height: 1.25em; flex: none; }"
+    },
+    {
+      "name": "Underline Input",
+      "kind": "input",
+      "refersTo": "input-underline",
+      "description": "Transparent square field with a Muted hairline underline that turns 2px Glow on focus, Error when invalid.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Email</span><input class=\"ds-input\" type=\"email\" placeholder=\"you@example.com\"></label>",
+      "css": ".ds-field { display: grid; gap: 10px; max-width: 640px; color: #F4F5F9; font-family: 'Host Grotesk', system-ui, sans-serif; } .ds-field-label { font-size: 0.9375rem; } .ds-input { width: 100%; min-height: 56px; padding: 0 0 8px; border: 0; border-bottom: 1px solid #9AA3BF; border-radius: 0; background: transparent; color: #F4F5F9; font: inherit; font-size: clamp(1.25rem, 4vw, 1.75rem); letter-spacing: -0.01em; caret-color: #D9F84A; } .ds-input::placeholder { color: #9AA3BF; } .ds-input:focus-visible { outline: none; border-bottom: 2px solid #D9F84A; } .ds-input[aria-invalid='true'] { border-bottom-color: #FF9A8A; }"
+    },
+    {
+      "name": "Two-line Label",
+      "kind": "custom",
+      "description": "Muted context line over the Ink fact; the system's signature text unit.",
+      "html": "<p class=\"ds-label\"><span class=\"ds-muted\">Tuesday run club</span><span>6:45 pm, Firefly corner</span></p>",
+      "css": ".ds-label { display: flex; flex-direction: column; margin: 0; color: #F4F5F9; font-family: 'Host Grotesk', system-ui, sans-serif; font-size: 0.9375rem; line-height: 1.3; } .ds-muted { color: #9AA3BF; }"
+    },
+    {
+      "name": "Hairline Rows",
+      "kind": "card",
+      "description": "Timed list between hairlines: muted when, title, muted body. Replaces cards.",
+      "html": "<ol class=\"ds-rows\"><li class=\"ds-row\"><p class=\"ds-when\">The day before</p><h3 class=\"ds-title\">Meet your pod on your phone</h3><p class=\"ds-body\">Pods form 24 hours before. You see first names, photos and a few interests.</p></li><li class=\"ds-row\"><p class=\"ds-when\">At the event</p><h3 class=\"ds-title\">Check in, then put the phone away</h3><p class=\"ds-body\">Find the Firefly corner, say hi, and get on with the run.</p></li></ol>",
+      "css": ".ds-rows { margin: 0; padding: 0; list-style: none; border-bottom: 1px solid rgb(201 207 222 / 0.18); color: #F4F5F9; font-family: 'Host Grotesk', system-ui, sans-serif; } .ds-row { display: grid; grid-template-columns: 6.75rem minmax(0, 1fr); column-gap: 16px; row-gap: 12px; align-items: baseline; padding: 28px 0 32px; border-top: 1px solid rgb(201 207 222 / 0.18); } .ds-row p, .ds-row h3 { margin: 0; } .ds-when { color: #9AA3BF; font-size: 0.9375rem; line-height: 1.3; } .ds-title { font-size: clamp(1.375rem, 3.4vw, 2rem); font-weight: 400; line-height: 1.15; letter-spacing: -0.02em; } .ds-body { grid-column: 1 / -1; max-width: 52ch; color: #9AA3BF; font-size: 1.0625rem; line-height: 1.55; }"
+    },
+    {
+      "name": "Phone Preview",
+      "kind": "card",
+      "refersTo": "phone-preview",
+      "description": "The one framed object: a Night Raised phone screen showing an example pod with initial discs and the Glow chat dot.",
+      "html": "<figure class=\"ds-phone\"><div class=\"ds-phone-screen\"><p class=\"ds-phone-event\"><span class=\"ds-muted\">Tomorrow, 6:45 pm</span><span class=\"ds-big\">Tuesday run club</span></p><ul class=\"ds-pod\"><li class=\"ds-person\"><span class=\"ds-initial\" aria-hidden=\"true\">M</span><span class=\"ds-ptext\"><span class=\"ds-pname\">Maya</span><span class=\"ds-muted\">Trail runs · ramen</span></span></li><li class=\"ds-person\"><span class=\"ds-initial\" aria-hidden=\"true\">J</span><span class=\"ds-ptext\"><span class=\"ds-pname\">Jun</span><span class=\"ds-muted\">New in town · bouldering</span></span></li></ul><p class=\"ds-chat\"><span class=\"ds-dot\" aria-hidden=\"true\"></span>Pod chat opens at 6:15 pm</p></div><figcaption class=\"ds-cap\">Example pod. Names and details are made up.</figcaption></figure>",
+      "css": ".ds-phone { margin: 0; width: min(100%, 360px); color: #F4F5F9; font-family: 'Host Grotesk', system-ui, sans-serif; } .ds-phone-screen { display: grid; gap: 20px; padding: 28px 20px 24px; border: 1px solid rgb(201 207 222 / 0.18); border-radius: 40px; background: #151C31; } .ds-phone p, .ds-phone ul { margin: 0; padding: 0; list-style: none; } .ds-phone-event { display: flex; flex-direction: column; padding-bottom: 18px; border-bottom: 1px solid rgb(201 207 222 / 0.18); font-size: 0.9375rem; } .ds-big { font-size: 1.375rem; letter-spacing: -0.02em; } .ds-muted { color: #9AA3BF; } .ds-pod { display: grid; gap: 14px; } .ds-person { display: flex; align-items: center; gap: 14px; } .ds-initial { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: #313C62; font-size: 1.0625rem; } .ds-ptext { display: flex; flex-direction: column; font-size: 0.8125rem; line-height: 1.35; } .ds-pname { font-size: 1.0625rem; } .ds-chat { display: flex; align-items: center; gap: 10px; font-size: 0.9375rem; } .ds-dot { width: 10px; height: 10px; border-radius: 50%; background: #D9F84A; } .ds-cap { margin-top: 14px; color: #9AA3BF; font-size: 0.8125rem; text-align: center; }"
+    },
+    {
+      "name": "Marquee Strip",
+      "kind": "custom",
+      "description": "Headline-size event kinds looping slowly between hairlines; still under reduced motion.",
+      "html": "<div class=\"ds-strip\" aria-hidden=\"true\"><div class=\"ds-strip-track\"><p class=\"ds-strip-line\"><span>Run clubs<i class=\"ds-sep\"></i></span><span>Board-game cafés<i class=\"ds-sep\"></i></span><span>Language exchanges<i class=\"ds-sep\"></i></span></p><p class=\"ds-strip-line\"><span>Run clubs<i class=\"ds-sep\"></i></span><span>Board-game cafés<i class=\"ds-sep\"></i></span><span>Language exchanges<i class=\"ds-sep\"></i></span></p></div></div>",
+      "css": ".ds-strip { padding: 28px 0; overflow: hidden; border-block: 1px solid rgb(201 207 222 / 0.18); background: #0E1424; color: #F4F5F9; font-family: 'Host Grotesk', system-ui, sans-serif; } .ds-strip-track { display: flex; width: max-content; animation: ds-strip 60s linear infinite; } .ds-strip-line { display: flex; flex: none; margin: 0; font-size: clamp(2.25rem, 8.5vw, 4.5rem); line-height: 1; letter-spacing: -0.035em; white-space: nowrap; } .ds-strip-line > span { display: inline-flex; align-items: center; } .ds-sep { display: inline-block; width: 0.16em; height: 0.16em; margin: 0 0.5em; border-radius: 50%; background: #9AA3BF; } @keyframes ds-strip { to { transform: translateX(-50%); } } @media (prefers-reduced-motion: reduce) { .ds-strip-track { animation: none; } }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Fireflies in Step",
+    "overview": "Firefly's world is a dark, quiet room with one signal in it. Night runs edge to edge; strangers are faint Wing-light dots; the only bright thing on a screen is Glow, and it belongs to the pod. Over it sits a civic, almost municipal grotesk layer: very large, tight Host Grotesk in white, small two-line labels, hairline rules and solid block cells. Nothing is decorated. Hierarchy comes from size and from the muted-over-white pairing, not from weight, colour or containers.\n\nThe world was established by the landing page (`src/features/landing/`, built 2026-11-25). That page is always Night regardless of the visitor's light/dark setting, a confirmed exception. App screens are not built yet; they will follow the system light/dark setting, and the light variant of the brand (Night on Paper, Wing-light wings) exists in `brand/` but has no built screens, so this file records no light-mode tokens. The root stylesheet's light defaults (Wing text on white) are placeholders, not a designed light system.\n\nMotion is one idea: repetition made visible. The scroll-driven field shows a crowd blinking at random while five dots gather, light up and fall into step (Kuramoto synchrony). Everything else is near-still. There is no photography; people are represented by initials and the example pod is labelled as made up.",
+    "keyCharacteristics": [
+      "Night ground edge to edge; one Glow per composition.",
+      "Host Grotesk only, regular weight for display, tight negative tracking; size carries hierarchy.",
+      "Two-line labels: muted context line over the white fact.",
+      "Hairline rules and square block cells instead of cards, shadows or gradients.",
+      "Flat dots: a flash is size and opacity, never blur or bloom.",
+      "Phone first from 360px; everything readable with the motion switched off."
+    ],
+    "rules": [
+      {
+        "name": "The One Light Rule",
+        "body": "Each composition has exactly one Glow element. On the story stage it is the pod; in the pod preview it is the chat dot; in the invite section it is the submit block. If a second Glow appears on screen, one of them is wrong.",
+        "section": "colors"
+      },
+      {
+        "name": "The No Glow on Paper Rule",
+        "body": "Glow never carries text or an essential indicator on a light surface; on light, the glow becomes Night (brand/README.md).",
+        "section": "colors"
+      },
+      {
+        "name": "The Solid Glow Rule",
+        "body": "Glow over Night is drawn at full opacity; dimmed Glow turns olive. Lit pod dots flash by swelling, not fading.",
+        "section": "colors"
+      },
+      {
+        "name": "The Size Not Weight Rule",
+        "body": "Hierarchy is carried by size and by the muted/white pairing. Display and headline stay at 400; nothing on the page is bold.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tight Display Rule",
+        "body": "Tracking tightens as size grows: -0.02em at title, -0.03em at statement, -0.035em at headline, -0.04em at display.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Dot Rule",
+        "body": "The flat dot is the light. Field dots, the chat dot, separators and the mark are solid circles; a flash is shown by size and opacity, never by blur, bloom or glow.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do keep one Glow element per composition, at full opacity.",
+      "Do set display type in Host Grotesk 400 with negative tracking (-0.04em at display).",
+      "Do pair a Muted context line over an Ink fact for labels.",
+      "Do separate content with 1px hairlines at Wing Light 18%.",
+      "Do keep header cells, buttons and inputs square (0 radius).",
+      "Do give every motion a still, end-state version under reduced motion, and pause canvas loops when off-screen or the tab is hidden.",
+      "Do use initials and clearly labelled made-up examples until consenting photography exists."
+    ],
+    "donts": [
+      "Don't add shadows, gradients, blur, bloom or glows to dots, the mark or surfaces.",
+      "Don't use bold weights for hierarchy; use size.",
+      "Don't wrap content in cards; the phone preview is the one framed object.",
+      "Don't put Glow text or essential Glow indicators on a light surface.",
+      "Don't load fonts from a CDN; Host Grotesk is self-hosted.",
+      "Don't invent light-mode tokens from the landing page; the light system is unbuilt."
+    ]
+  }
+}

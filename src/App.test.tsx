@@ -3,8 +3,10 @@ import { describe, expect, it } from 'vitest'
 import App from './App'
 
 describe('App', () => {
-  it('renders the Firefly heading', () => {
+  it('opens on the landing page', () => {
     render(<App />)
-    expect(screen.getByRole('heading', { level: 1, name: 'Firefly' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'Keep meeting the same faces.' }),
+    ).toBeInTheDocument()
   })
 })

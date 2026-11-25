@@ -108,6 +108,7 @@ These P0 and P1 gaps can't be closed by designing the flow. Each one must be don
 ### 0. Onboarding (≈3 minutes)
 
 - **Ways in:** the App Store or Google Play, a QR at a Firefly corner **[#19]**, or a partner channel (universities, co-op programs, employers, immigrant-services groups) aimed at people at high-need moments. **[#37]**
+- **Before launch: the public landing page.** Proposal: a web page that explains the pod idea and collects an email address for an invite when the first pods open. Its UI was built on 2026-11-25 (`src/features/landing/`). The form is **not connected yet**: storing emails needs a table with RLS, a retention rule (delete once the person is invited or unsubscribes) and a line in the privacy review before it goes live. Attendees only; hosts get their own page later.
 - **Verify:**
   - Phone number, **one account per phone number**. **[#28]**
   - **Selfie liveness check**, required before a user can appear in any pod or room. **[#28]**

@@ -1,6 +1,6 @@
 # Firefly
 
-Research, product design, and the app: **iOS and Android apps plus a web version**, built from one React + TypeScript + Vite codebase with Supabase, wrapped for the app stores with Capacitor (planned). The app is scaffolded with tooling and CI; features are not built yet. See [engineering/quality-and-ci.md §0](engineering/quality-and-ci.md#0-platforms-ios-android-and-web) for the platform plan.
+Research, product design, and the app: **iOS and Android apps plus a web version**, built from one React + TypeScript + Vite codebase with Supabase, wrapped for the app stores with Capacitor (planned). Tooling and CI are in place, and the public landing page is built (frontend only: its invite form is not connected yet). Attendee and host features are not built yet. See [engineering/quality-and-ci.md §0](engineering/quality-and-ci.md#0-platforms-ios-android-and-web) for the platform plan.
 
 ## Getting started
 
@@ -20,6 +20,9 @@ Research docs: See the [documentation audit](research/documentation-audit.md) fo
 ## Repository structure
 
 ```
+PRODUCT.md             # product truth for design work (users, voice, principles)
+DESIGN.md              # design system as built (tokens, type, components, motion)
+.impeccable/           # design briefs per surface (surfaces/) and Impeccable config
 research/
   README.md            # open questions + the decision each one informs
   problem.md           # inspiration and problem statement
