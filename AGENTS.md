@@ -25,6 +25,7 @@ Key documents (read the relevant ones before building a feature):
 | [PRODUCT.md](PRODUCT.md)                                       | Doing any design work. Product truth for design (users, voice, principles, evidence that must never be invented), read by `/impeccable`.              |
 | [DESIGN.md](DESIGN.md)                                         | Doing any visual or UI work. The design system (tokens, type, components, motion) as built; read by `/impeccable`.                                    |
 | `.impeccable/surfaces/*.md`                                    | Changing a designed surface. Each holds that page's brief and direction contract (e.g. the landing page's).                                           |
+| [pitch/README.md](pitch/README.md)                             | Changing anything a pitch slide states: positioning, launch scope, status, metrics, research. Maps each slide to the docs it depends on.              |
 
 `workflow/v1-user-flow.md` is the older v2 draft (the filename was kept). Use v4 for launch and v3 for later group and host features.
 
@@ -119,6 +120,7 @@ supabase/
 .github/                # CI workflow, Dependabot config, PR template
 engineering/            # engineering docs
 research/ workflow/ brand/   # product research, spec and brand (prose docs)
+pitch/project/          # pitch deck source (claude.ai Slides artifact; see pitch/README.md)
 ```
 
 "Planned" folders don't exist yet. Create them following this layout instead of inventing a new one.
@@ -235,6 +237,7 @@ Firefly tells strangers "this person is here and open to meeting people". Built 
 - Lint must pass with **zero warnings**. Don't add `eslint-disable` comments unless unavoidable. If you do, disable one rule on one line and give the reason: `// eslint-disable-next-line rule-name -- reason`.
 - Prettier style: no semicolons, single quotes, trailing commas, 100-character lines. Don't hand-format; run `npm run format`.
 - Prose docs in `research/`, `workflow/`, `brand/`, `engineering/` and `README.md` are excluded from Prettier on purpose. Don't reformat them.
+- `pitch/` (the pitch deck source) is also excluded from Prettier: each slide file must stay one bare `<section>`.
 
 ### Mobile-first and cross-platform
 
@@ -290,6 +293,7 @@ Roles: **attendee** and **Firefly team** at launch; **partner host** and **pod h
 
 - When changing `research/` or `workflow/` docs: cite sources inline, use absolute dates (e.g. "reviewed 2026-11-15"), label proposals as proposals, and don't strengthen a claim beyond what its source says. See [research/documentation-audit.md](research/documentation-audit.md).
 - If you change behaviour that the spec describes, update [workflow/v4-user-flow.md](workflow/v4-user-flow.md) (or v3 for group and host features) in the same PR, or note the divergence in the PR description.
+- If you change something the pitch deck states (positioning, launch scope, what's built, metrics, research), update the affected slides in [pitch/](pitch/README.md) in the same PR, or note in the PR description that the deck is now out of date. Never put invented numbers in it.
 - If you change tooling, CI or the test setup, update [engineering/quality-and-ci.md](engineering/quality-and-ci.md) and this file. **Keep `CLAUDE.md` and `AGENTS.md` identical.**
 
 ---

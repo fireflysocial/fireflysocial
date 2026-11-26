@@ -20,3 +20,6 @@ README.md
 
 # Impeccable design briefs and config (written by the impeccable CLI)
 .impeccable
+
+# Pitch deck source: each slide file must stay one bare <section> (pitch/README.md)
+pitch

@@ -258,7 +258,7 @@ Repo settings:
 .lintstagedrc.json
 .nvmrc                       # 24
 .env.example                 # documented, no real values
-.prettierrc.json / .prettierignore   # docs folders are excluded from Prettier
+.prettierrc.json / .prettierignore   # docs folders and pitch/ are excluded from Prettier
 eslint.config.js
 vitest.config.ts             # jsdom, setup file, coverage thresholds
 playwright.config.ts
