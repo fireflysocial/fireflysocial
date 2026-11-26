@@ -10,6 +10,12 @@ Firefly brings together people in Vancouver who share a sense of purpose, at the
 - **Next:** onboarding, the event pipeline and the personal feed. No attendee features exist yet.
 - **Not added yet:** Capacitor and the `ios/` / `android/` projects. Supabase is initialised locally with no migrations.
 
+## Pitch deck
+
+**[Open the Firefly pitch deck](https://claude.ai/artifact/PCzS7mCZL2jRaWLY3UpTqg)** (claude.ai Slides; private until shared from its Share menu, which also exports PowerPoint and PDF).
+
+Its source lives in [pitch/](pitch/README.md), which maps each slide to the docs it depends on. Update the slides there when the product changes, then republish to the same link.
+
 ## Getting started
 
 ```sh
@@ -64,6 +70,7 @@ workflow/
   open-gaps.md         # gap → proposed fix → how we'll validate it
 engineering/
   quality-and-ci.md    # testing strategy, coverage, CI pipeline, branch protection, Supabase workflow
+pitch/                 # pitch deck source and README (live deck linked above)
 src/
   lib/                 # pure logic (feed ranking, email checks, the landing page's firefly maths)
   data/                # Supabase data access (invites.ts is a stub for now)
