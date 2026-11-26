@@ -281,36 +281,53 @@ test.describe('landing page', () => {
     const box = await page.locator('.hero').boundingBox()
     if (!box) throw new Error('hero missing')
     const band = { x: 0, y: box.height * 0.12, width: box.width, height: box.height * 0.28 }
-    /** A fast zig-zag at the given heights (page pixels): the same moves every time it runs. */
+    /**
+     * A fast zig-zag at the given heights (page pixels): the same eight moves every time. One
+     * event per move: the field sweeps the whole path between frames, so in-between steps add
+     * nothing, and on a slow runner (CI's WebKit draws this page at about 8fps, and each input
+     * step waits for a frame) they would turn a flick into a slow drag that heals as it goes.
+     */
     const zigzag = async (heightAt: (i: number) => number) => {
-      for (let i = 0; i < 16; i++) {
-        await page.mouse.move(box.x + box.width * (i % 2 === 0 ? 0.05 : 0.95), heightAt(i), {
-          steps: 4,
-        })
+      for (let i = 0; i < 8; i++) {
+        await page.mouse.move(box.x + box.width * (i % 2 === 0 ? 0.05 : 0.95), heightAt(i))
       }
+    }
+    /**
+     * Runs a gesture that ends off the hero (on the header), then samples the band for 2s and
+     * returns the largest change from just before it. Lights take a moment to travel after a
+     * flick, so the change peaks after the gesture, not at its end; sampling the peak keeps the
+     * measure the same on a fast machine and a slow runner.
+     */
+    const peakChange = async (gesture: () => Promise<void>) => {
+      const start = await cloudCells(page, band)
+      await gesture()
+      await page.mouse.move(box.x + box.width / 2, 10)
+      let peak = 0
+      for (let sample = 0; sample < 14; sample++) {
+        peak = Math.max(peak, cloudChange(start, await cloudCells(page, band)))
+        await page.waitForTimeout(150)
+      }
+      return { start, peak }
     }
     // Start from a settled field: the mark gathered (slower on a slow machine).
     await expectGatheredMark(page, 15_000)
 
     // The control is the same gesture over the header, which doesn't reach the field: how much
-    // the band changes on its own (drift, twinkle) in the time a stir takes, on this machine.
-    const calm = await cloudCells(page, band)
-    await zigzag(() => 10)
-    const drift = cloudChange(calm, await cloudCells(page, band))
-
+    // the band changes on its own (drift, twinkle) over the same time, on this machine.
+    const drift = await peakChange(() => zigzag(() => 10))
     // The same gesture through the band.
-    const before = await cloudCells(page, band)
-    await zigzag((i) => box.y + box.height * (0.15 + (i % 4) * 0.07))
-    const stirred = cloudChange(before, await cloudCells(page, band))
-    expect(stirred).toBeGreaterThan(Math.max(0.2, 3 * drift))
+    const stir = await peakChange(() => zigzag((i) => box.y + box.height * (0.15 + (i % 4) * 0.07)))
+    // Measured 2026-11-25 with one worker: stirred peaks of 0.42 to 0.50, against drift peaks of
+    // 0.09 to 0.13 (3.7x to 4.8x). A stir that did nothing would come out near 1x.
+    expect(stir.peak).toBeGreaterThan(Math.max(0.2, 2 * drift.peak))
 
-    // Off the hero (onto the header): every light springs home, so the band heals to well under
-    // its peak change (measured 2026-11-25: 32% to 43% of it, drift included). A cloud that kept
-    // the pattern, the bug this guards, stays at its peak or beyond.
-    await page.mouse.move(box.x + box.width / 2, 10)
+    // Every light springs home, so the band heals to well under its peak change, drift included
+    // (measured: down to 23% to 40% of it). A cloud that kept the pattern, the bug this guards, stays at its peak or beyond.
     await expect
-      .poll(async () => cloudChange(before, await cloudCells(page, band)) / stirred, {
-        timeout: 10_000,
+      .poll(async () => cloudChange(stir.start, await cloudCells(page, band)) / stir.peak, {
+        // The spring heals in about 2s of animation time, which runs slower than the wall clock
+        // on a slow runner (each frame advances at most 1/20s).
+        timeout: 15_000,
       })
       .toBeLessThan(0.6)
   })
