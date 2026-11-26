@@ -48,14 +48,15 @@ function cloudTones(page: Page) {
 }
 
 /**
- * Pixels on the hero canvas inside a box (CSS pixels, relative to the canvas): how many are lit
- * at all, and how many are solid Glow, the mark's tail.
+ * The brightest pixel on the hero canvas inside a box (CSS pixels), from 0 to 1. Behind text the
+ * cloud is cleared to 6% (textClearance in src/lib/fireflies/cloud.ts), and cloud squares are
+ * drawn in eighths, so anything a wake or an answer lit there would read 0.125 or more.
  */
-function litIn(page: Page, box: { x: number; y: number; width: number; height: number }) {
+function brightestIn(page: Page, box: { x: number; y: number; width: number; height: number }) {
   return page.evaluate((area) => {
     const canvas = document.querySelector('canvas')
     const context = canvas?.getContext('2d')
-    if (!canvas || !context) return { lit: 0, glow: 0 }
+    if (!canvas || !context) return 0
     const ratio = canvas.width / canvas.getBoundingClientRect().width
     const { data } = context.getImageData(
       Math.round(area.x * ratio),
@@ -63,19 +64,75 @@ function litIn(page: Page, box: { x: number; y: number; width: number; height: n
       Math.max(1, Math.round(area.width * ratio)),
       Math.max(1, Math.round(area.height * ratio)),
     )
-    let lit = 0
-    let glow = 0
-    for (let i = 0; i < data.length; i += 4) {
-      const [r = 0, g = 0, b = 0, a = 0] = [data[i], data[i + 1], data[i + 2], data[i + 3]]
-      if (a > 0) lit++
-      if (a === 255 && r === 217 && g === 248 && b === 74) glow++
-    }
-    return { lit, glow }
+    let brightest = 0
+    for (let i = 3; i < data.length; i += 4) brightest = Math.max(brightest, data[i] ?? 0)
+    return brightest / 255
   }, box)
 }
 
-/** Where the hero's mark tail sits, mirroring markLayout in src/lib/fireflies/mark.ts. */
-async function markBox(page: Page) {
+interface Box {
+  x: number
+  y: number
+  width: number
+  height: number
+}
+
+/**
+ * Lit-pixel counts per cell over a box on the hero canvas (CSS pixels), in an 8 x 4 grid: a coarse
+ * picture of where the cloud is, so two moments can be compared.
+ */
+function cloudCells(page: Page, box: Box) {
+  return page.evaluate((area) => {
+    const cols = 8
+    const rows = 4
+    const counts = new Array<number>(cols * rows).fill(0)
+    const canvas = document.querySelector('canvas')
+    const context = canvas?.getContext('2d')
+    if (!canvas || !context) return counts
+    const ratio = canvas.width / canvas.getBoundingClientRect().width
+    const width = Math.max(1, Math.round(area.width * ratio))
+    const height = Math.max(1, Math.round(area.height * ratio))
+    const { data } = context.getImageData(
+      Math.round(area.x * ratio),
+      Math.round(area.y * ratio),
+      width,
+      height,
+    )
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        if ((data[(y * width + x) * 4 + 3] ?? 0) === 0) continue
+        const cell = Math.floor((x / width) * cols) + cols * Math.floor((y / height) * rows)
+        counts[cell] = (counts[cell] ?? 0) + 1
+      }
+    }
+    return counts
+  }, box)
+}
+
+/** How much the cloud's picture changed between two moments: 0 for none, about 1 for all of it. */
+function cloudChange(before: number[], after: number[]) {
+  let moved = 0
+  let total = 0
+  before.forEach((count, cell) => {
+    moved += Math.abs(count - (after[cell] ?? 0))
+    total += count
+  })
+  return moved / Math.max(1, total)
+}
+
+interface Circle {
+  x: number
+  y: number
+  r: number
+}
+
+/**
+ * Where the gathered mark's tail sits on the hero canvas (CSS pixels), mirroring markLayout in
+ * src/lib/fireflies/mark.ts: the mark is centred in the measured .hero__stage band, and its tail
+ * is a circle 0.278 mark heights below the mark's centre, 0.222 mark heights across. Returns the
+ * inner 80% of the tail, so the shimmer at its edge doesn't count.
+ */
+async function markTail(page: Page): Promise<Circle> {
   const { width, height, top, bottom } = await page.evaluate(() => {
     const field = document.querySelector('canvas')?.getBoundingClientRect()
     const stage = document.querySelector('.hero__stage')?.getBoundingClientRect()
@@ -90,18 +147,65 @@ async function markBox(page: Page) {
   const fits = stacked
     ? Math.min(height * 0.3, width * 0.62)
     : Math.min(height * 0.46, width * 0.28)
-  const mark = Math.min(fits, (bottom - top) * 0.78)
-  const centerX = stacked
+  const size = Math.min(fits, (bottom - top) * 0.78)
+  const x = stacked
     ? width / 2
-    : width - Math.min(32, Math.max(16, width * 0.024)) - (mark * 0.765) / 2
-  const centerY = (top + bottom) / 2
-  // The tail: a circle in the lower part of the mark.
-  return {
-    x: centerX - mark * 0.15,
-    y: centerY + mark * 0.13,
-    width: mark * 0.3,
-    height: mark * 0.3,
+    : width - Math.min(32, Math.max(16, width * 0.024)) - (size * 0.765) / 2
+  return { x, y: (top + bottom) / 2 + 0.278 * size, r: 0.222 * size * 0.8 }
+}
+
+/**
+ * The share of a circle on the hero canvas (CSS pixels) that is solid Glow, the mark's tail.
+ * A share, not a count, so it holds at any pixel ratio and any mark size.
+ */
+function glowShare(page: Page, circle: Circle) {
+  return page.evaluate(({ x: cx, y: cy, r }) => {
+    const canvas = document.querySelector('canvas')
+    const context = canvas?.getContext('2d')
+    if (!canvas || !context) return 0
+    const ratio = canvas.width / canvas.getBoundingClientRect().width
+    const { data } = context.getImageData(0, 0, canvas.width, canvas.height)
+    let inside = 0
+    let glow = 0
+    for (let y = Math.floor((cy - r) * ratio); y < (cy + r) * ratio; y++) {
+      for (let x = Math.floor((cx - r) * ratio); x < (cx + r) * ratio; x++) {
+        if (Math.hypot(x / ratio - cx, y / ratio - cy) > r) continue
+        inside++
+        const i = (y * canvas.width + x) * 4
+        if (data[i + 3] === 255 && data[i] === 217 && data[i + 1] === 248 && data[i + 2] === 74) {
+          glow++
+        }
+      }
+    }
+    return inside === 0 ? 0 : glow / inside
+  }, circle)
+}
+
+/**
+ * Proves the mark has gathered: its tail is solid Glow (measured at 10% to 28% across devices),
+ * and many times denser in Glow than the same-size patch of drifting crowd (about 0.1%). The
+ * tail is re-measured on every attempt: the band it sits in changes size as the page's font
+ * loads and the headline rewraps, and the field re-places the mark to match.
+ */
+async function expectGatheredMark(page: Page, timeout = 5000) {
+  const shares = async () => {
+    const tail = await markTail(page)
+    const width = await page.evaluate(
+      () => document.querySelector('canvas')?.getBoundingClientRect().width ?? 0,
+    )
+    // The same circle, in the crowd at the far left of the band, away from the mark.
+    const crowd = { ...tail, x: width * 0.12 }
+    return { tail: await glowShare(page, tail), crowd: await glowShare(page, crowd) }
   }
+  await expect
+    .poll(
+      async () => {
+        const { tail, crowd } = await shares()
+        return tail > 0.05 && tail > crowd * 10
+      },
+      { timeout },
+    )
+    .toBe(true)
 }
 
 test.describe('landing page', () => {
@@ -168,44 +272,129 @@ test.describe('landing page', () => {
 
   test('gathers part of the cloud into the Firefly mark', async ({ page }) => {
     await page.goto('/')
-    const tail = await markBox(page)
-    // The tail of the mark fills in with solid Glow once the lights have gathered.
-    await expect
-      .poll(async () => (await litIn(page, tail)).glow, { timeout: 10_000 })
-      .toBeGreaterThan(400)
+    // The lights gather from 0.4s over 3.2s.
+    await expectGatheredMark(page, 10_000)
   })
 
-  test('heals after a fast pointer drag instead of leaving a pattern', async ({ page }) => {
+  test('parts the cloud under a fast pointer drag, then heals', async ({ page }) => {
     await page.goto('/')
-    const hero = page.locator('.hero')
-    const box = await hero.boundingBox()
+    const box = await page.locator('.hero').boundingBox()
     if (!box) throw new Error('hero missing')
-    const band = { x: 0, y: box.height * 0.15, width: box.width, height: box.height * 0.2 }
+    // The stir runs through the left of the open band; the right is left alone as a control, so
+    // the cloud's own drift and twinkle can't pass for a stir, or for healing.
+    const stirred = {
+      x: 0,
+      y: box.height * 0.12,
+      width: box.width * 0.45,
+      height: box.height * 0.28,
+    }
+    const control = { ...stirred, x: box.width * 0.55 }
+    const picture = async () => ({
+      stirred: await cloudCells(page, stirred),
+      control: await cloudCells(page, control),
+    })
     // Let the mark gather and the field settle first.
     await page.waitForTimeout(4500)
-    const before = (await litIn(page, band)).lit
-    // A fast zig-zag through the open band.
-    for (let i = 0; i < 24; i++) {
+    const before = await picture()
+    // A fast zig-zag through the stirred region.
+    for (let i = 0; i < 16; i++) {
       await page.mouse.move(
-        box.x + box.width * (0.1 + (i % 6) * 0.15),
-        box.y + box.height * (i % 2 === 0 ? 0.2 : 0.3),
-        { steps: 3 },
+        box.x + box.width * (i % 2 === 0 ? 0.03 : 0.42),
+        box.y + box.height * (0.15 + (i % 4) * 0.07),
+        { steps: 4 },
       )
     }
-    await page.mouse.move(box.x + 4, box.y + box.height - 4)
-    // Every light springs home: the band fills back in to about where it was.
+    const during = await picture()
+    const stirChange = cloudChange(before.stirred, during.stirred)
+    // Measured 2026-11-25: 0.48 to 0.80 where stirred, 0.06 to 0.17 in the control.
+    expect(stirChange).toBeGreaterThan(0.2)
+    expect(stirChange).toBeGreaterThan(3 * cloudChange(before.control, during.control))
+    // Off the hero (onto the header): every light springs home. The stirred region heals to
+    // under half its disturbance and to within the control's own drift; a cloud that kept the
+    // pattern (the bug this guards) stays near its peak.
+    await page.mouse.move(box.x + box.width / 2, 10)
     await expect
-      .poll(async () => (await litIn(page, band)).lit, { timeout: 6000 })
-      .toBeGreaterThan(before * 0.85)
+      .poll(
+        async () => {
+          const after = await picture()
+          const left = cloudChange(before.stirred, after.stirred)
+          return left < stirChange / 2 && left < cloudChange(before.control, after.control) + 0.15
+        },
+        { timeout: 8000 },
+      )
+      .toBe(true)
   })
 
-  test('keeps sideways finger sweeps for the field, and still scrolls', async ({ page }) => {
+  test('keeps the ground behind the headline dark while a pointer sweeps across it', async ({
+    page,
+  }) => {
+    await page.goto('/')
+    const box = await page.locator('.hero').boundingBox()
+    if (!box) throw new Error('hero missing')
+    // Behind the lower lines of the headline the field is cleared to near-clean black (6%).
+    const behindText = { x: 0, y: box.height * 0.75, width: box.width, height: box.height * 0.15 }
+    for (let i = 0; i < 12; i++) {
+      await page.mouse.move(
+        box.x + (i % 2 === 0 ? 0.05 : 0.95) * box.width,
+        box.y + box.height * (0.78 + (i % 3) * 0.04),
+        { steps: 6 },
+      )
+      expect(await brightestIn(page, behindText)).toBeLessThan(0.07)
+    }
+  })
+
+  test('lets a sideways finger sweep stir the cloud, and a vertical one scroll', async ({
+    page,
+    browserName,
+    isMobile,
+  }) => {
+    // Synthetic touch drags go through Chromium's own input pipeline (CDP), so touch-action and
+    // native scrolling apply as on a phone. WebKit has no equivalent; the CSS check covers it.
     await page.goto('/')
     const touchAction = await page
       .locator('.hero')
       .evaluate((hero) => getComputedStyle(hero).touchAction)
     expect(touchAction).toContain('pan-y')
     expect(touchAction).toContain('pinch-zoom')
+    test.skip(browserName !== 'chromium' || !isMobile, 'touch drags need a Chromium phone')
+
+    const box = await page.locator('.hero').boundingBox()
+    if (!box) throw new Error('hero missing')
+    const band = { x: 0, y: box.height * 0.12, width: box.width, height: box.height * 0.28 }
+    const cdp = await page.context().newCDPSession(page)
+    const touch = (type: 'touchStart' | 'touchMove' | 'touchEnd', x = 0, y = 0) =>
+      cdp.send('Input.dispatchTouchEvent', {
+        type,
+        touchPoints: type === 'touchEnd' ? [] : [{ x, y }],
+      })
+    await page.waitForTimeout(4500)
+
+    // The band's own drift over the length of a sweep, for comparison.
+    const still = await cloudCells(page, band)
+    await page.waitForTimeout(15 * 16)
+    const drift = cloudChange(still, await cloudCells(page, band))
+
+    // A sideways sweep across the band stirs it, and doesn't scroll the page.
+    const y = box.height * 0.25
+    const before = await cloudCells(page, band)
+    await touch('touchStart', 20, y)
+    for (let i = 1; i <= 15; i++) {
+      await touch('touchMove', 20 + i * 22, y)
+      await page.waitForTimeout(16)
+    }
+    const swept = cloudChange(before, await cloudCells(page, band))
+    await touch('touchEnd')
+    expect(swept).toBeGreaterThan(Math.max(0.2, 3 * drift))
+    expect(await page.evaluate(() => window.scrollY)).toBe(0)
+
+    // A vertical drag starting on the hero still scrolls the page.
+    await touch('touchStart', box.width / 2, box.height * 0.8)
+    for (let i = 1; i <= 15; i++) {
+      await touch('touchMove', box.width / 2, box.height * 0.8 - i * 25)
+      await page.waitForTimeout(16)
+    }
+    await touch('touchEnd')
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(100)
   })
 
   test('answers a tap on the dark without getting in the way', async ({ page }) => {
@@ -255,7 +444,6 @@ test.describe('landing page with reduced motion', () => {
 
   test('shows the Firefly mark already gathered', async ({ page }) => {
     await page.goto('/')
-    const tail = await markBox(page)
-    await expect.poll(async () => (await litIn(page, tail)).glow).toBeGreaterThan(400)
+    await expectGatheredMark(page)
   })
 })

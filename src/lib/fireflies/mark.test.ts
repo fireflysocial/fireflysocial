@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import {
   MARK_ASPECT,
+  MIN_MARK_SIZE,
+  readableMark,
   arrival,
   lensCentres,
   markClearance,
@@ -109,6 +111,15 @@ describe('markLayout in a measured band', () => {
 
   it('draws nothing in a band with no room', () => {
     expect(markLayout(360, 760, { top: 300, bottom: 280 }).size).toBe(0)
+  })
+})
+
+describe('readableMark', () => {
+  it('keeps a mark large enough to read, and drops one that would be a blob', () => {
+    const layout = { centerX: 100, centerY: 100, size: MIN_MARK_SIZE }
+    expect(readableMark(layout)).toBe(layout)
+    expect(readableMark({ ...layout, size: MIN_MARK_SIZE - 1 })).toBeNull()
+    expect(readableMark({ ...layout, size: 0 })).toBeNull()
   })
 })
 

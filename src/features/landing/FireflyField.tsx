@@ -20,6 +20,7 @@ import {
   markCountFor,
   markGather,
   markLayout,
+  readableMark,
   type MarkBand,
   type MarkLayout,
 } from '../../lib/fireflies/mark.ts'
@@ -167,8 +168,10 @@ export function FireflyField({
     })
     const swarm: Swarm = createSwarm({ seed })
     const scene = { context, cloud, swarm, batches }
+    // Placement is recomputed every frame (and on resize), so a band that shrinks too small for
+    // a readable mark drops it then, and one that grows back brings it back.
     const place = (gather: number) => {
-      const layout = mark ? markLayout(width, height, band) : null
+      const layout = mark ? readableMark(markLayout(width, height, band)) : null
       placeCloud(cloud, { width, height, mark: layout, gather })
       return layout
     }
@@ -330,7 +333,9 @@ function draw(
     let room = 1
     let resting: number
     let swell = 0
-    if (mote.slot === null) {
+    // With no mark this frame (none asked for, or no room for one), the mark's lights are just
+    // more of the crowd and obey the crowd's clearances.
+    if (mote.slot === null || mark === null) {
       const aroundPod = podClearance(
         Math.hypot(x - layout.centerX, y - layout.centerY),
         ring,
@@ -380,10 +385,15 @@ function draw(
     context.fillStyle = batch.style
     const { squares } = batch
     for (let i = 0; i < squares.length; i += 3) {
-      // Squares are pushed as whole x, y, side triples, so every index here is in range; the
-      // fallbacks only satisfy the type checker under noUncheckedIndexedAccess.
+      // Squares are pushed as whole x, y, side triples, so every index here is in range; each
+      // fallback only satisfies the type checker under noUncheckedIndexedAccess. Separate reads,
+      // not a destructured array, so drawing allocates nothing per square.
       /* v8 ignore next -- @preserve */
-      const [left, top, side] = [squares[i] ?? 0, squares[i + 1] ?? 0, squares[i + 2] ?? 0]
+      const left = squares[i] ?? 0
+      /* v8 ignore next -- @preserve */
+      const top = squares[i + 1] ?? 0
+      /* v8 ignore next -- @preserve */
+      const side = squares[i + 2] ?? 0
       context.fillRect(left, top, side, side)
     }
   }

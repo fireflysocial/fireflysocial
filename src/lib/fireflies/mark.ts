@@ -130,6 +130,18 @@ export function markLayout(width: number, height: number, band?: MarkBand): Mark
   return { centerX: width - gutter - (size * MARK_ASPECT) / 2, centerY, size }
 }
 
+/**
+ * The smallest mark worth drawing (px tall). Below this the band above the text has been
+ * squeezed (a short window, or enlarged text), and a mark that small would read as a blob, so
+ * the field leaves its lights in the crowd instead.
+ */
+export const MIN_MARK_SIZE = 48
+
+/** The mark's layout if it is large enough to read, otherwise null (no mark this frame). */
+export function readableMark(layout: MarkLayout): MarkLayout | null {
+  return layout.size >= MIN_MARK_SIZE ? layout : null
+}
+
 /** How many lights draw the mark: enough for a crisp silhouette, capped so phones keep 60fps. */
 export function markCountFor(size: number): number {
   return Math.round(clamp((size * size) / 32, 800, 3400))

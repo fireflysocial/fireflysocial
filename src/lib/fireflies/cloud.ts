@@ -70,6 +70,8 @@ export interface CloudOptions {
 
 /** How finely the cloud clumps: higher gives more, smaller clumps. */
 const CLUMP_SCALE = 1.15
+/** Most candidates tried per mote asked for, before `createCloud` settles for fewer. */
+const MAX_ATTEMPTS_PER_MOTE = 100
 /** How large the drifting currents are. */
 const FLOW_SCALE = 1.4
 /** Drift speed, in field-heights per second at full current. */
@@ -125,7 +127,13 @@ export function createCloud({
   // voids across its width instead of an even sprinkle.
   const clump = CLUMP_SCALE / Math.min(1, aspect)
   const motes: Mote[] = []
-  while (motes.length < Math.max(0, count)) {
+  const wanted = Math.max(0, count)
+  // Rejection sampling, with a bound: a `room` that leaves (almost) nowhere to gather would
+  // otherwise never fill the count. The landing's fields keep 6.5% to 10% of candidates (measured
+  // 2026-11-25 at 360x760 to 2560x1440), so they need 10 to 15 tries per mote, far inside the
+  // bound; a field that hits it gets the motes found so far.
+  const attempts = wanted * MAX_ATTEMPTS_PER_MOTE
+  for (let attempt = 0; attempt < attempts && motes.length < wanted; attempt++) {
     const x = random()
     const y = random()
     const d = (fractalNoise(density, x * clump * aspect, y * clump, 3) + 1) / 2

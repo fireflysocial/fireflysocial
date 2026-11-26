@@ -73,6 +73,15 @@ describe('createCloud', () => {
     expect(upper).toBeGreaterThan(motes.length * 0.85)
   })
 
+  it('gives up after a bounded number of tries when the room leaves nowhere to gather', () => {
+    expect(createCloud({ seed: 1, count: 500, aspect: 1, room: () => 0 }).motes).toHaveLength(0)
+  })
+
+  it('settles for fewer motes when the room is too tight to fill', () => {
+    const { motes } = createCloud({ seed: 1, count: 300, aspect: 1, room: () => 0.001 })
+    expect(motes.length).toBeLessThan(300)
+  })
+
   it('treats a negative count as an empty cloud', () => {
     expect(createCloud({ seed: 1, count: -4, aspect: 1 }).motes).toHaveLength(0)
   })

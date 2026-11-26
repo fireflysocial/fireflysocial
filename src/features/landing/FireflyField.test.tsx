@@ -283,6 +283,35 @@ describe('FireflyField', () => {
     expect(solidGlow(true)).toBeGreaterThan(without + 100)
   })
 
+  it('leaves the mark out, and its lights in the crowd, when the band is squeezed shut', () => {
+    const { context } = withCanvas()
+    // The open band has no height: the text fills the hero (a short window, or enlarged text).
+    const stage = document.createElement('div')
+    vi.spyOn(stage, 'getBoundingClientRect').mockReturnValue(
+      DOMRect.fromRect({ x: 0, y: 300, width: 360, height: 0 }),
+    )
+    const solid: [number, number][] = []
+    const squares: number[] = []
+    context.fillRect.mockImplementation((x, y) => {
+      squares.push(y)
+      if (context.fillStyle === 'rgba(217, 248, 74, 1)') solid.push([x, y])
+    })
+    render(
+      <FireflyField
+        progress={{ current: 0 }}
+        still
+        stillProgress={0}
+        mark
+        markStage={{ current: stage }}
+      />,
+    )
+    // No collapsed knot of solid Glow where the band was…
+    expect(solid.filter(([x, y]) => Math.hypot(x - 180, y - 300) < 10).length).toBeLessThan(5)
+    // …and the mark's lights obey the crowd's clearance, so nothing sits behind the text.
+    expect(squares.length).toBeGreaterThan(500)
+    expect(squares.every((y) => y < 760 * 0.67)).toBe(true)
+  })
+
   it('gathers the mark over the first few seconds when moving', () => {
     const { context, frame } = withCanvas()
     // Solid Glow squares drawn in the latest frame, by position.
