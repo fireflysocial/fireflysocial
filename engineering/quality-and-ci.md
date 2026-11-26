@@ -104,7 +104,7 @@ Test pure logic, with no network and no Supabase:
 - Zod schemas and form validation
 - Formatting and helper functions
 - Custom hooks that wrap pure logic
-- Animation and simulation maths, kept out of components. Example: the landing page's firefly field (`src/lib/fireflies/`) has a seeded random generator, the Kuramoto synchrony model, the swarm and the scroll-to-story mapping, all tested without a canvas (for instance, "a coupled pod reaches order parameter > 0.95 within 6 simulated seconds").
+- Animation and simulation maths, kept out of components. Example: the landing page's firefly field (`src/lib/fireflies/`) has a seeded random generator, seeded Perlin noise (`noise.ts`), the colour cloud with curl-noise drift, pointer stir and tap answers (`cloud.ts`), the Kuramoto synchrony model, the pod and the scroll-to-story mapping, all tested without a canvas (for instance, "a coupled pod reaches order parameter > 0.95 within 6 simulated seconds").
 
 **Location:** colocated next to the code, e.g. `src/lib/matching.ts` → `src/lib/matching.test.ts`.
 

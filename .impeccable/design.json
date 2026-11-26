@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-25T18:00:00+00:00",
+  "generatedAt": "2026-11-25T23:00:00+00:00",
   "title": "Design System: Firefly",
   "extensions": {
     "colorMeta": {
@@ -47,6 +47,21 @@
           "oklch(72% 0.143 118)",
           "oklch(84% 0.098 118)",
           "oklch(95% 0.034 118)"
+        ]
+      },
+      "dusk": {
+        "role": "secondary",
+        "displayName": "Dusk",
+        "canonical": "#C3A0FF",
+        "tonalRamp": [
+          "oklch(15% 0.078 302)",
+          "oklch(26% 0.119 302)",
+          "oklch(38% 0.140 302)",
+          "oklch(49% 0.140 302)",
+          "oklch(61% 0.140 302)",
+          "oklch(72% 0.125 302)",
+          "oklch(84% 0.085 302)",
+          "oklch(95% 0.029 302)"
         ]
       },
       "ink": {
@@ -154,19 +169,19 @@
           "oklch(95% 0.001 106)"
         ]
       },
-      "firefly-white": {
+      "ember": {
         "role": "neutral",
-        "displayName": "Firefly White",
-        "canonical": "#E9E6CF",
+        "displayName": "Ember",
+        "canonical": "#F2ECCE",
         "tonalRamp": [
-          "oklch(15% 0.017 101)",
-          "oklch(26% 0.026 101)",
-          "oklch(38% 0.031 101)",
-          "oklch(49% 0.031 101)",
-          "oklch(61% 0.031 101)",
-          "oklch(72% 0.028 101)",
-          "oklch(84% 0.019 101)",
-          "oklch(95% 0.007 101)"
+          "oklch(15% 0.025 98)",
+          "oklch(26% 0.038 98)",
+          "oklch(38% 0.045 98)",
+          "oklch(49% 0.045 98)",
+          "oklch(61% 0.045 98)",
+          "oklch(72% 0.040 98)",
+          "oklch(84% 0.027 98)",
+          "oklch(95% 0.009 98)"
         ]
       },
       "device-bezel": {
@@ -301,18 +316,43 @@
       },
       {
         "name": "call-and-response",
-        "value": "reach 200px, ripple 320px/s, answer ±0.55s, swell up to 2.6x, ring Firefly White 12%",
-        "purpose": "Tap on the dark field: crowd dots within reach flash back nearest first; one fading hairline ring marks the call. Off under reduced motion."
+        "value": "reach 220px, ripple 340px/s, answer ±0.5s, swell up to 1.4x plus brightness, ring Ember 14%",
+        "purpose": "Tap on the dark field: cloud motes within reach flash back nearest first; one fading 1px ring marks the call. Off under reduced motion."
+      },
+      {
+        "name": "cloud-drift",
+        "value": "curl-noise flow, 0.012 field-heights/s, currents shift 0.02/s; twinkle = max(0.62 + 0.3 sin φ, ((1 + cos φ)/2)^24), period 1.8 to 6s",
+        "purpose": "The cloud swirls like smoke without bunching; each mote shimmers with a brief spark. Drawn in 8 brightness steps; step 0 is not drawn."
+      },
+      {
+        "name": "pointer-stir",
+        "value": "home + offset; spring 11/s², damping 4.6/s (ζ≈0.7); sweeps the whole path since last frame (≤12 points), radius 90px, quadratic falloff, frame-rate-independent easing to 20% of hand speed (cap 1600px/s) + up to 160px/s outward, scaled by hand speed (full at 600px/s) and fading with offset; on-path motes part to alternate sides; hero touch-action pan-y pinch-zoom, pointercancel ends the path",
+        "purpose": "A hand moving through the dark sweeps the lights aside and they spring home, so the cloud heals instead of scarring. A stopped pointer does not stir. Off under reduced motion."
+      },
+      {
+        "name": "wake-into-step",
+        "value": "awake = smoothstep(4·reach), decay τ 3.2s; Kuramoto pull 9/s × awake towards a 1.6s beat; lift 0.35·awake·flash(φ, 4) over resting (only motes already showing, limited by text clearance), swell up to 1.25x",
+        "purpose": "Lights a hand passes fall into step with the mark's tail and flash together, then drift apart: the North Star made interactive."
+      },
+      {
+        "name": "gathered-mark",
+        "value": "count clamp(size²/32, 800, 3400); gather from 0.4s over 3.2s, per-light stagger, smootherstep flight; mark-light swell max-not-sum, cap 1.4x; crowd thinned to 20% inside; centred in the measured .hero__stage band, size ≤ 78% of band; stacked: size ≤ min(30% h, 62% w), centred; wide (≥900px): size ≤ min(46% h, 28% w), right-aligned to gutter",
+        "purpose": "Part of the hero cloud gathers into the Firefly mark: Dusk/Ember wings, a solid Glow tail keeping the beat. Shown gathered under reduced motion."
+      },
+      {
+        "name": "text-clearance",
+        "value": "brightness 0.06 from 42% of height (narrow, <720px) or 50% (wide), over a 20% smoothstep; bottom 8% fades to 0",
+        "purpose": "Keeps text on near-clean black; the cloud also spends its motes above the text."
       },
       {
         "name": "field-sync",
         "value": "gather 0.32 to 0.5; lit 0.4 to 0.52; Kuramoto coupling 0 to 2.4 over 0.58 to 0.86 (smoothstep)",
-        "purpose": "Scroll-driven story field; crowd dims 40% as the pod lights; max step 1/20 s; pixel ratio capped at 2; pauses off-screen and on tab hide."
+        "purpose": "Scroll-driven story field; pod cross-fades Ember to solid Glow with a 40% Muted ring; the cloud dims 55% while the pod is lit; max step 1/20 s; pixel ratio capped at 2; pauses off-screen and on tab hide."
       },
       {
         "name": "reduced-motion-field",
         "value": "still frame",
-        "purpose": "Hero draws the crowd only; the story draws its end state (pod gathered, lit, in step)."
+        "purpose": "No stir or call. Hero draws the cloud with the mark gathered; the story draws its end state (pod gathered, lit, in step)."
       },
       {
         "name": "reduced-motion-global",
@@ -330,7 +370,7 @@
         "value": "600px"
       },
       {
-        "name": "field-narrow",
+        "name": "field-wide",
         "value": "720px"
       },
       {
@@ -360,9 +400,9 @@
       "name": "Interest Chips",
       "kind": "chip",
       "refersTo": "chip",
-      "description": "Square toggle buttons with aria-pressed; picked is a solid warm-white block.",
+      "description": "Square toggle buttons with aria-pressed; picked is a solid Dusk block with black text.",
       "html": "<div class=\"ds-chips\" role=\"group\" aria-label=\"I’m into\"><button class=\"ds-chip\" type=\"button\" aria-pressed=\"true\">Board games</button><button class=\"ds-chip\" type=\"button\" aria-pressed=\"false\">Running</button><button class=\"ds-chip\" type=\"button\" aria-pressed=\"true\">Outdoors</button><button class=\"ds-chip\" type=\"button\" aria-pressed=\"false\">Books</button></div>",
-      "css": ".ds-chips { display: flex; flex-wrap: wrap; gap: 8px; } .ds-chip { min-height: 44px; padding: 0 16px; border: 1px solid rgb(242 242 238 / 0.28); border-radius: 0; background: transparent; color: #F2F2EE; font-family: 'Host Grotesk', system-ui, sans-serif; font-size: 1.0625rem; cursor: pointer; transition: background-color 180ms ease-out, color 180ms ease-out, border-color 180ms ease-out; } .ds-chip:hover { border-color: #F2F2EE; } .ds-chip[aria-pressed='true'] { border-color: #F2F2EE; background: #F2F2EE; color: #050505; } .ds-chip:active { transform: scale(0.97); } .ds-chip:focus-visible { outline: 2px solid #D9F84A; outline-offset: 3px; }"
+      "css": ".ds-chips { display: flex; flex-wrap: wrap; gap: 8px; } .ds-chip { min-height: 44px; padding: 0 16px; border: 1px solid rgb(242 242 238 / 0.28); border-radius: 0; background: transparent; color: #F2F2EE; font-family: 'Host Grotesk', system-ui, sans-serif; font-size: 1.0625rem; cursor: pointer; transition: background-color 180ms ease-out, color 180ms ease-out, border-color 180ms ease-out; } .ds-chip:hover { border-color: #F2F2EE; } .ds-chip[aria-pressed='true'] { border-color: #C3A0FF; background: #C3A0FF; color: #050505; } .ds-chip:active { transform: scale(0.97); } .ds-chip:focus-visible { outline: 2px solid #D9F84A; outline-offset: 3px; }"
     },
     {
       "name": "Underline Input",
@@ -375,9 +415,9 @@
     {
       "name": "Two-line Label",
       "kind": "custom",
-      "description": "Muted context line over the Ink fact; the system’s signature text unit.",
-      "html": "<p class=\"ds-label\"><span class=\"ds-muted\">Coming next</span><span>Example: Tuesday run club</span></p>",
-      "css": ".ds-label { display: flex; flex-direction: column; margin: 0; color: #F2F2EE; font-family: 'Host Grotesk', system-ui, sans-serif; font-size: 0.9375rem; line-height: 1.3; } .ds-muted { color: #9A9A92; }"
+      "description": "Context line over the Ink fact; Muted context normally, a Dusk tag for \"Coming next\" on the story HUD.",
+      "html": "<div class=\"ds-labels\"><p class=\"ds-label\"><span class=\"ds-muted\">Built in</span><span>Safety</span></p><p class=\"ds-label\"><span class=\"ds-tag\">Coming next</span><span>Example: Tuesday run club</span></p></div>",
+      "css": ".ds-labels { display: flex; gap: 40px; } .ds-label { display: flex; flex-direction: column; margin: 0; color: #F2F2EE; font-family: 'Host Grotesk', system-ui, sans-serif; font-size: 0.9375rem; line-height: 1.3; } .ds-muted { color: #9A9A92; } .ds-tag { color: #C3A0FF; }"
     },
     {
       "name": "Hairline Rows",
@@ -391,43 +431,49 @@
       "kind": "card",
       "refersTo": "device-phone",
       "description": "The one framed object: a code-drawn phone (status bar, island, home indicator) showing a ranked example feed with reasons and one Glow best-fit dot.",
-      "html": "<figure class=\"ds-phone\"><div class=\"ds-screen\"><div class=\"ds-status\" aria-hidden=\"true\"><span>9:41</span><span class=\"ds-island\"></span><span class=\"ds-battery\"></span></div><p class=\"ds-label\"><span class=\"ds-muted\">This week</span><span class=\"ds-big\">For you</span></p><ol class=\"ds-feed\"><li class=\"ds-item\"><p class=\"ds-label\"><span class=\"ds-muted\">Thu · 7 pm · Free</span><span class=\"ds-ftitle\">Board-game night</span></p><p class=\"ds-place\">Commercial Drive</p><p class=\"ds-why\"><span class=\"ds-dot\" aria-hidden=\"true\"></span>Board games, Food &amp; drink</p></li><li class=\"ds-item\"><p class=\"ds-label\"><span class=\"ds-muted\">Sat · 9 am · Free</span><span class=\"ds-ftitle\">Seawall walk</span></p><p class=\"ds-place\">Stanley Park</p><p class=\"ds-why\">Outdoors</p></li></ol><span class=\"ds-home\" aria-hidden=\"true\"></span></div><figcaption class=\"ds-cap\">Example events. Real listings come from across Vancouver.</figcaption></figure>",
-      "css": ".ds-phone { margin: 0; width: min(100% - 16px, 360px); color: #F2F2EE; font-family: 'Host Grotesk', system-ui, sans-serif; } .ds-screen { position: relative; display: grid; align-content: start; gap: 8px; min-height: 420px; padding: 14px 22px 40px; border: 1px solid rgb(242 242 238 / 0.28); border-radius: 48px; background: #111111; outline: 8px solid #1C1C1A; } .ds-phone p, .ds-phone ol { margin: 0; padding: 0; list-style: none; } .ds-status { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; margin: 0 -4px 14px; font-size: 0.8125rem; font-weight: 500; } .ds-island { width: 92px; height: 26px; border-radius: 13px; background: #000000; } .ds-battery { justify-self: end; width: 24px; height: 11px; border: 1px solid #F2F2EE; border-radius: 3px; } .ds-home { position: absolute; bottom: 10px; left: 50%; width: 120px; height: 5px; border-radius: 3px; background: #F2F2EE; opacity: 0.55; transform: translateX(-50%); } .ds-label { display: flex; flex-direction: column; font-size: 0.9375rem; line-height: 1.3; } .ds-muted { color: #9A9A92; } .ds-big { font-size: 1.5rem; letter-spacing: -0.02em; } .ds-item { display: grid; gap: 4px; padding: 16px 0; border-top: 1px solid rgb(242 242 238 / 0.13); } .ds-ftitle { font-size: 1.125rem; letter-spacing: -0.01em; } .ds-place { color: #9A9A92; font-size: 0.8125rem; } .ds-why { display: flex; align-items: center; gap: 8px; margin-top: 2px; font-size: 0.8125rem; } .ds-dot { flex: none; width: 8px; height: 8px; border-radius: 50%; background: #D9F84A; } .ds-cap { margin-top: 14px; color: #9A9A92; font-size: 0.8125rem; text-align: center; }"
+      "html": "<figure class=\"ds-phone\"><div class=\"ds-screen\"><div class=\"ds-status\" aria-hidden=\"true\"><span>9:41</span><span class=\"ds-island\"></span><span class=\"ds-battery\"></span></div><p class=\"ds-big\">For you this week</p><ol class=\"ds-feed\"><li class=\"ds-item\"><p class=\"ds-label\"><span class=\"ds-muted\">Thu · 7 pm · Free</span><span class=\"ds-ftitle\">Board-game night</span></p><p class=\"ds-place\">Commercial Drive</p><p class=\"ds-why\"><span class=\"ds-dot\" aria-hidden=\"true\"></span>Board games, Food &amp; drink</p></li><li class=\"ds-item\"><p class=\"ds-label\"><span class=\"ds-muted\">Sat · 9 am · Free</span><span class=\"ds-ftitle\">Seawall walk</span></p><p class=\"ds-place\">Stanley Park</p><p class=\"ds-why\">Outdoors</p></li></ol><span class=\"ds-home\" aria-hidden=\"true\"></span></div><figcaption class=\"ds-cap\">Example events. Real listings come from across Vancouver.</figcaption></figure>",
+      "css": ".ds-phone { margin: 0; width: min(100% - 16px, 360px); color: #F2F2EE; font-family: 'Host Grotesk', system-ui, sans-serif; } .ds-screen { position: relative; display: grid; align-content: start; gap: 8px; min-height: 420px; padding: 14px 22px 40px; border: 1px solid rgb(242 242 238 / 0.28); border-radius: 48px; background: #111111; outline: 8px solid #1C1C1A; } .ds-phone p, .ds-phone ol { margin: 0; padding: 0; list-style: none; } .ds-status { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; margin: 0 -4px 14px; font-size: 0.8125rem; font-weight: 500; } .ds-island { width: 92px; height: 26px; border-radius: 13px; background: #000000; } .ds-battery { justify-self: end; width: 24px; height: 11px; border: 1px solid #F2F2EE; border-radius: 3px; } .ds-home { position: absolute; bottom: 10px; left: 50%; width: 120px; height: 5px; border-radius: 3px; background: #F2F2EE; opacity: 0.55; transform: translateX(-50%); } .ds-label { display: flex; flex-direction: column; font-size: 0.9375rem; line-height: 1.3; } .ds-muted { color: #9A9A92; } .ds-big { font-size: 1.5rem; line-height: 1.2; letter-spacing: -0.02em; } .ds-item { display: grid; gap: 4px; padding: 16px 0; border-top: 1px solid rgb(242 242 238 / 0.13); } .ds-ftitle { font-size: 1.125rem; letter-spacing: -0.01em; } .ds-place { color: #9A9A92; font-size: 0.8125rem; } .ds-why { display: flex; align-items: center; gap: 8px; margin-top: 2px; font-size: 0.8125rem; } .ds-dot { flex: none; width: 8px; height: 8px; border-radius: 50%; background: #D9F84A; } .ds-cap { margin-top: 14px; color: #9A9A92; font-size: 0.8125rem; text-align: center; }"
     },
     {
       "name": "Marquee Strip",
       "kind": "custom",
-      "description": "Headline-size event kinds looping slowly between hairlines; still under reduced motion.",
+      "description": "Headline-size event kinds looping slowly between hairlines, separated by Dusk dots; still under reduced motion.",
       "html": "<div class=\"ds-strip\" aria-hidden=\"true\"><div class=\"ds-strip-track\"><p class=\"ds-strip-line\"><span>Startup meetups<i class=\"ds-sep\"></i></span><span>Run clubs<i class=\"ds-sep\"></i></span><span>Gallery openings<i class=\"ds-sep\"></i></span></p><p class=\"ds-strip-line\"><span>Startup meetups<i class=\"ds-sep\"></i></span><span>Run clubs<i class=\"ds-sep\"></i></span><span>Gallery openings<i class=\"ds-sep\"></i></span></p></div></div>",
-      "css": ".ds-strip { padding: 28px 0; overflow: hidden; border-block: 1px solid rgb(242 242 238 / 0.13); background: #050505; color: #F2F2EE; font-family: 'Host Grotesk', system-ui, sans-serif; } .ds-strip-track { display: flex; width: max-content; animation: ds-strip 60s linear infinite; } .ds-strip-line { display: flex; flex: none; margin: 0; font-size: clamp(2.25rem, 8.5vw, 4.5rem); line-height: 1; letter-spacing: -0.035em; white-space: nowrap; } .ds-strip-line > span { display: inline-flex; align-items: center; } .ds-sep { display: inline-block; width: 0.16em; height: 0.16em; margin: 0 0.5em; border-radius: 50%; background: #9A9A92; } @keyframes ds-strip { to { transform: translateX(-50%); } } @media (prefers-reduced-motion: reduce) { .ds-strip-track { animation: none; } }"
+      "css": ".ds-strip { padding: 28px 0; overflow: hidden; border-block: 1px solid rgb(242 242 238 / 0.13); background: #050505; color: #F2F2EE; font-family: 'Host Grotesk', system-ui, sans-serif; } .ds-strip-track { display: flex; width: max-content; animation: ds-strip 60s linear infinite; } .ds-strip-line { display: flex; flex: none; margin: 0; font-size: clamp(2.25rem, 8.5vw, 4.5rem); line-height: 1; letter-spacing: -0.035em; white-space: nowrap; } .ds-strip-line > span { display: inline-flex; align-items: center; } .ds-sep { display: inline-block; width: 0.16em; height: 0.16em; margin: 0 0.5em; border-radius: 50%; background: #C3A0FF; } @keyframes ds-strip { to { transform: translateX(-50%); } } @media (prefers-reduced-motion: reduce) { .ds-strip-track { animation: none; } }"
     }
   ],
   "narrative": {
     "northStar": "Fireflies in Step",
-    "overview": "Firefly's world is a dark city with one light that answers you. Soft black runs edge to edge; strangers are warm firefly-white dots drifting and blinking on their own; the only bright thing in any composition is Glow. Over it sits a civic, almost municipal grotesk layer: very large, tight Host Grotesk in warm white, small two-line labels, hairline rules and solid square cells. Nothing is decorated. Hierarchy comes from size and from the muted-over-ink pairing, not from weight, colour or containers.\n\nThe interface has no blue (decided 2026-11-25). Black is the ground; every neutral is warm (ink, muted, rules and the crowd all sit near hue 105). Night and Wing survive only inside the logo files, and the mark keeps its own colours wherever it appears. The landing page (`src/features/landing/`) is always dark regardless of the visitor's setting, a confirmed exception. App screens will follow the system light/dark setting, but no light system has been built, so this file records no light-mode tokens; the root stylesheet's light defaults are placeholders.\n\nMotion is two ideas, both drawn from real fireflies. Call and response: tap the dark and the nearby crowd flashes back in a ripple. Falling into step: on scroll, five strangers gather, turn Glow and synchronise (Kuramoto coupling). Everything else is near-still, and every motion has a still frame. There is no photography; example events and the example pod are synthetic and say so, and features that have not launched carry a \"Coming next\" label.",
+    "overview": "Firefly's world is a dark city full of small lights, and one of them answers you. Soft black runs edge to edge; above the text hangs a dense cloud of thousands of tiny flat squares in three tones (Glow, Dusk violet and Ember warm white), gathered in clumps and dark voids and drifting like smoke. Over it sits a civic, almost municipal grotesk layer: very large, tight Host Grotesk in warm white, small two-line labels, hairline rules and solid square cells. Nothing is decorated. Hierarchy comes from size and from the muted-over-ink pairing, not from weight, colour or containers.\n\nThe interface has no blue (decided 2026-11-25). Black is the ground and the neutrals are warm. Dusk is violet, not blue: it comes from the cloud and returns in the interface as a quiet second accent for state and for \"Coming next\". Night and Wing survive only inside the logo files, and the mark keeps its own colours wherever it appears. The landing page (`src/features/landing/`) is always dark regardless of the visitor's setting, a confirmed exception. App screens will follow the system light/dark setting, but no light system has been built, so this file records no light-mode tokens; the root stylesheet's light defaults are placeholders.\n\nMotion is drawn from real fireflies. The cloud drifts along a curl-noise flow and twinkles. Stir: a pointer or finger moving through the dark parts the cloud and makes it eddy. Call and response: tap the dark and the lights nearby flash back in a ripple. Falling into step: on scroll, five strangers gather, turn solid Glow and synchronise (Kuramoto coupling) while the cloud dims around them. Every motion has a still frame. There is no photography; example events and the example pod are synthetic and say so, and features that have not launched carry a \"Coming next\" label.",
     "keyCharacteristics": [
-      "Soft black ground edge to edge; warm neutrals only; no blue in the interface.",
-      "One Glow per composition, always solid.",
+      "Soft black ground edge to edge; warm neutrals; no blue in the interface.",
+      "One Glow highlight per screen in the interface, always solid. The cloud is atmosphere.",
+      "Dusk violet as the quiet second accent: picked state, \"Coming next\", separators.",
       "Host Grotesk only, regular weight, tight negative tracking; size carries hierarchy.",
-      "Two-line labels: muted context line over the warm-white fact.",
+      "Two-line labels: a context line over the warm-white fact.",
       "Hairline rules and square cells instead of cards, shadows or gradients.",
-      "Flat dots: a flash is size and opacity, never blur or bloom.",
+      "Flat squares and dots: a flash is size and brightness, never blur or bloom.",
       "Phone first from 360px; everything readable with the motion switched off."
     ],
     "rules": [
       {
         "name": "The One Light Rule",
-        "body": "Each composition has exactly one Glow element. In the feed demo it is the best-fit dot; in the story it is the pod; in the invite section it is the submit block. The hero has none: it is the crowd alone. If a second Glow appears on screen, one of them is wrong.",
+        "body": "Each screen of interface has exactly one Glow highlight: in the feed demo the best-fit dot, in the story the pod, in the invite section the submit block. The hero has no Glow interface element; its light is the cloud. Glow motes in the cloud are atmosphere and do not count, but no interface element other than the one highlight may be Glow.",
+        "section": "colors"
+      },
+      {
+        "name": "The Quiet Dusk Rule",
+        "body": "Dusk marks state and what is coming; it never competes with Glow. It is never the call to action, never the best-fit signal, never the pod. If a reader's eye goes to Dusk before Glow, Dusk is doing too much.",
         "section": "colors"
       },
       {
         "name": "The No Blue Rule",
-        "body": "The interface has no blue. Grounds are black, neutrals are warm. Night and Wing exist only inside the mark, which keeps its own colours.",
+        "body": "The interface has no blue. Grounds are black, neutrals are warm, Dusk is violet. Night and Wing exist only inside the mark, which keeps its own colours.",
         "section": "colors"
       },
       {
         "name": "The Solid Glow Rule",
-        "body": "Glow over black is drawn at full opacity; dimmed Glow turns olive. Lit pod dots flash by swelling, not fading.",
+        "body": "Glow as a highlight is drawn at full opacity; dimmed Glow turns olive. Lit pod dots flash by swelling, not fading. (Cloud motes step through brightness; they are not a highlight.)",
         "section": "colors"
       },
       {
@@ -446,23 +492,26 @@
         "section": "typography"
       },
       {
-        "name": "The Flat Dot Rule",
-        "body": "The flat dot is the light. Field dots, the best-fit dot, marquee separators and the mark are solid circles; a flash is shown by size and opacity, never by blur, bloom or glow.",
+        "name": "The Flat Light Rule",
+        "body": "Every light is flat. Cloud motes are solid squares; the pod, the best-fit dot and the marquee separators are solid circles. A flash is shown by size and brightness, never by blur, bloom or glow.",
         "section": "elevation"
       }
     ],
     "dos": [
-      "Do keep one Glow element per composition, at full opacity.",
+      "Do keep one Glow highlight per screen in the interface, at full opacity.",
+      "Do use Dusk only as a quiet second accent: picked state, \"Coming next\", separators.",
       "Do keep the interface blue-free: black grounds and warm neutrals; Night and Wing only inside the mark.",
       "Do set display type in Host Grotesk 400 with negative tracking (-0.04em at display).",
-      "Do pair a Muted context line over an Ink fact for labels.",
+      "Do pair a context line over an Ink fact for labels.",
       "Do separate content with 1px hairlines at Ink 13%, and frame controls with Ink 28%.",
       "Do keep header cells, chips, buttons and inputs square (0 radius).",
+      "Do thin the field behind text instead of putting text on a panel.",
       "Do give every motion a still version under reduced motion, and pause canvas loops when off-screen or the tab is hidden.",
       "Do label example events and the example pod as made up, and unlaunched features as \"Coming next\"."
     ],
     "donts": [
-      "Don't add shadows, gradients, blur, bloom or glows to dots, the mark or surfaces.",
+      "Don't add shadows, gradients, blur, bloom or glows to motes, dots, the mark or surfaces.",
+      "Don't make Dusk a call to action or a highlight that competes with Glow.",
       "Don't use bold weights for hierarchy; use size.",
       "Don't wrap content in cards; the drawn phone is the one framed object.",
       "Don't use Night, Wing or any blue as an interface fill, text or rule colour.",

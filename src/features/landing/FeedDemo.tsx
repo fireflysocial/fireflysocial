@@ -73,10 +73,7 @@ export function FeedDemo() {
             <span className="phone__island" />
             <span className="phone__battery" />
           </div>
-          <p className="label phone__heading">
-            <span className="muted">This week</span>
-            <span>For you</span>
-          </p>
+          <p className="phone__heading">For you this week</p>
           <p className="visually-hidden" role="status">
             {top && picked.size > 0 ? `Top pick: ${top.event.title}` : ''}
           </p>

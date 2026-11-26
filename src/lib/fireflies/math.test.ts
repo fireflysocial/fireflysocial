@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { TAU, clamp, lerp, progressBetween, smoothstep, wrapPhase } from './math.ts'
+import { TAU, clamp, lerp, progressBetween, smoothstep, wrapPhase, wrapUnit } from './math.ts'
 
 describe('clamp', () => {
   it('keeps values inside the range', () => {
@@ -47,5 +47,14 @@ describe('wrapPhase', () => {
     expect(wrapPhase(TAU)).toBeCloseTo(0)
     expect(wrapPhase(-Math.PI / 2)).toBeCloseTo((3 * Math.PI) / 2)
     expect(wrapPhase(3 * TAU + 1)).toBeCloseTo(1)
+  })
+})
+
+describe('wrapUnit', () => {
+  it('wraps coordinates into [0, 1)', () => {
+    expect(wrapUnit(0.25)).toBe(0.25)
+    expect(wrapUnit(1.25)).toBeCloseTo(0.25)
+    expect(wrapUnit(-0.25)).toBeCloseTo(0.75)
+    expect(wrapUnit(1)).toBe(0)
   })
 })

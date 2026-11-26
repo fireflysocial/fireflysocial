@@ -20,6 +20,12 @@ export function smoothstep(amount: number): number {
   return t * t * (3 - 2 * t)
 }
 
+/** Wraps a unit-space coordinate into [0, 1), so things leaving one edge come back at the other. */
+export function wrapUnit(value: number): number {
+  const wrapped = value % 1
+  return wrapped < 0 ? wrapped + 1 : wrapped
+}
+
 /** Wraps an angle into [0, TAU). */
 export function wrapPhase(phase: number): number {
   const wrapped = phase % TAU

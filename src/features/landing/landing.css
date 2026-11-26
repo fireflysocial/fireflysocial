@@ -303,6 +303,17 @@ html:has(.landing) {
     transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.story__tag {
+  color: var(--dusk);
+}
+
+/* A small black plate behind each caption, so the cloud never runs through its letters. */
+.story__hud > p {
+  margin: -6px -10px;
+  padding: 6px 10px;
+  background: var(--black);
+}
+
 .story__hud > [data-shown='true'] {
   opacity: 1;
   transform: none;
@@ -369,6 +380,17 @@ html:has(.landing) {
   /* The field answers taps; don't let a tap also select text or flash a highlight. */
   -webkit-user-select: none;
   user-select: none;
+  /*
+   * Vertical drags still scroll and pinches still zoom, but a sideways finger sweep stays with
+   * the page, so a finger can stir the cloud the way a pointer does.
+   */
+  touch-action: pan-y pinch-zoom;
+}
+
+/* The open band above the text, where the mark gathers: empty, measured by the field. */
+.hero__stage {
+  grid-row: 1;
+  pointer-events: none;
 }
 
 .hero > :not(.field) {
@@ -561,8 +583,8 @@ html:has(.landing) {
 }
 
 .chip[aria-pressed='true'] {
-  border-color: var(--ink);
-  background: var(--ink);
+  border-color: var(--dusk);
+  background: var(--dusk);
   color: var(--black);
 }
 
@@ -635,8 +657,9 @@ html:has(.landing) {
   transform: translateX(-50%);
 }
 
-.phone__heading span:last-child {
+.phone__heading {
   font-size: 1.5rem;
+  line-height: 1.2;
   letter-spacing: -0.02em;
 }
 
@@ -749,7 +772,7 @@ html:has(.landing) {
   height: 0.16em;
   margin: 0 0.5em;
   border-radius: 50%;
-  background: var(--muted);
+  background: var(--dusk);
 }
 
 @keyframes strip-scroll {

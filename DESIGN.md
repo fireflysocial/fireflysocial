@@ -5,6 +5,7 @@ colors:
   black: '#050505'
   glow: '#D9F84A'
   glow-hover: '#E6FF7A'
+  dusk: '#C3A0FF'
   ink: '#F2F2EE'
   ink-hover: '#FFFFFF'
   muted: '#9A9A92'
@@ -12,7 +13,7 @@ colors:
   raised: '#111111'
   rule: 'rgb(242 242 238 / 0.13)'
   rule-strong: 'rgb(242 242 238 / 0.28)'
-  firefly-white: '#E9E6CF'
+  ember: '#F2ECCE'
   device-bezel: '#1C1C1A'
   device-island: '#000000'
   error: '#FF9A8A'
@@ -117,7 +118,7 @@ components:
     padding: '0 16px'
     height: '{spacing.target}'
   chip-picked:
-    backgroundColor: '{colors.ink}'
+    backgroundColor: '{colors.dusk}'
     textColor: '{colors.black}'
   input-underline:
     backgroundColor: 'transparent'
@@ -149,69 +150,83 @@ components:
 
 **Creative North Star: "Fireflies in Step"**
 
-Firefly's world is a dark city with one light that answers you. Soft black runs edge to edge;
-strangers are warm firefly-white dots drifting and blinking on their own; the only bright thing in
-any composition is Glow. Over it sits a civic, almost municipal grotesk layer: very large, tight
-Host Grotesk in warm white, small two-line labels, hairline rules and solid square cells. Nothing
-is decorated. Hierarchy comes from size and from the muted-over-ink pairing, not from weight,
-colour or containers.
+Firefly's world is a dark city full of small lights, and one of them answers you. Soft black runs
+edge to edge; above the text hangs a dense cloud of thousands of tiny flat squares in three tones
+(Glow, Dusk violet and Ember warm white), gathered in clumps and dark voids and drifting like
+smoke. Over it sits a civic, almost municipal grotesk layer: very large, tight Host Grotesk in
+warm white, small two-line labels, hairline rules and solid square cells. Nothing is decorated.
+Hierarchy comes from size and from the muted-over-ink pairing, not from weight, colour or
+containers.
 
-The interface has no blue (decided 2026-11-25). Black is the ground; every neutral is warm (ink,
-muted, rules and the crowd all sit near hue 105). Night and Wing survive only inside the logo
-files, and the mark keeps its own colours wherever it appears. The landing page
-(`src/features/landing/`) is always dark regardless of the visitor's setting, a confirmed
-exception. App screens will follow the system light/dark setting, but no light system has been
-built, so this file records no light-mode tokens; the root stylesheet's light defaults are
-placeholders.
+The interface has no blue (decided 2026-11-25). Black is the ground and the neutrals are warm.
+Dusk is violet, not blue: it comes from the cloud and returns in the interface as a quiet second
+accent for state and for "Coming next". Night and Wing survive only inside the logo files, and
+the mark keeps its own colours wherever it appears as the mark itself. The one exception is the
+hero's gathered mark, which is not the logo but the cloud taking its shape: it is drawn in the
+cloud's own tones (Dusk and Ember wings, a solid Glow tail). The landing page (`src/features/landing/`) is
+always dark regardless of the visitor's setting, a confirmed exception. App screens will follow
+the system light/dark setting, but no light system has been built, so this file records no
+light-mode tokens; the root stylesheet's light defaults are placeholders.
 
-Motion is two ideas, both drawn from real fireflies. Call and response: tap the dark and the
-nearby crowd flashes back in a ripple. Falling into step: on scroll, five strangers gather, turn
-Glow and synchronise (Kuramoto coupling). Everything else is near-still, and every motion has a
-still frame. There is no photography; example events and the example pod are synthetic and say
-so, and features that have not launched carry a "Coming next" label.
+Motion is drawn from real fireflies. The cloud drifts along a curl-noise flow and twinkles. On
+the hero, part of it gathers into the Firefly mark, whose tail keeps a steady beat. Stir: a
+pointer or finger moving through the dark sweeps the lights along its path and they spring back
+home, and every light it wakes falls into step with the mark's beat. Call and response: tap the
+dark and the lights nearby flash back in a ripple. Falling into step: on scroll, five strangers
+gather, turn solid Glow and synchronise (Kuramoto coupling) while the cloud dims around them. Every motion has a still frame. There is no photography; example events and the
+example pod are synthetic and say so, and features that have not launched carry a "Coming next"
+label.
 
 **Key Characteristics:**
 
-- Soft black ground edge to edge; warm neutrals only; no blue in the interface.
-- One Glow per composition, always solid.
+- Soft black ground edge to edge; warm neutrals; no blue in the interface.
+- One Glow highlight per screen in the interface, always solid. The cloud is atmosphere.
+- Dusk violet as the quiet second accent: picked state, "Coming next", separators.
 - Host Grotesk only, regular weight, tight negative tracking; size carries hierarchy.
-- Two-line labels: muted context line over the warm-white fact.
+- Two-line labels: a context line over the warm-white fact.
 - Hairline rules and square cells instead of cards, shadows or gradients.
-- Flat dots: a flash is size and opacity, never blur or bloom.
+- Flat squares and dots: a flash is size and brightness, never blur or bloom.
 - Phone first from 360px; everything readable with the motion switched off.
 
 ## Colors
 
-Warm near-monochrome on soft black, with one chartreuse light; every colour except Glow is a
-shade of warm white at some strength.
+Warm near-monochrome on soft black, with one chartreuse light, one quiet violet and a field of
+three-tone motes.
 
 ### Primary
 
-- **Glow** (glow): the light. Exactly one per composition: the best-fit dot in the feed demo, the
-  pod in the story field, the invite submit block. Also the focus ring, the input focus underline,
-  the text caret and text selection, which appear only on interaction. Its hover, Glow Hover
-  (glow-hover), is used only on the submit block.
+- **Glow** (glow): the light. In the interface, exactly one Glow highlight per screen: the
+  best-fit dot in the feed demo, the pod in the story field, the invite submit block. Also the
+  focus ring, the input focus underline, the text caret and text selection, which appear only on
+  interaction. Its hover, Glow Hover (glow-hover), is used only on the submit block. In the cloud,
+  Glow is one of three mote tones.
+
+### Secondary
+
+- **Dusk** (dusk): the cloud's violet, a quiet second accent (9.5:1 on black). Picked interest
+  chips (a solid Dusk block with black text), the "Coming next" tag on the story HUD, and the
+  marquee separators. In the cloud, the violet tone: 15% to 65% of the non-Ember motes depending
+  on region, so some clumps lean violet and others yellow.
 
 ### Neutral
 
-- **Soft Black** (black): every ground, the header bar, text on Ink and on Glow, the browser
+- **Soft Black** (black): every ground, the header bar, text on Ink, Dusk and Glow, the browser
   theme colour in dark mode.
 - **Raised** (raised): the one raised surface, the drawn phone's screen. Depth by tone, never by
   shadow.
-- **Ink** (ink): warm-white primary text, the second line of every two-line label, and the solid
-  fill of the header invite cell and picked chips. Its hover is pure white (ink-hover), used only
+- **Ink** (ink): warm-white primary text, the fact line of every two-line label, and the solid
+  fill of the header invite cell and the skip link. Its hover is pure white (ink-hover), used only
   on the invite cell.
 - **Muted** (muted): context lines, ledes, row bodies, sources, captions, the input underline at
-  rest, the disabled submit block, the marquee separators and the pod's names and ring in the
-  field.
+  rest, the disabled submit block, and the pod's names and ring in the field.
 - **Placeholder** (placeholder): input placeholder text only; dimmer than Muted so it reads as a
   hint.
 - **Rule** (rule): Ink at 13%; every hairline (header bottom, mark-cell divider, row separators,
   strip borders, feed separators, footer top).
 - **Rule Strong** (rule-strong): Ink at 28%; edges that frame a control or object (unpicked chip
   border, the phone screen's edge).
-- **Firefly White** (firefly-white): the crowd in the field, drawn at 12% to 94% opacity as it
-  blinks, and the tap ring at 12%.
+- **Ember** (ember): the cloud's warm white, 16% of its motes; the colour a pod-mate has before
+  it lights; and the tap ring, drawn at 14%. Canvas only.
 - **Device Bezel / Device Island** (device-bezel, device-island): the drawn phone's frame and
   camera island; nowhere else.
 - **Error Coral** (error): an invalid email's message and input underline.
@@ -220,15 +235,21 @@ shade of warm white at some strength.
 
 ### Named Rules
 
-**The One Light Rule.** Each composition has exactly one Glow element. In the feed demo it is the
-best-fit dot; in the story it is the pod; in the invite section it is the submit block. The hero
-has none: it is the crowd alone. If a second Glow appears on screen, one of them is wrong.
+**The One Light Rule.** Each screen of interface has exactly one Glow highlight: in the feed demo
+the best-fit dot, in the story the pod, in the invite section the submit block. The hero has no
+Glow interface element; its light is the cloud. Glow motes in the cloud are atmosphere and do
+not count, but no interface element other than the one highlight may be Glow.
 
-**The No Blue Rule.** The interface has no blue. Grounds are black, neutrals are warm. Night and
-Wing exist only inside the mark, which keeps its own colours.
+**The Quiet Dusk Rule.** Dusk marks state and what is coming; it never competes with Glow. It is
+never the call to action, never the best-fit signal, never the pod. If a reader's eye goes to
+Dusk before Glow, Dusk is doing too much.
 
-**The Solid Glow Rule.** Glow over black is drawn at full opacity; dimmed Glow turns olive. Lit
-pod dots flash by swelling, not fading.
+**The No Blue Rule.** The interface has no blue. Grounds are black, neutrals are warm, Dusk is
+violet. Night and Wing exist only inside the mark, which keeps its own colours.
+
+**The Solid Glow Rule.** Glow as a highlight is drawn at full opacity; dimmed Glow turns olive.
+Lit pod dots flash by swelling, not fading. (Cloud motes step through brightness; they are not a
+highlight.)
 
 **The No Glow on Paper Rule.** Glow never carries text or an essential indicator on a light
 surface; on light, the glow becomes Night (brand/README.md).
@@ -261,8 +282,9 @@ big, tight, regular weight, warm white on black. Tabular figures are on across t
 - **Small** (400, 0.8125rem, 1.4): sources, captions, feed places and reasons, the phone status
   bar, footer meta.
 
-The only weight above 400 is 500: the header invite cell, the submit block, the phone status bar
-and the field's canvas name labels.
+The phone's one-line heading ("For you this week") sits between Item and Title at 1.5rem, 1.2
+line height, -0.02em. The only weight above 400 is 500: the header invite cell, the submit block,
+the phone status bar and the field's canvas name labels.
 
 ### Named Rules
 
@@ -274,21 +296,26 @@ at title, -0.03em at statement, -0.035em at headline, -0.04em at display.
 
 ## Layout
 
-Phone first at 360px, then 600px (form field and button side by side) and 900px (header grows
-from 56px to 72px, header nav appears, rows, the feed demo and the invite body split into two
-equal columns). Side gutters are a fluid `clamp(16px, 2.4vw, 32px)` plus the safe-area insets;
-sections are separated by a fluid 96px to 200px. Edge-to-edge bands (header, strip, footer) run
-full width with hairlines; content columns are not boxed.
+Phone first at 360px, then 600px (form field and button side by side), 720px (the field's wide
+layout) and 900px (header grows from 56px to 72px, header nav appears, rows, the feed demo and
+the invite body split into two equal columns). Side gutters are a fluid `clamp(16px, 2.4vw,
+32px)` plus the safe-area insets; sections are separated by a fluid 96px to 200px. Edge-to-edge
+bands (header, strip, footer) run full width with hairlines; content columns are not boxed.
 
-The page opens on a full-height (`100dvh`) hero: the field behind, the H1 and intro low, and a
+The page opens on a full-height (`100dvh`) hero: the cloud behind, the H1 and intro low, and a
 foot row with a small muted tap hint left and the scroll cue right. On wide screens the intro sits
 beside the H1 in a 22rem column. The feed demo puts heading, lede and chips left and the drawn
 phone right, top-aligned so the chips never move under the pointer as the feed changes height.
 The "Coming next" story is a sticky full-height stage with five full-screen chapters scrolling
-over it; chapter text sits low (phones) or low-left (wide), the field dims the crowd to 25% under
-that area, and the pod sits centred in the upper third on phones or right of centre on wide
-screens (field breakpoint 720px). A HUD across the top of the stage keeps the two-line "Coming
-next" label visible through every chapter and fades in the week counter.
+over it; chapter text sits low (phones) or low-left (wide), and the pod sits centred in the upper
+third on phones or right of centre on wide screens. A HUD across the top of the stage keeps the
+"Coming next" label visible through every chapter and fades in the week counter. Each caption sits on
+a small solid black plate (6px by 10px padding), so the cloud never runs through its letters.
+
+The field keeps text legible by placement, not by panels. The cloud spends its motes in the open
+band above the text and thins behind it: brightness falls to 6% from 42% of the field's height on
+phones (50% on wide screens), and the bottom 8% fades to nothing so the field has no hard lower
+edge.
 
 Rows are the main content grid: on phones `when | title` with the body below; on wide screens
 `when | title | body` in 0.35 / 0.65 / 1 fractions so bodies line up with the right column of
@@ -301,18 +328,19 @@ least 44px and form controls 56px.
 
 Flat. There are no shadows, blurs or gradients anywhere in the build. Depth comes from tone (the
 phone's Raised screen inside its Device Bezel, drawn as a solid 8px outline, not a shadow), from
-hairlines, and from the field itself: a canvas behind the text.
+hairlines, and from the field itself: a canvas of motes behind the text, dimming where text sits.
 
 ### Named Rules
 
-**The Flat Dot Rule.** The flat dot is the light. Field dots, the best-fit dot, marquee
-separators and the mark are solid circles; a flash is shown by size and opacity, never by blur,
-bloom or glow.
+**The Flat Light Rule.** Every light is flat. Cloud motes are solid squares; the pod, the
+best-fit dot and the marquee separators are solid circles. A flash is shown by size and
+brightness, never by blur, bloom or glow.
 
 ## Shapes
 
 Square by default: header cells, chips, the submit block, the input and the skip link have no
-radius. The circle carries meaning: a dot is a firefly or a signal (field dots, the best-fit dot,
+radius, and the cloud's motes are tiny squares, so the field shares the interface's square
+geometry. The circle carries meaning: a dot is a signal or a person (the pod, the best-fit dot,
 separators, the pod's hairline ring, the tap ring). Rounded rectangles belong only to the drawn
 phone: the screen (48px), the camera island (13px), the battery and home indicator (3px). Lines
 are 1px hairlines; the focused input underline thickens to 2px. Arrows are thin line icons (1.5
@@ -330,9 +358,10 @@ to pure white over 200ms ease-out; its focus ring is black, inset 4px, so it sho
 
 ### Two-line label
 
-The world's signature text unit: a muted context line stacked over the ink fact ("This week" over
-"For you", "Coming next" over the example, "Built in" over "Safety", "Week" over the number).
-Used in the header, nav, feed items, story HUD and footer line.
+The world's signature text unit: a context line stacked over the ink fact ("Thu · 7 pm · Free"
+over the event title, "Built in" over "Safety", "Week" over the number). The context line is
+Muted; on the story HUD the "Coming next" context line is Dusk, marking something not yet
+launched. Used in the header, nav, feed items, story HUD and footer line.
 
 ### Hairline rows
 
@@ -344,7 +373,7 @@ row describing something unlaunched uses "Coming next" as its `when`.
 
 - **Style:** square toggle buttons, 44px tall, 16px side padding, Body size, transparent with a
   Rule Strong border and Ink text.
-- **State:** `aria-pressed`; picked is a solid Ink block with black text. Hover sharpens the
+- **State:** `aria-pressed`; picked is a solid Dusk block with black text. Hover sharpens the
   border to Ink; press scales to 0.97. Colour changes run 180ms ease-out.
 
 ### Inputs / Fields
@@ -369,38 +398,85 @@ row describing something unlaunched uses "Coming next" as its `when`.
 
 A phone drawn in code, max 360px wide: a Raised screen with a Rule Strong edge and 48px radius,
 an 8px Device Bezel outline, a status bar (time, camera island, battery), and a home indicator
-at 55% Ink. Inside, a two-line heading and a short ranked list (four events) separated by
-hairlines: muted "when · price" over an Item-size title, a small muted place, and a one-line
-reason. Only the top event's reason carries the 8px Glow dot. Reordering glides through view
-transitions (420ms, `cubic-bezier(0.16, 1, 0.3, 1)`) where supported, and not under reduced
-motion; a visually hidden status line announces the top pick. Always captioned as example
-events. The only rounded object in the system.
+at 55% Ink. Inside, a one-line heading ("For you this week") and a short ranked list (four
+events) separated by hairlines: muted "when · price" over an Item-size title, a small muted
+place, and a one-line reason. Only the top event's reason carries the 8px Glow dot. Reordering
+glides through view transitions (420ms, `cubic-bezier(0.16, 1, 0.3, 1)`) where supported, and
+not under reduced motion; a visually hidden status line announces the top pick. Always captioned
+as example events. The only rounded object in the system.
 
-### Firefly field (signature)
+### Firefly cloud (signature)
 
-A canvas of warm firefly-white dots on black, drifting and blinking independently; crowd size
-scales with area (90 to 380). Pixel ratio is capped at 2, the loop pauses off-screen and on tab
-hide, and it is decorative and hidden from assistive technology: every idea is also in the text.
+A canvas of thousands of tiny flat squares on black: area / 70 motes, clamped to 3,000 to
+11,000. Each mote's side is twice its size (1.4px to 3px). Seeded fractal Perlin noise places them
+in dense clumps with near-empty voids (a 4% floor keeps a faint scatter, so the dark never looks
+cut out), sized to the field's shorter side so tall phone fields get clumps across their width,
+and weighted towards the open band above the text. Once the story's pod forms, the cloud clears
+inside the pod's ring (to 8%, with a soft edge), so the five names sit on clean black. Tones: 16% Ember; of the rest, Dusk
+takes 15% to 65% by region and Glow the remainder. The cloud drifts along a slowly shifting
+curl-noise flow and twinkles (a gentle shimmer plus a brief spark). It is drawn in 8 brightness
+steps batched by tone; a mote that rounds to step 0 is not drawn, so the ground behind text and
+at the field's edge stays clean black. Pixel ratio is capped at 2, the loop pauses off-screen and
+on tab hide, and the canvas is decorative and hidden from assistive technology: every idea is
+also in the text.
 
-- **Call and response:** tapping the dark (not a link or control) makes crowd dots within 200px
-  answer, nearest first, rippling at 320px/s. Each answering dot swells up to 2.6x and brightens
-  for 0.55s either side of its peak. One hairline ring in Firefly White at 12% marks the call and
-  fades as it reaches its edge. Off under reduced motion.
-- **Falling into step (story):** five crowd dots gather into a pentagon, cross-fade to solid
-  Glow, gain a 35% Muted hairline ring and muted 500 name labels, and synchronise as coupling
-  rises with scroll. The crowd dims by 40% as the pod lights. Lit pod dots flash by swelling.
-- **Reduced motion:** still frames. The hero shows the crowd only; the story shows its end state,
-  the pod gathered, lit and in step.
+- **Home and offset:** every mote has a home (where the drift has carried it) and a pixel offset
+  from it. Interaction only moves the offset; a damped spring (stiffness 11/s², damping 4.6/s,
+  damping ratio about 0.7, so it heals in about 2s with no visible bounce) pulls it back, so the
+  cloud parts and heals and is never scarred by a pass. There is no hard limit on the offset,
+  which would pile motes into a visible ridge.
+- **Stir:** a hand moving through the dark sweeps every mote within 90px of its whole path since
+  the last frame (every pointer event, up to 12), not just its end point, so a fast move leaves
+  one smooth wake rather than a row of holes. Each mote eases (quadratic falloff, the same at any
+  frame rate) towards moving with the hand at 20% of its speed (capped at 1,600px/s) plus up to
+  160px/s out of its way. The outward push scales with hand speed (full at 600px/s) and fades as
+  a mote gets further from home, so a slow, jittering or circling hand leaves a soft eddy rather
+  than digging a ringed hole. Motes right on the path part to alternate sides. A pointer that
+  has stopped, or only just arrived, does not stir. The hero sets `touch-action: pan-y
+pinch-zoom`, so a sideways finger sweep stirs while vertical drags still scroll; a cancelled
+  pointer (the browser taking a touch to scroll) ends the path.
+- **Waking into step:** a stirred mote wakes (fully across most of the reach, fading only at its
+  edge; decaying with a 3.2s time constant, about two beats) and is pulled into step with one
+  shared beat (1.6s per flash, Kuramoto coupling 9/s scaled by how awake it is). On the beat a
+  woken mote brightens by up to 0.35 over its own resting light and grows up to 1.25x, then
+  drifts back to its own rhythm as it falls asleep. The wake lifts only motes that are already
+  showing: it never reveals one the text clearance hides, and answers to a call are limited by
+  the same clearance, so nothing ever flashes behind text. The beat is the mark's tail: what a hand passes through
+  falls into step with Firefly.
+- **Gathered mark (hero):** extra lights (mark height² / 32, 800 to 3,400) gather into the Firefly
+  mark, sampled from the mark's own geometry (two lenses of radius 200, a tail circle of radius
+  72). Wings take most of them, in Dusk (72%) and Ember, twinkling at no less than 72%; the tail is
+  solid Glow, every tail light on the beat, flashing by swelling up to 1.3x. A mark light takes
+  the larger of its swells rather than their sum, capped at 1.4x, so a stirred tail keeps its
+  grain. They wait scattered in the open band and gather from 0.4s over 3.2s, each setting off
+  at its own moment and flying a smootherstep (lifting off and landing at rest, top speed under
+  twice the average), then shimmer about a pixel around their places. The drifting crowd thins
+  to 20% inside the mark so its shape reads. Placement: the hero measures its open band (an empty
+  `.hero__stage` in the first grid row, between the header and the text) and centres the mark in
+  it, no taller than 78% of the band. It is also no taller than 30% of the height or 62% of the
+  width when stacked (below 900px, centred), or 46% of the height or 28% of the width when wide
+  (above the intro column, right-aligned to the gutter). A hand passing through scatters it like
+  the rest; it re-forms.
+- **Call and response:** tapping the dark (not a link or control) makes motes within 220px
+  answer, nearest first, rippling at 340px/s. Each answering mote brightens and swells up to 1.4x
+  for 0.5s either side of its peak. One 1px Ember ring at 14% marks the call and fades as it
+  reaches its edge.
+- **Falling into step (story):** five pod-mates gather into a pentagon, cross-fade from Ember to
+  solid Glow, gain a Muted hairline ring at 40% and muted 500 name labels, and synchronise as
+  coupling rises with scroll. The cloud dims by 55% while the pod is lit. Lit pod dots flash by
+  swelling.
+- **Reduced motion:** still frames, with no stir or call. The hero shows the cloud with the mark
+  already gathered; the story shows its end state, the pod gathered, lit and in step.
 
 ### Story HUD
 
-Top of the sticky stage: the two-line "Coming next" label, always shown, and a right-aligned
-"Week" counter at Statement size. Items fade in with a 500ms exponential ease-out and an 8px
-rise.
+Top of the sticky stage: the two-line label with a Dusk "Coming next" tag, always shown, and a
+right-aligned "Week" counter at Statement size. Items fade in with a 500ms exponential ease-out
+and an 8px rise.
 
 ### Marquee strip
 
-One slow line of headline-size event kinds between hairlines, separated by small Muted dots,
+One slow line of headline-size event kinds between hairlines, separated by small Dusk dots,
 looping over 60s linear. A visually hidden list carries the content once; the animation is off
 under reduced motion.
 
@@ -413,13 +489,15 @@ A two-line footer line at lede size, then the mark and "Firefly" at display size
 
 ### Do:
 
-- **Do** keep one Glow element per composition, at full opacity.
+- **Do** keep one Glow highlight per screen in the interface, at full opacity.
+- **Do** use Dusk only as a quiet second accent: picked state, "Coming next", separators.
 - **Do** keep the interface blue-free: black grounds and warm neutrals; Night and Wing only
   inside the mark.
 - **Do** set display type in Host Grotesk 400 with negative tracking (-0.04em at display).
-- **Do** pair a Muted context line over an Ink fact for labels.
+- **Do** pair a context line over an Ink fact for labels.
 - **Do** separate content with 1px hairlines at Ink 13%, and frame controls with Ink 28%.
 - **Do** keep header cells, chips, buttons and inputs square (0 radius).
+- **Do** thin the field behind text instead of putting text on a panel.
 - **Do** give every motion a still version under reduced motion, and pause canvas loops when
   off-screen or the tab is hidden.
 - **Do** label example events and the example pod as made up, and unlaunched features as
@@ -427,7 +505,8 @@ A two-line footer line at lede size, then the mark and "Firefly" at display size
 
 ### Don't:
 
-- **Don't** add shadows, gradients, blur, bloom or glows to dots, the mark or surfaces.
+- **Don't** add shadows, gradients, blur, bloom or glows to motes, dots, the mark or surfaces.
+- **Don't** make Dusk a call to action or a highlight that competes with Glow.
 - **Don't** use bold weights for hierarchy; use size.
 - **Don't** wrap content in cards; the drawn phone is the one framed object.
 - **Don't** use Night, Wing or any blue as an interface fill, text or rule colour.
