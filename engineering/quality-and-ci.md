@@ -112,7 +112,7 @@ Test pure logic, with no network and no Supabase:
 - Query elements the way a user finds them (`getByRole`, `getByLabelText`), not by test IDs where possible.
 - Test behaviour (what renders and what happens on click), not implementation details.
 - Mock the data layer at the module boundary or with MSW. Don't mock the Supabase client's internals. Example: `LandingPage` takes an optional `onRequestInvite`, so tests pass their own function instead of mocking `src/data/invites.ts`.
-- **No canvas in jsdom.** `src/test/setup.ts` makes `HTMLCanvasElement.prototype.getContext` return `null` before every test (jsdom would otherwise log "Not implemented"), so canvas components must handle a missing context. A test that needs to check drawing mocks `getContext` with a small fake that records calls, and stubs `ResizeObserver`, `IntersectionObserver` and `requestAnimationFrame` with `vi.stubGlobal` (the setup file restores them after each test).
+- **No canvas in jsdom.** `src/test/setup.ts` makes `HTMLCanvasElement.prototype.getContext` return `null` before every test (jsdom would otherwise log "Not implemented"), so canvas components must handle a missing context. A test that needs to check drawing calls `withCanvas()` from `src/test/fakeCanvas.ts`, which mocks `getContext` with a small fake that records calls and stubs `ResizeObserver`, `IntersectionObserver` and `requestAnimationFrame` with `vi.stubGlobal` (the setup file restores them after each test); a test drives the animation by running `frame(ms)`.
 - Hooks that read `matchMedia` (such as `usePrefersReducedMotion`) are tested by stubbing `window.matchMedia`; they must also work when it doesn't exist.
 
 ### 3.3 Database tests (pgTAP)
@@ -263,6 +263,7 @@ eslint.config.js
 vitest.config.ts             # jsdom, setup file, coverage thresholds
 playwright.config.ts
 src/test/setup.ts            # jest-dom matchers + cleanup
+src/test/fakeCanvas.ts       # shared fake canvas context, observers and animation frame
 supabase/
   config.toml
   migrations/

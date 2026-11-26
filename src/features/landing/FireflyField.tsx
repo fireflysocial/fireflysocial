@@ -2,8 +2,11 @@ import { useEffect, useRef, type RefObject } from 'react'
 import {
   advanceCloud,
   answerCall,
+  extendPath,
   cloudCountFor,
   createCloud,
+  fireflyCountFor,
+  fireflyGlow,
   NARROW,
   placeCloud,
   podClearance,
@@ -12,18 +15,7 @@ import {
   twinkle,
   type Cloud,
   type Point,
-  type Tone,
 } from '../../lib/fireflies/cloud.ts'
-import {
-  arrival,
-  markClearance,
-  markCountFor,
-  markGather,
-  markLayout,
-  readableMark,
-  type MarkBand,
-  type MarkLayout,
-} from '../../lib/fireflies/mark.ts'
 import { clamp, lerp } from '../../lib/fireflies/math.ts'
 import { storyAt, type StoryFrame } from '../../lib/fireflies/story.ts'
 import {
@@ -34,6 +26,21 @@ import {
   type Swarm,
 } from '../../lib/fireflies/swarm.ts'
 import { flash } from '../../lib/fireflies/sync.ts'
+import {
+  batchFor,
+  dot,
+  drawBatches,
+  drawHalos,
+  EMBER,
+  FAINTEST,
+  GLOW,
+  makeHalos,
+  MUTED,
+  rgba,
+  type Batch,
+  type Halos,
+  type Rgb,
+} from './canvasLights.ts'
 
 const MAX_PIXEL_RATIO = 2
 /** Longest step we simulate, so a backgrounded tab doesn't jump on return. */
@@ -49,22 +56,15 @@ const ANSWER_SECONDS = 0.5
 const STIR = { radius: 90, drag: 0.2, push: 160, maxSpeed: 1600 } as const
 /** How much a woken light brightens on the beat, over its own brightness. */
 const WAKE_LIFT = 0.35
-/** Largest size a light of the mark swells to, so a stirred tail never clumps into blotches. */
-const MARK_SWELL_MAX = 1.4
-/** Most pointer events kept per frame for the path (one frame rarely sees more than a few). */
-const PATH_POINTS = 12
-/** Brightness steps the cloud is drawn in, so a frame sets a few dozen fill styles, not thousands. */
-const LEVELS = 8
-
-type Rgb = readonly [number, number, number]
-
-/** The cloud's tones: Glow (#D9F84A), Dusk (#C3A0FF) and Ember (#F2ECCE). */
-const GLOW: Rgb = [217, 248, 74]
-const DUSK: Rgb = [195, 160, 255]
-const EMBER: Rgb = [242, 236, 206]
-const TONES: Record<Tone, Rgb> = { 0: GLOW, 1: DUSK, 2: EMBER }
-/** Muted label colour (#9A9A92), for names and hairlines. */
-const MUTED: Rgb = [154, 154, 146]
+/** Pointer samples a frame's path holds before it is thinned (see extendPath); rarely reached. */
+const PATH_POINTS = 64
+/**
+ * A firefly's halo: its radius at depth 0 and the extra at depth 1 (px), and the faintest glow
+ * worth a halo. Halos are the one soft light on the page; dust stays flat.
+ */
+const HALO = { radius: 7, depthRadius: 17, faintest: 0.04 } as const
+/** A firefly's resting light between glows: just enough to follow it in the dark. */
+const EMBERING = 0.1
 
 /** The same synthetic pod as the example names elsewhere on the page. */
 const POD_NAMES = ['Maya', 'Jun', 'Priya', 'Sam', 'You'] as const
@@ -74,13 +74,6 @@ interface Call {
   y: number
   /** Seconds, on the animation clock. */
   start: number
-}
-
-/** All the motes drawn with one fill style in a frame. */
-interface Batch {
-  style: string
-  /** Flat x, y, side triples, reused every frame so drawing allocates nothing per mote. */
-  squares: number[]
 }
 
 interface FireflyFieldProps {
@@ -94,22 +87,14 @@ interface FireflyFieldProps {
   callTarget?: RefObject<HTMLElement | null>
   /** Seed for the cloud and pod, so two fields on one page don't look identical. */
   seed?: number
-  /** Gather part of the cloud into the Firefly mark, in the open band above the text. */
-  mark?: boolean
-  /**
-   * The open band the mark sits in (an empty element between the header and the text). The
-   * mark is sized and centred to it, so it never crowds the header or runs into the text.
-   */
-  markStage?: RefObject<HTMLElement | null>
 }
 
 /**
- * A field of fireflies on black: a cloud of thousands of tiny lights in yellow, violet and warm
- * white, drifting in clumps like smoke, and one pod of five that gathers, lights up and falls
- * into step as the story progresses. With `mark`, part of the cloud gathers into the Firefly
- * mark, whose tail keeps a steady beat. A hand passing through sweeps the lights aside (they
- * spring back) and wakes them, and woken lights fall into step with the mark's beat; a tap
- * makes the lights near it flash back. Decorative (every idea is in the page text), so it is
+ * The story's field of fireflies on black: a swarm in yellow, violet and warm white, distant dust
+ * shimmering and nearer fireflies floating on slow loops and glowing softly, and one pod of five
+ * that gathers, lights up and falls into step as the story progresses. A hand passing through
+ * sweeps the lights aside (they spring back) and wakes them, and woken lights fall into step
+ * with one shared beat; a tap makes the lights near it flash back. Decorative (every idea is in the page text), so it is
  * hidden from assistive technology.
  */
 export function FireflyField({
@@ -118,8 +103,6 @@ export function FireflyField({
   stillProgress = 1,
   callTarget,
   seed = 20261125,
-  mark = false,
-  markStage,
 }: FireflyFieldProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -139,14 +122,11 @@ export function FireflyField({
     let hand: Point | null = null
     const calls: Call[] = []
     const batches = new Map<number, Batch>()
-    let band: MarkBand | undefined
 
     const measure = () => {
       const box = canvas.getBoundingClientRect()
       width = box.width
       height = box.height
-      const stage = markStage?.current?.getBoundingClientRect()
-      band = stage ? { top: stage.top - box.top, bottom: stage.bottom - box.top } : undefined
       const ratio = Math.min(window.devicePixelRatio || 1, MAX_PIXEL_RATIO)
       canvas.width = Math.round(width * ratio)
       canvas.height = Math.round(height * ratio)
@@ -158,30 +138,26 @@ export function FireflyField({
     const aspect = width / Math.max(1, height)
     // Spend the motes where they show: the open band above the text, not behind it.
     const room = (y: number) => textClearance(y * height, width, height)
-    const markCount = mark ? markCountFor(markLayout(width, height, band).size) : 0
     const cloud: Cloud = createCloud({
       seed,
       count: cloudCountFor(width, height),
+      fireflies: fireflyCountFor(width, height),
       aspect,
       room,
-      markCount,
     })
     const swarm: Swarm = createSwarm({ seed })
-    const scene = { context, cloud, swarm, batches }
-    // Placement is recomputed every frame (and on resize), so a band that shrinks too small for
-    // a readable mark drops it then, and one that grows back brings it back.
-    const place = (gather: number) => {
-      const layout = mark ? readableMark(markLayout(width, height, band)) : null
-      placeCloud(cloud, { width, height, mark: layout, gather })
-      return layout
+    const scene: Scene = { context, cloud, swarm, batches, halos: makeHalos(), glows: [] }
+    const place = () => {
+      placeCloud(cloud, { width, height })
     }
 
     const drawStill = () => {
       const frame = storyAt(stillProgress)
       // The still frame shows the end of its story: a lit pod flashes together.
       if (frame.lit > 0) for (const firefly of swarm.pod) firefly.phase = 0
-      // And a gathered mark.
-      draw(scene, frame, width, height, 0, [], place(1), 1)
+      advanceCloud(cloud, 0, 0)
+      place()
+      draw(scene, frame, width, height, 0, [])
     }
 
     const resize = () => {
@@ -196,21 +172,17 @@ export function FireflyField({
       lastTime = now
       clock += seconds
       const frame = storyAt(progress.current)
-      advanceCloud(cloud, seconds, clock, aspect)
-      const gather = markGather(clock)
-      const layout = place(gather)
+      advanceCloud(cloud, seconds, clock)
+      place()
       // Only a hand that moved stirs: a resting pointer leaves a one-point path and digs no hole.
       if (path.length > 1) stirCloud(cloud, path, seconds, STIR)
       path = hand ? [hand] : []
       advanceSwarm(swarm, seconds, frame.coupling)
-      draw(scene, frame, width, height, clock, calls, layout, gather)
+      draw(scene, frame, width, height, clock, calls)
     }
 
     const observer = new ResizeObserver(resize)
     observer.observe(canvas)
-    // The band changes size with the text (fonts loading, wrapping), not only with the field.
-    const stage = markStage?.current
-    if (stage) observer.observe(stage)
     if (still) drawStill()
 
     // Stop drawing while the field is scrolled away or the tab is hidden: phones have batteries.
@@ -238,15 +210,18 @@ export function FireflyField({
       calls.push({ x, y, start: clock })
       if (calls.length > 6) calls.shift()
     }
-    // A hand moving through the dark stirs the cloud along its path; leaving ends the path, and
-    // so does the browser taking over a touch (to scroll), which cancels the pointer.
+    // A hand moving through the dark stirs the cloud along its path.
     const onMove = (event: PointerEvent) => {
       hand = pointAt(event)
-      // Every event since the last frame, so a fast curve is swept as a curve, not a chord.
-      if (path.length < PATH_POINTS) path.push(hand)
-      else path[path.length - 1] = hand
+      extendPath(path, hand, PATH_POINTS)
     }
+    // Leaving ends the hand, but the movement since the last frame still sweeps: the next frame
+    // consumes it, so a fast move out of the field stirs all the way to the edge.
     const onLeave = () => {
+      hand = null
+    }
+    // The browser took the touch over to scroll: that movement was a scroll, not a stroke.
+    const onCancel = () => {
       hand = null
       path = []
     }
@@ -255,7 +230,7 @@ export function FireflyField({
     target?.addEventListener('pointerdown', onCall)
     target?.addEventListener('pointermove', onMove)
     target?.addEventListener('pointerleave', onLeave)
-    target?.addEventListener('pointercancel', onLeave)
+    target?.addEventListener('pointercancel', onCancel)
 
     if (!still) frameId = requestAnimationFrame(tick)
 
@@ -267,9 +242,9 @@ export function FireflyField({
       target?.removeEventListener('pointerdown', onCall)
       target?.removeEventListener('pointermove', onMove)
       target?.removeEventListener('pointerleave', onLeave)
-      target?.removeEventListener('pointercancel', onLeave)
+      target?.removeEventListener('pointercancel', onCancel)
     }
-  }, [progress, still, stillProgress, callTarget, seed, mark, markStage])
+  }, [progress, still, stillProgress, callTarget, seed])
 
   return <canvas ref={canvasRef} className="field" aria-hidden="true" />
 }
@@ -291,17 +266,19 @@ interface Scene {
   cloud: Cloud
   swarm: Swarm
   batches: Map<number, Batch>
+  /** The halo sprites, or null where an offscreen canvas can't be drawn (no halos then). */
+  halos: Halos | null
+  /** This frame's halos as flat x, y, radius, alpha, tone runs, reused every frame. */
+  glows: number[]
 }
 
 function draw(
-  { context, cloud, swarm, batches }: Scene,
+  { context, cloud, swarm, batches, halos, glows }: Scene,
   frame: StoryFrame,
   width: number,
   height: number,
   clock: number,
   calls: Call[],
-  mark: MarkLayout | null,
-  gather: number,
 ) {
   context.clearRect(0, 0, width, height)
 
@@ -317,9 +294,10 @@ function draw(
     context.stroke()
   }
 
-  // The cloud, sorted into batches by tone and brightness. It dims once the pod lights up, so
-  // the eye goes to the pod.
+  // The swarm, sorted into batches by tone, shape and brightness. It dims once the pod lights
+  // up, so the eye goes to the pod.
   for (const batch of batches.values()) batch.squares.length = 0
+  glows.length = 0
   const crowdLevel = 1 - 0.55 * frame.lit
   // Once the pod forms, the cloud clears inside its ring so the names sit on clean black.
   const layout = podLayout(width, height)
@@ -329,29 +307,17 @@ function draw(
     const x = mote.px
     const y = mote.py
     // How bright this spot of the field may be (1 in the open, near 0 behind text): it limits
-    // the resting twinkle, the wake and the answer alike, so nothing ever flashes behind text.
-    let room = 1
-    let resting: number
-    let swell = 0
-    // With no mark this frame (none asked for, or no room for one), the mark's lights are just
-    // more of the crowd and obey the crowd's clearances.
-    if (mote.slot === null || mark === null) {
-      const aroundPod = podClearance(
-        Math.hypot(x - layout.centerX, y - layout.centerY),
-        ring,
-        formed,
-      )
-      const aroundMark = mark ? markClearance(x, y, mark, gather) : 1
-      room = textClearance(y, width, height) * aroundPod * aroundMark
-      resting = twinkle(mote.phase) * crowdLevel * room
-    } else {
-      // A light of the mark: once in place, the tail is solid Glow (any dimmer turns olive) and
-      // flashes on the beat by swelling; the wings twinkle on their own.
-      const here = arrival(gather, mote.slot.stagger)
-      const lit = mote.slot.tail ? 1 : Math.max(0.72, twinkle(mote.phase))
-      resting = lerp(twinkle(mote.phase) * 0.8, lit, here)
-      if (mote.slot.tail) swell = 0.3 * here * flash(mote.phase, 3)
-    }
+    // the resting light, the wake and the answer alike, so nothing ever flashes behind text.
+    const room =
+      textClearance(y, width, height) *
+      podClearance(Math.hypot(x - layout.centerX, y - layout.centerY), ring, formed)
+    // A firefly's lantern, 0 to 1 (dust has none).
+    const firefly = mote.kind === 'firefly'
+    const lantern = firefly ? fireflyGlow(mote.phase) : 0
+    const resting = firefly
+      ? (EMBERING + (1 - EMBERING) * lantern) * crowdLevel * room
+      : // Far dust is dimmer than near dust, so the swarm has depth.
+        twinkle(mote.phase) * (0.35 + 0.5 * mote.depth) * crowdLevel * room
     // Woken by a passing hand: brighter than its own resting light on the beat, in step with
     // every other woken light. A lift, not a floor, so a wake shimmers instead of drawing a line.
     const woken = mote.awake * flash(mote.phase, 4)
@@ -359,44 +325,31 @@ function draw(
     const answer = Math.max(0, 1 - Math.abs(clock - mote.answerAt) / ANSWER_SECONDS)
     // A wake lifts lights that are already showing; it never reveals one the clearance hides,
     // which would put a flash behind the text.
-    const showing = Math.round(clamp(resting) * LEVELS) > 0
+    const showing = resting >= FAINTEST
     const lifted = showing ? resting + WAKE_LIFT * woken * room : 0
     const brightness = Math.max(lifted, answer * room)
-    // Rounded to the nearest brightness step; a mote too dim for the first step isn't drawn,
-    // so the ground behind text and at the field's edge stays clean black.
-    const level = Math.round(clamp(brightness) * LEVELS)
-    if (level === 0) continue
-    const key = mote.tone * (LEVELS + 1) + level
-    let batch = batches.get(key)
-    if (!batch) {
-      batch = { style: rgba(TONES[mote.tone], level / LEVELS), squares: [] }
-      batches.set(key, batch)
+    // A mote too dim to show isn't drawn, so the ground behind text and at the field's edge
+    // stays clean black; the rest are rounded to the nearest brightness step.
+    if (brightness < FAINTEST) continue
+    const batch = batchFor(batches, mote.tone, firefly, brightness)
+    if (firefly) {
+      // A firefly's core swells a touch as it glows; its light is mostly in the halo.
+      batch.squares.push(x, y, mote.size * (1 + 0.35 * Math.max(lantern, answer, woken)))
+      const glow = Math.max(lantern, answer, WAKE_LIFT * woken) * crowdLevel * room
+      if (glow > HALO.faintest) {
+        const halo = (HALO.radius + HALO.depthRadius * mote.depth) * (0.75 + 0.25 * glow)
+        glows.push(x, y, halo, glow, mote.tone)
+      }
+      continue
     }
-    // Brightness carries the answer and the beat; size swells with them a little. The mark's
-    // lights take the larger swell rather than the sum, so a stirred tail keeps its grain.
-    const grow =
-      mote.slot === null
-        ? 1 + 0.4 * answer + 0.25 * woken
-        : Math.min(MARK_SWELL_MAX, 1 + Math.max(swell, 0.4 * answer, 0.25 * woken))
-    const side = mote.size * 2 * grow
+    // Brightness carries the answer and the beat; size swells with them a little.
+    const side = mote.size * 2 * (1 + 0.4 * answer + 0.25 * woken)
     batch.squares.push(x - side / 2, y - side / 2, side)
   }
-  for (const batch of batches.values()) {
-    context.fillStyle = batch.style
-    const { squares } = batch
-    for (let i = 0; i < squares.length; i += 3) {
-      // Squares are pushed as whole x, y, side triples, so every index here is in range; each
-      // fallback only satisfies the type checker under noUncheckedIndexedAccess. Separate reads,
-      // not a destructured array, so drawing allocates nothing per square.
-      /* v8 ignore next -- @preserve */
-      const left = squares[i] ?? 0
-      /* v8 ignore next -- @preserve */
-      const top = squares[i + 1] ?? 0
-      /* v8 ignore next -- @preserve */
-      const side = squares[i + 2] ?? 0
-      context.fillRect(left, top, side, side)
-    }
-  }
+
+  // Halos first, added onto the dark, so overlapping lights pool; the flat cores go on top.
+  if (halos) drawHalos(context, halos, glows)
+  drawBatches(context, batches)
 
   // A hairline round the gathered pod: these five are a group now.
   if (formed > 0.01) {
@@ -437,23 +390,4 @@ function draw(
       context.fillText(name, x + outward * (podDot * 2 + 6), y)
     }
   })
-}
-
-function rgba([r, g, b]: Rgb, alpha: number): string {
-  return `rgba(${String(Math.round(r))}, ${String(Math.round(g))}, ${String(Math.round(b))}, ${String(clamp(alpha))})`
-}
-
-/** A flat dot. No blur or bloom: per the brand, the flat dot is the light. */
-function dot(
-  context: CanvasRenderingContext2D,
-  x: number,
-  y: number,
-  radius: number,
-  colour: Rgb,
-  alpha: number,
-) {
-  context.fillStyle = rgba(colour, alpha)
-  context.beginPath()
-  context.arc(x, y, radius, 0, Math.PI * 2)
-  context.fill()
 }

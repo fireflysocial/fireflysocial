@@ -26,8 +26,8 @@ const GRADIENT_Y = Float64Array.of(
 )
 
 /**
- * Seeded Perlin (gradient) noise. Used to shape the firefly cloud into organic clumps and voids,
- * and to make it drift like smoke rather than jitter. Same seed, same field.
+ * Seeded Perlin (gradient) noise. Used to place the firefly swarm in soft groves with open dark
+ * between them. Same seed, same field.
  */
 export function createNoise2D(seed: number): Noise2D {
   const random = createRandom(seed)

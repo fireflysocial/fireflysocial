@@ -18,4 +18,11 @@ describe('FireflyMark', () => {
     expect(screen.queryByRole('img')).not.toBeInTheDocument()
     expect(container.querySelector('svg')).toHaveAttribute('aria-hidden', 'true')
   })
+
+  it('crops to its own extent for a lockup, and keeps its square canvas by default', () => {
+    const { container, rerender } = render(<FireflyMark />)
+    expect(container.querySelector('svg')).toHaveAttribute('viewBox', '0 0 512 512')
+    rerender(<FireflyMark cropped />)
+    expect(container.querySelector('svg')).toHaveAttribute('viewBox', '125.7 95 260.6 326')
+  })
 })

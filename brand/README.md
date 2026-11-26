@@ -43,8 +43,9 @@ On light backgrounds, the glow becomes Night and the wings become `#C9CFDE` (see
 
 Some firefly species flash at random when apart and gradually flash in unison when they stay together. Firefly uses that as its visual story: a dark field of faint, independently blinking dots (strangers), five of which gather into a pod, turn Glow and fall into step week by week. It's the brand promise, repetition becoming connection, made visible. On the landing page it is modelled with the Kuramoto synchrony model (`src/lib/fireflies/`).
 
-- **The cloud** (from 2026-11-25, after the Lugano Living Lab reference): thousands of tiny flat squares in Glow, Dusk and Ember (`#F2ECCE`, warm white), placed in clumps and dark voids by noise and drifting like smoke along a curl-noise flow. It thins to near-black behind text. When the pod gathers, the cloud dims so the five solid-Glow pod-mates stand out.
+- **The meadow** (hero, from 2026-11-26): line-drawn grass in Muted, swaying in one slow wind, with only Glow fireflies that glow and dim slowly over it, set beside the "Firefly" wordmark. The real mark (`FireflyMark cropped`) stands beside the word, on its baseline, with no animation.
+- **The swarm** (from 2026-11-25, after the Lugano Living Lab reference; rebuilt 2026-11-26 as a firefly swarm): tiny flat squares of distant dust and nearer fireflies in Glow, Dusk and Ember (`#F2ECCE`, warm white), placed in soft groves by noise. Each light wanders its own slow loop round a fixed home (no shared flow, so no streaks); fireflies flash with a quick rise and slow fade. It thins to near-black behind text. When the pod gathers, the cloud dims so the five solid-Glow pod-mates stand out.
 - **Stir:** a pointer or finger moving through the dark parts the cloud and makes it eddy.
 - **Call and response:** tapping the dark makes nearby fireflies flash back in a ripple, as real fireflies answer a signal. A single hairline ring marks the tap.
-- Dots are flat circles. A flash is shown by size and opacity, never by blur or bloom.
+- Dots are flat circles. A flash is shown by size and opacity, never by blur or bloom. The one exception (approved 2026-11-26): a flashing firefly in the swarm carries a soft halo under its flat core. The mark and every interface dot stay flat.
 - With reduced motion, show the end state: the pod gathered, lit and in step.
