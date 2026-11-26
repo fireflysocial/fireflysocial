@@ -1,0 +1,180 @@
+body {
+  font-family: 'Host Grotesk', Arial, sans-serif;
+}
+
+section {
+  --black: #050505;
+  --coal: #11110E;
+  --ink: #F2F2EE;
+  --muted: #9A9A92;
+  --line: #2C2C27;
+  --glow: #D9F84A;
+  --dusk: #C3A0FF;
+  --ember: #F2ECCE;
+  --paper: #F4F1E6;
+  --soot: #14140F;
+  --soot-muted: #55554C;
+  background: #050505;
+  color: #F2F2EE;
+  font-family: 'Host Grotesk', Arial, sans-serif;
+  padding: 128px 128px 160px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  counter-increment: page;
+}
+
+section.coal { background: #11110E; }
+section.paper { background: #F4F1E6; color: #14140F; }
+section.lit { background: #D9F84A; color: #050505; }
+
+/* ---------- type scale: 160 / 88 / 44 / 32 / 24 ---------- */
+.display {
+  font-size: 160px;
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+  margin: 0;
+}
+.title {
+  font-size: 88px;
+  font-weight: 400;
+  letter-spacing: -0.035em;
+  line-height: 1.04;
+  margin: 0;
+}
+.lead {
+  font-size: 44px;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  margin: 0;
+}
+.body {
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: #9A9A92;
+  margin: 0;
+}
+.label {
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.35;
+  color: #9A9A92;
+  margin: 0;
+}
+.eyebrow {
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: #9A9A92;
+  margin: 0 0 40px 0;
+}
+.eyebrow .n { color: #C3A0FF; }
+.hl { color: #D9F84A; }
+.dusk { color: #C3A0FF; }
+.ink { color: #F2F2EE; }
+
+.paper .body, .paper .label, .paper .eyebrow { color: #55554C; }
+.paper .eyebrow .n { color: #6B3FD1; }
+.lit .eyebrow, .lit .label { color: #2E3311; }
+
+.source {
+  position: absolute;
+  left: 128px;
+  bottom: 64px;
+  width: 1400px;
+  font-size: 24px;
+  line-height: 1.3;
+  color: #6E6E66;
+  margin: 0;
+}
+.paper .source { color: #6E6E66; }
+
+/* ---------- footer page number ---------- */
+.pg {
+  position: absolute;
+  right: 128px;
+  bottom: 64px;
+  width: 120px;
+  height: 32px;
+  font-size: 24px;
+  color: #6E6E66;
+  text-align: right;
+}
+.pg::after { content: counter(page, decimal-leading-zero); }
+
+/* ---------- shared layout pieces ---------- */
+.spacer { flex: 1; }
+.row { display: flex; gap: 48px; }
+.col { display: flex; flex-direction: column; }
+.rule { border-top: 2px solid #2C2C27; }
+
+.card {
+  background: #11110E;
+  border: 2px solid #2C2C27;
+  border-radius: 28px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-sizing: border-box;
+}
+.coal .card { background: #050505; }
+.card .k {
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: #C3A0FF;
+  margin: 0;
+}
+.card .h {
+  font-size: 44px;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+  color: #F2F2EE;
+  margin: 0;
+}
+.card .t {
+  font-size: 28px;
+  line-height: 1.4;
+  color: #9A9A92;
+  margin: 0;
+}
+.card.on { border-color: #D9F84A; }
+.card.on .k { color: #D9F84A; }
+
+.big {
+  font-size: 160px;
+  font-weight: 400;
+  letter-spacing: -0.05em;
+  line-height: 0.95;
+  margin: 0;
+}
+
+.dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  background: #D9F84A;
+}
+
+/* ---------- motion: arrive, staged ---------- */
+.rise {
+  animation: rise 560ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: calc(var(--i, 0) * 110ms);
+}
+.fade {
+  animation: fadein 900ms ease-out both;
+  animation-delay: calc(var(--i, 0) * 110ms);
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0px); }
+}
+@keyframes fadein {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
