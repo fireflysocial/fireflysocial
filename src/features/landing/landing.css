@@ -369,65 +369,113 @@ html:has(.landing) {
 
 /* Hero ------------------------------------------------------------------------------------ */
 
+/*
+ * Two halves: a night meadow (the canvas draws the grass and fireflies inside .hero__meadow)
+ * and the wordmark with the promise. Phones stack the meadow over the words; from 900px the
+ * meadow takes the right half, edge to edge, and the words sit in the left half like a civic
+ * poster: a sparse row of three words at the top, the wordmark and promise at the foot.
+ */
 .hero {
   position: relative;
   display: grid;
-  grid-template-rows: 1fr auto auto;
+  /* The meadow takes whatever height the words leave, so a tall tablet has no dead gap. */
+  grid-template-rows: 1fr auto auto auto;
   min-height: 100dvh;
-  padding: calc(var(--header) + var(--safe-top) + 24px) var(--gutter-right)
-    calc(var(--safe-bottom) + 16px) var(--gutter-left);
+  padding: calc(var(--header) + var(--safe-top)) var(--gutter-right) calc(var(--safe-bottom) + 12px)
+    var(--gutter-left);
   overflow: hidden;
-  /* The field answers taps; don't let a tap also select text or flash a highlight. */
-  -webkit-user-select: none;
-  user-select: none;
-  /*
-   * Vertical drags still scroll and pinches still zoom, but a sideways finger sweep stays with
-   * the page, so a finger can stir the cloud the way a pointer does.
-   */
-  touch-action: pan-y pinch-zoom;
-}
-
-/* The open band above the text, where the mark gathers: empty, measured by the field. */
-.hero__stage {
-  grid-row: 1;
-  pointer-events: none;
 }
 
 .hero > :not(.field) {
   position: relative;
 }
 
-.hero__copy {
-  grid-row: 2;
-  display: grid;
-  gap: 20px;
-  padding-bottom: 24px;
-}
-
-.hero__title {
-  max-width: 13ch;
-}
-
-.hero__intro {
-  max-width: 34ch;
-  font-size: var(--text-lede);
-  line-height: 1.4;
-  text-wrap: pretty;
-  -webkit-user-select: text;
-  user-select: text;
-}
-
-.hero__foot {
-  grid-row: 3;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
+.hero__meadow {
+  grid-row: 1;
+  min-height: clamp(240px, 40dvh, 420px);
+  /* Edge to edge on phones. */
+  margin-inline: calc(-1 * var(--gutter-left)) calc(-1 * var(--gutter-right));
+  padding: 16px var(--gutter-right) 0 var(--gutter-left);
+  border-bottom: 1px solid var(--rule);
+  /* The meadow answers taps and a finger brushes it; don't select text or flash a highlight. */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  /* Vertical drags still scroll the page; a sideways sweep stays with the meadow. */
+  touch-action: pan-y pinch-zoom;
 }
 
 .hero__hint {
-  color: var(--muted);
   font-size: var(--text-small);
+}
+
+/* Three plain words spread across the width, as a civic poster would set them. */
+.hero__words {
+  grid-row: 2;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 14px;
+  font-size: var(--text-label);
+}
+
+.hero__copy {
+  grid-row: 3;
+  display: grid;
+  gap: 18px;
+  padding-top: 28px;
+  container-type: inline-size;
+}
+
+/* The wordmark: the mark and the name, as one lockup. */
+.wordmark {
+  display: flex;
+  /* An empty box's baseline is its bottom edge: the mark stands on the word's baseline. */
+  align-items: baseline;
+  gap: 0.07em;
+  margin-left: -0.04em;
+  font-size: clamp(3.75rem, 26cqi, 10.5rem);
+  line-height: 0.8;
+  letter-spacing: -0.055em;
+  white-space: nowrap;
+}
+
+.wordmark__mark {
+  flex: none;
+  /* Cap height of Host Grotesk, at the mark's own proportions (MARK_ASPECT, 260.6 by 326). */
+  height: 0.72em;
+  aspect-ratio: 260.6 / 326;
+}
+
+/* The mark itself, crisp and flat, filling its slot. */
+.wordmark__mark svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.hero__title {
+  max-width: 18ch;
+  font-size: var(--text-statement);
+  font-weight: 400;
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.hero__intro {
+  max-width: 36ch;
+  color: var(--muted);
+  font-size: var(--text-lede);
+  line-height: 1.4;
+  text-wrap: pretty;
+}
+
+.hero__foot {
+  grid-row: 4;
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 16px;
 }
 
 .cue {
@@ -435,7 +483,6 @@ html:has(.landing) {
   align-items: center;
   gap: 8px;
   min-height: 44px;
-  margin-left: auto;
   font-size: var(--text-label);
   white-space: nowrap;
 }
@@ -446,10 +493,45 @@ html:has(.landing) {
 }
 
 @media (width >= 900px) {
-  .hero__copy {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 22rem);
-    align-items: end;
+  .hero {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
+    grid-template-rows: auto 1fr auto;
     column-gap: var(--gutter);
+    padding-bottom: 0;
+  }
+
+  .hero__meadow {
+    grid-column: 2;
+    grid-row: 1 / -1;
+    min-height: 0;
+    margin: 0 calc(-1 * var(--gutter-right)) 0 0;
+    padding: 24px var(--gutter-right) 0 24px;
+    border-bottom: 0;
+    border-left: 1px solid var(--rule);
+  }
+
+  .hero__words {
+    grid-column: 1;
+    grid-row: 1;
+    padding-top: 24px;
+  }
+
+  .hero__copy {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: end;
+    gap: 24px;
+  }
+
+  .wordmark {
+    font-size: clamp(5rem, 24cqi, 10.5rem);
+  }
+
+  .hero__foot {
+    grid-column: 1;
+    grid-row: 3;
+    justify-content: flex-start;
+    padding: 24px 0 calc(var(--safe-bottom) + 16px);
   }
 }
 

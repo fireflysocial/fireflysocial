@@ -8,12 +8,16 @@ import {
   beatPhase,
   cloudCountFor,
   createCloud,
+  fireflyCountFor,
+  fireflyGlow,
+  pickFireflyTone,
   pickTone,
   placeCloud,
   stirCloud,
   podClearance,
   textClearance,
   twinkle,
+  wanderAt,
   type Cloud,
   type Mote,
 } from './cloud.ts'
@@ -29,7 +33,7 @@ function cloudAt(points: [number, number][]): Cloud {
     mote.x = x / size.width
     mote.y = y / size.height
   })
-  placeCloud(cloud, { ...size, mark: null, gather: 0 })
+  placeCloud(cloud, size)
   return cloud
 }
 
@@ -41,7 +45,7 @@ function only(cloud: Cloud): Mote {
 
 /** Runs the cloud for `seconds` in small steps, with no drift (aspect 1, flow still applies). */
 function settle(cloud: Cloud, seconds: number, start = 0) {
-  for (let t = 0; t < seconds; t += 1 / 60) advanceCloud(cloud, 1 / 60, start + t, 1)
+  for (let t = 0; t < seconds; t += 1 / 60) advanceCloud(cloud, 1 / 60, start + t)
 }
 
 describe('createCloud', () => {
@@ -139,16 +143,24 @@ describe('pickTone', () => {
 
 describe('cloudCountFor', () => {
   it('keeps phones lighter and caps large screens', () => {
-    expect(cloudCountFor(360, 400)).toBe(3000)
-    expect(cloudCountFor(700, 450)).toBe(4500)
-    expect(cloudCountFor(2560, 1440)).toBe(11000)
+    expect(cloudCountFor(360, 400)).toBe(1200)
+    expect(cloudCountFor(700, 450)).toBe(1313)
+    expect(cloudCountFor(2560, 1440)).toBe(5200)
+  })
+})
+
+describe('fireflyCountFor', () => {
+  it('gives every screen enough fireflies to read as a swarm, and caps large ones', () => {
+    expect(fireflyCountFor(360, 400)).toBe(140)
+    expect(fireflyCountFor(1000, 800)).toBe(471)
+    expect(fireflyCountFor(2560, 1440)).toBe(560)
   })
 })
 
 describe('advanceCloud', () => {
   it('keeps every mote inside the field as the cloud drifts', () => {
     const cloud = createCloud({ seed: 4, count: 300, aspect: 1.5 })
-    for (let i = 0; i < 400; i++) advanceCloud(cloud, 1 / 10, i / 10, 1.5)
+    for (let i = 0; i < 400; i++) advanceCloud(cloud, 1 / 10, i / 10)
     for (const mote of cloud.motes) {
       expect(mote.x).toBeGreaterThanOrEqual(0)
       expect(mote.x).toBeLessThan(1)
@@ -157,18 +169,31 @@ describe('advanceCloud', () => {
     }
   })
 
-  it('drifts slowly and smoothly, like smoke', () => {
-    const cloud = createCloud({ seed: 5, count: 200, aspect: 1 })
-    const before = cloud.motes.map((mote) => [mote.x, mote.y] as const)
-    advanceCloud(cloud, 1, 0, 1)
-    // Distance on a field that wraps at its edges: leaving one side means arriving at the other.
-    const wrapped = (d: number) => Math.min(Math.abs(d), 1 - Math.abs(d))
-    const moved = cloud.motes.map((mote, index) => {
+  it('wanders each light round its own home, which never moves, so no streaks can form', () => {
+    const cloud = createCloud({ seed: 5, count: 200, fireflies: 50, aspect: 1 })
+    const homes = cloud.motes.map((mote) => [mote.x, mote.y])
+    const wanders: number[] = []
+    for (let t = 0; t < 60; t += 0.5) {
+      advanceCloud(cloud, 0.5, t)
+      for (const mote of cloud.motes) wanders.push(Math.hypot(mote.wx, mote.wy))
+    }
+    expect(cloud.motes.map((mote) => [mote.x, mote.y])).toEqual(homes)
+    // Dust strays a few pixels, a near firefly a few tens; nothing ever leaves for good.
+    expect(Math.max(...wanders)).toBeLessThan(80)
+    expect(wanders.some((distance) => distance > 20)).toBe(true)
+  })
+
+  it('moves slowly and smoothly along the loop', () => {
+    const cloud = createCloud({ seed: 5, count: 0, fireflies: 80, aspect: 1 })
+    advanceCloud(cloud, 0, 10)
+    const before = cloud.motes.map((mote) => [mote.wx, mote.wy] as const)
+    advanceCloud(cloud, 1 / 60, 10 + 1 / 60)
+    const steps = cloud.motes.map((mote, index) => {
       const [x = 0, y = 0] = before[index] ?? []
-      return Math.hypot(wrapped(mote.x - x), wrapped(mote.y - y))
+      return Math.hypot(mote.wx - x, mote.wy - y)
     })
-    expect(Math.max(...moved)).toBeLessThan(0.1)
-    expect(moved.some((distance) => distance > 0.001)).toBe(true)
+    // Under 30 px/s at most: a firefly floats, it doesn't dart.
+    expect(Math.max(...steps)).toBeLessThan(0.5)
   })
 
   it('advances each twinkle by its own rhythm', () => {
@@ -176,7 +201,7 @@ describe('advanceCloud', () => {
     const [mote] = cloud.motes
     if (!mote) throw new Error('expected a mote')
     mote.phase = 0
-    advanceCloud(cloud, 0.1, 0, 1)
+    advanceCloud(cloud, 0.1, 0)
     expect(mote.phase).toBeCloseTo(mote.omega * 0.1)
   })
 })
@@ -409,7 +434,7 @@ describe('the spring home', () => {
     mote.vx = 500
     let furthest = 0
     for (let t = 0; t < 2; t += 1 / 60) {
-      advanceCloud(cloud, 1 / 60, t, 1)
+      advanceCloud(cloud, 1 / 60, t)
       furthest = Math.max(furthest, mote.dx)
     }
     expect(furthest).toBeLessThan(150)
@@ -425,7 +450,7 @@ describe('falling into step', () => {
     for (const mote of cloud.motes) mote.awake = 1
     // Keep them awake for a while, as a hand lingering would.
     for (let t = 0; t < 2; t += 1 / 60) {
-      advanceCloud(cloud, 1 / 60, t, 1)
+      advanceCloud(cloud, 1 / 60, t)
       for (const mote of cloud.motes) mote.awake = 1
     }
     expect(before).toBeLessThan(0.5)
@@ -443,63 +468,12 @@ describe('falling into step', () => {
   })
 })
 
-describe('the mark’s lights', () => {
-  const mark = { centerX: 200, centerY: 150, size: 200 }
-
-  it('adds the requested lights, each with its place in the mark', () => {
-    const { motes } = createCloud({ seed: 5, count: 100, aspect: 1, markCount: 300 })
-    const lights = motes.filter((mote) => mote.slot !== null)
-    expect(motes).toHaveLength(400)
-    expect(lights).toHaveLength(300)
-    // They wait in the open upper band before gathering.
-    expect(lights.every((mote) => mote.y < 0.31)).toBe(true)
-  })
-
-  it('paints the tail in Glow, keeping the beat together, and the wings in Dusk and Ember', () => {
-    const { motes } = createCloud({ seed: 5, count: 0, aspect: 1, markCount: 400 })
-    const tail = motes.filter((mote) => mote.slot?.tail === true)
-    const wings = motes.filter((mote) => mote.slot?.tail === false)
-    expect(tail.length).toBeGreaterThan(20)
-    expect(tail.every((mote) => mote.tone === 0 && mote.phase === 0)).toBe(true)
-    expect(tail.every((mote) => mote.omega === (2 * Math.PI) / BEAT_SECONDS)).toBe(true)
-    expect(new Set(wings.map((mote) => mote.tone))).toEqual(new Set([1, 2]))
-  })
-
-  it('stays where the mark is instead of drifting with the crowd', () => {
-    const cloud = createCloud({ seed: 5, count: 0, aspect: 1, markCount: 20 })
-    const homes = cloud.motes.map((mote) => [mote.x, mote.y])
-    settle(cloud, 1)
-    expect(cloud.motes.map((mote) => [mote.x, mote.y])).toEqual(homes)
-  })
-
-  it('moves from the crowd into its place in the mark as the mark gathers', () => {
-    const cloud = createCloud({ seed: 5, count: 0, aspect: 1, markCount: 50 })
-    placeCloud(cloud, { ...size, mark, gather: 0 })
-    for (const mote of cloud.motes) {
-      expect(mote.px).toBeCloseTo(mote.x * size.width)
-      expect(mote.py).toBeCloseTo(mote.y * size.height)
-    }
-    placeCloud(cloud, { ...size, mark, gather: 1 })
-    for (const mote of cloud.motes) {
-      const slot = mote.slot
-      if (!slot) throw new Error('expected a mark light')
-      // In its place, give or take the one-pixel shimmer.
-      expect(Math.abs(mote.px - (mark.centerX + slot.x * mark.size))).toBeLessThanOrEqual(0.81)
-      expect(Math.abs(mote.py - (mark.centerY + slot.y * mark.size))).toBeLessThanOrEqual(0.81)
-    }
-  })
-
-  it('stays in the crowd in a field without the mark', () => {
-    const cloud = createCloud({ seed: 5, count: 0, aspect: 1, markCount: 5 })
-    placeCloud(cloud, { ...size, mark: null, gather: 1 })
-    expect(only(cloud).px).toBeCloseTo(only(cloud).x * size.width)
-  })
-
+describe('placeCloud', () => {
   it('draws a light at home plus its offset', () => {
     const cloud = cloudAt([[100, 100]])
     only(cloud).dx = 12
     only(cloud).dy = -5
-    placeCloud(cloud, { ...size, mark: null, gather: 0 })
+    placeCloud(cloud, size)
     expect(only(cloud).px).toBeCloseTo(112)
     expect(only(cloud).py).toBeCloseTo(95)
   })
@@ -576,5 +550,75 @@ describe('podClearance', () => {
 
   it('clears in proportion as the pod forms', () => {
     expect(podClearance(50, 100, 0.5)).toBeCloseTo(0.54)
+  })
+})
+
+describe('fireflies', () => {
+  it('adds the requested fireflies after the dust, mostly in Glow', () => {
+    const { motes } = createCloud({ seed: 8, count: 100, fireflies: 200, aspect: 1 })
+    const fireflies = motes.filter((mote) => mote.kind === 'firefly')
+    expect(motes.slice(0, 100).every((mote) => mote.kind === 'dust')).toBe(true)
+    expect(fireflies).toHaveLength(200)
+    const glow = fireflies.filter((mote) => mote.tone === 0).length
+    expect(glow / fireflies.length).toBeGreaterThan(0.55)
+  })
+
+  it('treats a negative firefly count as none', () => {
+    expect(createCloud({ seed: 8, count: 0, fireflies: -3, aspect: 1 }).motes).toHaveLength(0)
+  })
+})
+
+describe('pickFireflyTone', () => {
+  it('makes seven in ten Glow, two Ember and one Dusk', () => {
+    expect(pickFireflyTone(0.1)).toBe(0)
+    expect(pickFireflyTone(0.69)).toBe(0)
+    expect(pickFireflyTone(0.8)).toBe(2)
+    expect(pickFireflyTone(0.95)).toBe(1)
+  })
+})
+
+describe('fireflyGlow', () => {
+  it('glows to full at phase 0 and is dim for most of the cycle', () => {
+    expect(fireflyGlow(0)).toBeCloseTo(1)
+    const samples = Array.from({ length: 200 }, (_, i) => fireflyGlow((i / 200) * 2 * Math.PI))
+    expect(samples.every((value) => value >= 0 && value <= 1)).toBe(true)
+    expect(samples.filter((value) => value < 0.1).length / samples.length).toBeGreaterThan(0.5)
+  })
+
+  it('swells slowly and fades slower still, a lantern breathing rather than a blink', () => {
+    // Half a radian before its peak it is already well lit; it takes longer to fade the same.
+    expect(fireflyGlow(-0.5)).toBeGreaterThan(0.3)
+    expect(fireflyGlow(0.5)).toBeGreaterThan(0.5)
+    expect(fireflyGlow(1.2)).toBeGreaterThan(fireflyGlow(-1.2))
+  })
+})
+
+describe('one tone and an offset area', () => {
+  it('paints every light in one tone when asked', () => {
+    const { motes } = createCloud({ seed: 4, count: 80, fireflies: 40, aspect: 1, tone: 0 })
+    expect(motes.every((mote) => mote.tone === 0)).toBe(true)
+  })
+
+  it('places the swarm inside an area that starts away from the canvas corner', () => {
+    const cloud = cloudAt([[100, 100]])
+    placeCloud(cloud, { left: 500, top: 40, ...size })
+    expect(only(cloud).px).toBeCloseTo(600)
+    expect(only(cloud).py).toBeCloseTo(140)
+  })
+})
+
+describe('wanderAt', () => {
+  it('stays within its reach', () => {
+    const wander = {
+      reachX: 10,
+      reachY: 5,
+      rates: [1, 2, 3, 4] as const,
+      phases: [0, 1, 2, 3] as const,
+    }
+    for (let t = 0; t < 30; t += 0.1) {
+      const { x, y } = wanderAt(wander, t)
+      expect(Math.abs(x)).toBeLessThanOrEqual(10)
+      expect(Math.abs(y)).toBeLessThanOrEqual(5)
+    }
   })
 })

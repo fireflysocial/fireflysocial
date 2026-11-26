@@ -102,9 +102,10 @@ src/
   App.tsx               # root component
   index.css             # global tokens (brand palette, safe areas), self-hosted font, base styles
   test/setup.ts         # Vitest setup (jest-dom matchers, cleanup, canvas stub)
+  test/fakeCanvas.ts    # fake 2D context, observers and animation frame for canvas component tests
   assets/fonts/         # self-hosted WOFF2 fonts (Host Grotesk, SIL OFL)
   lib/                  # pure logic, no React/Supabase imports
-    fireflies/          # landing-page field: seeded random and noise, colour cloud, Kuramoto sync, pod, scroll story
+    fireflies/          # landing-page fields: seeded random and noise, firefly swarm, hero meadow, Kuramoto sync, pod, scroll story
   data/                 # typed Supabase data-access functions (invites.ts is a stub for now)
   components/           # shared UI components (FireflyMark)
   features/<feature>/   # feature-scoped components, hooks, tests (landing/ exists)
@@ -165,7 +166,7 @@ Conventions:
 - **Don't mock Supabase internals.** For component tests, mock at the module boundary (your own `src/data` functions). Anything about queries or permissions is tested against the real local database.
 - Times and dates: use fake timers or inject "now". Never depend on the real clock or the machine's timezone. Firefly's timezone is `America/Vancouver`; test across DST changes for anything scheduled.
 - Tests must be deterministic: no real network, no random data without a fixed seed, no ordering dependence between tests.
-- **Canvas and animation:** jsdom has no canvas, so `src/test/setup.ts` makes `getContext` return `null` and canvas components must render safely without one. Keep the maths in `src/lib` (seeded, unit-tested); component tests that need drawing pass a small fake context. In E2E, prove the canvas actually painted and add a `test.use({ reducedMotion: 'reduce' })` case for anything that animates.
+- **Canvas and animation:** jsdom has no canvas, so `src/test/setup.ts` makes `getContext` return `null` and canvas components must render safely without one. Keep the maths in `src/lib` (seeded, unit-tested); component tests that need drawing use the shared fake in `src/test/fakeCanvas.ts`. In E2E, prove the canvas actually painted and add a `test.use({ reducedMotion: 'reduce' })` case for anything that animates.
 - Never weaken, skip (`.skip`, `.only`), or delete a failing test to make CI pass. Fix the code, or explain why the test is wrong and ask.
 - Don't lower the 100% coverage thresholds in `vitest.config.ts` or add exclusions to get past them.
 

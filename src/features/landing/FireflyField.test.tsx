@@ -1,77 +1,16 @@
 import { cleanup, render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, onTestFinished, vi } from 'vitest'
+import {
+  FakeIntersectionObserver,
+  FakeResizeObserver,
+  withCanvas,
+  type FakeContext,
+} from '../../test/fakeCanvas.ts'
 import { FireflyField } from './FireflyField.tsx'
 
-class FakeObserver {
-  observe = vi.fn()
-  disconnect = vi.fn()
-}
-
-/** Remembers the latest resize callback, so a test can resize the field. */
-class FakeResizeObserver extends FakeObserver {
-  static latest: (() => void) | undefined
-  constructor(callback: () => void) {
-    super()
-    FakeResizeObserver.latest = callback
-  }
-}
-
-/** Remembers the latest visibility callback, so a test can scroll the field in and out of view. */
-class FakeIntersectionObserver extends FakeObserver {
-  static latest: ((entries: { isIntersecting: boolean }[]) => void) | undefined
-  constructor(callback: (entries: { isIntersecting: boolean }[]) => void) {
-    super()
-    FakeIntersectionObserver.latest = callback
-  }
-}
-
-/** Just enough of a 2D context to record what gets drawn. */
-function fakeContext() {
-  return {
-    setTransform: vi.fn(),
-    clearRect: vi.fn(),
-    beginPath: vi.fn(),
-    arc: vi.fn<(x: number, y: number, radius: number, start: number, end: number) => void>(),
-    fill: vi.fn(),
-    fillRect: vi.fn<(x: number, y: number, width: number, height: number) => void>(),
-    stroke: vi.fn(),
-    fillText: vi.fn<(text: string, x: number, y: number) => void>(),
-    fillStyle: '',
-    strokeStyle: '',
-    lineWidth: 1,
-    font: '',
-    textBaseline: 'alphabetic',
-  }
-}
-
-function withCanvas(size: { width: number; height: number } = { width: 360, height: 760 }) {
-  const context = fakeContext()
-  // Test double: jsdom has no canvas, and a real CanvasRenderingContext2D can't be constructed,
-  // so a partial fake that records draw calls stands in for it. The component only uses these.
-  vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(
-    context as unknown as CanvasRenderingContext2D,
-  )
-  const measure = vi
-    .spyOn(HTMLCanvasElement.prototype, 'getBoundingClientRect')
-    .mockReturnValue(DOMRect.fromRect(size))
-  vi.stubGlobal('ResizeObserver', FakeResizeObserver)
-  vi.stubGlobal('IntersectionObserver', FakeIntersectionObserver)
-  const requestFrame = vi.fn<(callback: FrameRequestCallback) => number>(() => 1)
-  const cancelFrame = vi.fn()
-  vi.stubGlobal('requestAnimationFrame', requestFrame)
-  vi.stubGlobal('cancelAnimationFrame', cancelFrame)
-  /** Runs the most recently requested animation frame at `now` (ms). */
-  const frame = (now: number) => {
-    const callback = requestFrame.mock.calls.at(-1)?.[0]
-    if (!callback) throw new Error('No animation frame was requested')
-    callback(now)
-  }
-  return { context, requestFrame, cancelFrame, frame, measure }
-}
-
 /** The radius of the hairline ring drawn around a tap at (x, y) in the latest frame, if any. */
-function ringAt(context: ReturnType<typeof fakeContext>, x: number, y: number) {
+function ringAt(context: FakeContext, x: number, y: number) {
   const rings = context.arc.mock.calls.filter(([cx, cy]) => cx === x && cy === y)
   return rings.at(-1)?.[2]
 }
@@ -160,31 +99,31 @@ describe('FireflyField', () => {
     expect(context.fillRect.mock.calls.every(([, y]) => y < 760 * 0.8)).toBe(true)
   })
 
-  it('sizes the mark to the measured band above the text', () => {
+  it('lights fireflies with soft halos under their cores, added onto the dark', () => {
     const { context } = withCanvas()
-    const stage = document.createElement('div')
-    vi.spyOn(stage, 'getBoundingClientRect').mockReturnValue(
-      DOMRect.fromRect({ x: 0, y: 80, width: 360, height: 100 }),
-    )
-    const solid: [number, number][] = []
-    context.fillRect.mockImplementation((x, y) => {
-      if (context.fillStyle === 'rgba(217, 248, 74, 1)') solid.push([x, y])
+    const modes: string[] = []
+    context.drawImage.mockImplementation(() => {
+      modes.push(context.globalCompositeOperation)
     })
-    render(
-      <FireflyField
-        progress={{ current: 0 }}
-        still
-        stillProgress={0}
-        mark
-        markStage={{ current: stage }}
-      />,
-    )
-    // A 78px mark centred at y 130 puts its tail about (180, 152); unmeasured, it would be at
-    // about (180, 267).
-    const near = (x: number, y: number) =>
-      solid.filter(([sx, sy]) => Math.hypot(sx - x, sy - y) < 15).length
-    expect(near(180, 152)).toBeGreaterThan(30)
-    expect(near(180, 267)).toBeLessThan(10)
+    render(<FireflyField progress={{ current: 0 }} still stillProgress={0} />)
+    expect(modes.length).toBeGreaterThan(5)
+    expect(modes.every((mode) => mode === 'lighter')).toBe(true)
+    // Back to normal painting for the cores and the mark, at full opacity.
+    expect(context.globalCompositeOperation).toBe('source-over')
+    expect(context.globalAlpha).toBe(1)
+    // Round cores, one path per batch.
+    expect(context.moveTo).toHaveBeenCalled()
+  })
+
+  it('draws the lights without halos where an offscreen canvas can’t be drawn', () => {
+    const { context, getContext } = withCanvas()
+    // The field's own canvas has a context; the first halo sprite's doesn't.
+    getContext
+      .mockReturnValueOnce(context as unknown as CanvasRenderingContext2D)
+      .mockReturnValueOnce(null)
+    render(<FireflyField progress={{ current: 0 }} still stillProgress={0} />)
+    expect(context.drawImage).not.toHaveBeenCalled()
+    expect(context.fillRect.mock.calls.length).toBeGreaterThan(500)
   })
 
   it('draws only the crowd as a still frame when its story is at the start', () => {
@@ -211,9 +150,11 @@ describe('FireflyField', () => {
       styles.push(context.fillStyle)
     })
     render(<FireflyField progress={{ current: 0 }} still stillProgress={0} />)
-    expect(styles.some((style) => style.startsWith('rgba(217, 248, 74'))).toBe(true)
-    expect(styles.some((style) => style.startsWith('rgba(195, 160, 255'))).toBe(true)
-    expect(styles.some((style) => style.startsWith('rgba(242, 236, 206'))).toBe(true)
+    // The halo sprites share this fake context and fill with a gradient; only the lights count.
+    const lights = styles.filter((style) => typeof style === 'string')
+    expect(lights.some((style) => style.startsWith('rgba(217, 248, 74'))).toBe(true)
+    expect(lights.some((style) => style.startsWith('rgba(195, 160, 255'))).toBe(true)
+    expect(lights.some((style) => style.startsWith('rgba(242, 236, 206'))).toBe(true)
   })
 
   it('stirs the cloud along a moving pointer’s path', () => {
@@ -264,75 +205,6 @@ describe('FireflyField', () => {
     context.clearRect.mockClear()
     frame(1040)
     expect(context.clearRect).toHaveBeenCalledTimes(1)
-  })
-
-  it('gathers part of the cloud into the Firefly mark, with a solid Glow tail', () => {
-    /** Full-strength Glow squares drawn in the field's upper band. */
-    const solidGlow = (mark: boolean) => {
-      const { context } = withCanvas()
-      const styles: string[] = []
-      context.fillRect.mockImplementation(() => {
-        styles.push(context.fillStyle)
-      })
-      render(<FireflyField progress={{ current: 0 }} still stillProgress={0} mark={mark} />)
-      return styles.filter((style) => style === 'rgba(217, 248, 74, 1)').length
-    }
-    const without = solidGlow(false)
-    cleanup()
-    // The tail: a hundred or more lights at full Glow, on top of the crowd's own sparks.
-    expect(solidGlow(true)).toBeGreaterThan(without + 100)
-  })
-
-  it('leaves the mark out, and its lights in the crowd, when the band is squeezed shut', () => {
-    const { context } = withCanvas()
-    // The open band has no height: the text fills the hero (a short window, or enlarged text).
-    const stage = document.createElement('div')
-    vi.spyOn(stage, 'getBoundingClientRect').mockReturnValue(
-      DOMRect.fromRect({ x: 0, y: 300, width: 360, height: 0 }),
-    )
-    const solid: [number, number][] = []
-    const squares: number[] = []
-    context.fillRect.mockImplementation((x, y) => {
-      squares.push(y)
-      if (context.fillStyle === 'rgba(217, 248, 74, 1)') solid.push([x, y])
-    })
-    render(
-      <FireflyField
-        progress={{ current: 0 }}
-        still
-        stillProgress={0}
-        mark
-        markStage={{ current: stage }}
-      />,
-    )
-    // No collapsed knot of solid Glow where the band was…
-    expect(solid.filter(([x, y]) => Math.hypot(x - 180, y - 300) < 10).length).toBeLessThan(5)
-    // …and the mark's lights obey the crowd's clearance, so nothing sits behind the text.
-    expect(squares.length).toBeGreaterThan(500)
-    expect(squares.every((y) => y < 760 * 0.67)).toBe(true)
-  })
-
-  it('gathers the mark over the first few seconds when moving', () => {
-    const { context, frame } = withCanvas()
-    // Solid Glow squares drawn in the latest frame, by position.
-    let solid: [number, number][] = []
-    context.fillRect.mockImplementation((x, y) => {
-      if (context.fillStyle === 'rgba(217, 248, 74, 1)') solid.push([x, y])
-    })
-    render(<FireflyField progress={{ current: 0 }} still={false} mark />)
-    // On a 360x760 field the mark is 223px tall, centred at (180, 205); its tail sits about
-    // 0.28 mark heights below that centre.
-    const tail = { x: 180, y: 205 + 0.278 * 223 }
-    const solidOnTail = () =>
-      solid.filter(([x, y]) => Math.hypot(x - tail.x, y - tail.y) < 25).length
-    frame(1000)
-    solid = []
-    frame(1040)
-    const early = solidOnTail()
-    for (let now = 1080; now < 6000; now += 50) frame(now)
-    solid = []
-    frame(6040)
-    expect(solidOnTail()).toBeGreaterThan(early + 50)
   })
 
   it('draws one still frame, with the pod named and gathered, for reduced motion', () => {

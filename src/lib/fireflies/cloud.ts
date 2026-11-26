@@ -1,41 +1,64 @@
-import { TAU, clamp, smoothstep, wrapPhase, wrapUnit } from './math.ts'
-import { arrival, sampleMark, type MarkLayout, type MarkSlot } from './mark.ts'
-import { createNoise2D, fractalNoise, type Noise2D } from './noise.ts'
-import { between, createRandom } from './random.ts'
+import { TAU, clamp, smoothstep, wrapPhase } from './math.ts'
+import { createNoise2D, fractalNoise } from './noise.ts'
+import { between, createRandom, type Random } from './random.ts'
 
 /**
- * The firefly cloud: thousands of tiny lights drifting in organic clumps, in three tones.
- * Inspired by the particle fields of civic design studios (decided 2026-11-25): dense swirls
- * and dark voids rather than an even scatter, moving like smoke along a flow field.
+ * The firefly swarm: a summer night of lights over the city, in three tones.
  *
- * Every light has a home (where the drift has carried it) and an offset from that home. A hand
- * passing through pushes the offset; a spring pulls it back, so the cloud parts and heals
- * instead of being scarred by every pass. Lights a hand passes wake up and fall into step with
- * one shared beat: the beat of the Firefly mark's tail.
+ * Two kinds of light share the dark. Fine **dust**, distant fireflies too small to make out,
+ * shimmers softly; it gives the night its depth. **Fireflies**, closer, glow and dim slowly,
+ * each on its own unhurried rhythm (revised 2026-11-26: quick flashes read as "constant
+ * flashing"; the user asked for something subtle).
+ *
+ * Nothing follows a shared current. Every light has a fixed home and wanders a slow, looping
+ * path of its own around it (revised 2026-11-26: the earlier curl-noise drift slowly combed the
+ * cloud into long filaments, the "weird patterns" the user reported). Because homes never move,
+ * the swarm keeps its shape for as long as the page is open: denser groves, open dark, and clean
+ * black behind the text.
+ *
+ * A hand passing through pushes lights aside and a spring brings them home, so the swarm parts
+ * and heals. Lights a hand passes wake and fall into step with one shared beat.
  */
 
 /** Tones, painted by the renderer: 0 Glow (yellow-green), 1 Dusk (violet), 2 Ember (warm white). */
 export type Tone = 0 | 1 | 2
 export const TONE_COUNT = 3
 
-/** One light in the cloud. */
+/** Dust shimmers far off; a firefly flashes close by, with a halo. */
+export type Kind = 'dust' | 'firefly'
+
+/** A slow looping path: two sine terms per axis, each with its own rate and phase. */
+export interface Wander {
+  /** Reach of the loop either side of home, in pixels. */
+  reachX: number
+  reachY: number
+  /** Angular rates (radians per second) and phases for x, x's overtone, y, y's overtone. */
+  rates: readonly [number, number, number, number]
+  phases: readonly [number, number, number, number]
+}
+
+/** One light in the swarm. */
 export interface Mote {
-  /**
-   * Home, in unit space (0 to 1 across the field). For a crowd mote, where the drift has carried
-   * it. For a mark mote, where it waits in the crowd before the mark gathers.
-   */
+  /** Home, in unit space (0 to 1 across the field). */
   x: number
   y: number
+  kind: Kind
+  /** How near it is, 0 (far) to 1 (near): nearer lights are larger, brighter and roam further. */
+  depth: number
+  wander: Wander
+  /** Where its wander has taken it from home, in pixels. Set by `advanceCloud`. */
+  wx: number
+  wy: number
   /** Offset from home in pixels, and its velocity (px/s): a hand's push, springing back. */
   dx: number
   dy: number
   vx: number
   vy: number
-  /** Where it was drawn last frame, in pixels: home plus offset. Set by `placeCloud`. */
+  /** Where it was drawn last frame, in pixels. Set by `placeCloud`. */
   px: number
   py: number
   tone: Tone
-  /** Twinkle phase and rhythm (radians, radians per second). */
+  /** Flash or twinkle phase and rhythm (radians, radians per second). 0 is the flash. */
   phase: number
   omega: number
   /** Relative size, around 1. */
@@ -44,52 +67,76 @@ export interface Mote {
   answerAt: number
   /** How awake a passing hand has left it, 0 to 1. Awake motes fall into step with the beat. */
   awake: number
-  /** Its place in the Firefly mark, for the lights that draw it; null for the drifting crowd. */
-  slot: MarkSlot | null
 }
 
 export interface Cloud {
   motes: Mote[]
-  /** Noise that steers the drift. */
-  flow: Noise2D
 }
 
 export interface CloudOptions {
   seed: number
+  /** How many dust lights. */
   count: number
-  /** Field width divided by height, so clumps are round on any screen. */
+  /** How many fireflies (the flashing, haloed lights). */
+  fireflies?: number
+  /** Field width divided by height, so groves are round on any screen. */
   aspect: number
   /**
-   * Where the cloud may gather, 0 to 1 at unit height y: lower values make a mote there less
-   * likely, so a field whose lower part sits behind text spends its motes in the open part.
+   * Where the swarm may gather, 0 to 1 at unit height y: lower values make a light there less
+   * likely, so a field whose lower part sits behind text spends its lights in the open part.
    */
   room?: (y: number) => number
-  /** How many extra lights gather into the Firefly mark (0 for a field without it). */
-  markCount?: number
+  /** Paint every dust light and firefly in this one tone (the hero's meadow is all Glow). */
+  tone?: Tone
 }
 
-/** How finely the cloud clumps: higher gives more, smaller clumps. */
-const CLUMP_SCALE = 1.15
-/** Most candidates tried per mote asked for, before `createCloud` settles for fewer. */
+/** How finely the swarm groups: higher gives more, smaller groves. */
+const GROVE_SCALE = 1.1
+/** Most candidates tried per light asked for, before `createCloud` settles for fewer. */
 const MAX_ATTEMPTS_PER_MOTE = 100
-/** How large the drifting currents are. */
-const FLOW_SCALE = 1.4
-/** Drift speed, in field-heights per second at full current. */
-const DRIFT = 0.012
-/** The shared beat that the mark's tail keeps and that woken motes fall into (s per flash). */
-export const BEAT_SECONDS = 1.6
+/** The shared beat that woken lights fall into (s per flash). */
+export const BEAT_SECONDS = 2.6
 /** The spring that pulls a pushed light home: stiffness (1/s²) and damping (1/s), a smooth heal. */
 const SPRING = 11
 const DAMPING = 4.6
 /** How long a light stays awake after a hand passes (s, time constant): about two beats. */
-const AWAKE_SECONDS = 3.2
+const AWAKE_SECONDS = 4
 /** How strongly an awake light is pulled into step with the beat (Kuramoto coupling, 1/s). */
 const SYNC = 9
 
-function mote(x: number, y: number, tone: Tone, phase: number, omega: number, size: number) {
+/**
+ * A light of the given kind and depth: its size, tone-independent rhythm and wandering loop.
+ * Nearer lights are larger and roam further; dust loops slowly over a few pixels, a firefly
+ * over tens of pixels, so the near swarm visibly floats and the far one barely stirs.
+ */
+function mote(random: Random, x: number, y: number, kind: Kind, depth: number, tone: Tone): Mote {
+  const firefly = kind === 'firefly'
+  const reach = firefly ? 16 + 46 * depth : 4 + 12 * depth
+  // Slow: a firefly takes 16 to 40 s round its main loop, dust longer still.
+  const [slowest, fastest] = firefly ? ([40, 16] as const) : ([60, 28] as const)
   return {
     x,
     y,
+    kind,
+    depth,
+    wander: {
+      reachX: reach * between(random, 0.7, 1.2),
+      reachY: reach * between(random, 0.5, 0.9),
+      rates: [
+        (TAU / between(random, fastest, slowest)) * sign(random),
+        TAU / between(random, 7, 14),
+        (TAU / between(random, fastest, slowest)) * sign(random),
+        TAU / between(random, 6, 12),
+      ],
+      phases: [
+        between(random, 0, TAU),
+        between(random, 0, TAU),
+        between(random, 0, TAU),
+        between(random, 0, TAU),
+      ],
+    },
+    wx: 0,
+    wy: 0,
     dx: 0,
     dy: 0,
     vx: 0,
@@ -97,84 +144,68 @@ function mote(x: number, y: number, tone: Tone, phase: number, omega: number, si
     px: 0,
     py: 0,
     tone,
-    phase,
-    omega,
-    size,
+    phase: between(random, 0, TAU),
+    // A firefly glows every 6 to 11 s, slowly; dust shimmers every 3 to 7 s.
+    omega: firefly ? TAU / between(random, 6, 11) : TAU / between(random, 3, 7),
+    size: firefly ? 0.8 + 0.9 * depth : between(random, 0.55, 1.05) * (0.8 + 0.4 * depth),
     answerAt: Number.NEGATIVE_INFINITY,
     awake: 0,
-    slot: null,
-  } satisfies Mote
+  }
+}
+
+function sign(random: Random): number {
+  return random() < 0.5 ? -1 : 1
 }
 
 /**
- * Scatters `count` motes into clumps and voids: each candidate is kept with a probability set
- * by fractal noise, so dense swirls form with near-empty dark between them. Which tone a mote
- * gets also drifts across the field, so some clumps lean yellow and others violet. Then adds
- * `markCount` lights that will gather into the mark.
+ * Places `count` dust lights and `fireflies` fireflies. Each candidate is kept with a
+ * probability set by fractal noise, so the swarm gathers into soft groves with open dark
+ * between them (never an even sprinkle, never filaments). Dust leans yellow in some groves and
+ * violet in others; fireflies are mostly Glow, like real ones.
  */
 export function createCloud({
   seed,
   count,
+  fireflies = 0,
   aspect,
   room = () => 1,
-  markCount = 0,
+  tone,
 }: CloudOptions): Cloud {
   const random = createRandom(seed)
   const density = createNoise2D(seed + 1)
   const hue = createNoise2D(seed + 2)
-  const flow = createNoise2D(seed + 3)
-  // Clumps are sized to the field's shorter side, so a tall phone field gets real clumps and
-  // voids across its width instead of an even sprinkle.
-  const clump = CLUMP_SCALE / Math.min(1, aspect)
+  // Groves are sized to the field's shorter side, so a tall phone field gets real groves.
+  const grove = GROVE_SCALE / Math.min(1, aspect)
   const motes: Mote[] = []
-  const wanted = Math.max(0, count)
-  // Rejection sampling, with a bound: a `room` that leaves (almost) nowhere to gather would
-  // otherwise never fill the count. The landing's fields keep 6.5% to 10% of candidates (measured
-  // 2026-11-25 at 360x760 to 2560x1440), so they need 10 to 15 tries per mote, far inside the
-  // bound; a field that hits it gets the motes found so far.
-  const attempts = wanted * MAX_ATTEMPTS_PER_MOTE
-  for (let attempt = 0; attempt < attempts && motes.length < wanted; attempt++) {
-    const x = random()
-    const y = random()
-    const d = (fractalNoise(density, x * clump * aspect, y * clump, 3) + 1) / 2
-    // A floor of 4% keeps a faint scatter in the voids, so the dark never looks cut out.
-    const keep = (0.04 + 0.96 * smoothstep((d - 0.47) / 0.2)) * room(y)
-    if (random() > keep) continue
+
+  /**
+   * Rejection sampling, with a bound: a `room` that leaves (almost) nowhere to gather would
+   * otherwise never fill the count. `floor` is the chance a light lands in open dark, so the
+   * voids keep a faint scatter instead of looking cut out.
+   */
+  const scatter = (wanted: number, floor: number, make: (x: number, y: number) => Mote) => {
+    const target = motes.length + Math.max(0, wanted)
+    const attempts = Math.max(0, wanted) * MAX_ATTEMPTS_PER_MOTE
+    for (let attempt = 0; attempt < attempts && motes.length < target; attempt++) {
+      const x = random()
+      const y = random()
+      const d = (fractalNoise(density, x * grove * aspect, y * grove, 3) + 1) / 2
+      const keep = (floor + (1 - floor) * smoothstep((d - 0.42) / 0.26)) * room(y)
+      if (random() > keep) continue
+      motes.push(make(x, y))
+    }
+  }
+
+  scatter(count, 0.12, (x, y) => {
     const lean = (hue(x * 1.3 * aspect, y * 1.3) + 1) / 2
-    motes.push(
-      mote(
-        x,
-        y,
-        pickTone(random(), lean),
-        between(random, 0, TAU),
-        TAU / between(random, 1.8, 6),
-        between(random, 0.7, 1.5),
-      ),
-    )
-  }
-  for (const slot of sampleMark(createRandom(seed + 4), markCount)) {
-    // They wait scattered in the open upper band, then gather.
-    const light = slot.tail
-      ? // The tail keeps the beat: every tail light flashes on it, together.
-        mote(
-          random(),
-          between(random, 0.04, 0.3),
-          0,
-          0,
-          TAU / BEAT_SECONDS,
-          between(random, 0.8, 1.4),
-        )
-      : mote(
-          random(),
-          between(random, 0.04, 0.3),
-          random() < 0.72 ? 1 : 2,
-          between(random, 0, TAU),
-          TAU / between(random, 1.8, 6),
-          between(random, 0.7, 1.3),
-        )
-    motes.push({ ...light, slot })
-  }
-  return { motes, flow }
+    // Mostly far: dust is the distant swarm.
+    return mote(random, x, y, 'dust', random() ** 1.6, tone ?? pickTone(random(), lean))
+  })
+  scatter(fireflies, 0.3, (x, y) =>
+    mote(random, x, y, 'firefly', random(), tone ?? pickFireflyTone(random())),
+  )
+
+  return { motes }
 }
 
 /** 16% are warm white; of the rest, the violet share grows from 15% to 65% with `lean`. */
@@ -184,9 +215,20 @@ export function pickTone(roll: number, lean: number): Tone {
   return roll < 0.16 + 0.84 * violetShare ? 1 : 0
 }
 
-/** How many motes a field of this size gets: dense like a swarm, capped so phones keep 60fps. */
+/** Fireflies are mostly Glow, like real ones: 70% Glow, 20% Ember, 10% Dusk. */
+export function pickFireflyTone(roll: number): Tone {
+  if (roll < 0.7) return 0
+  return roll < 0.9 ? 2 : 1
+}
+
+/** How much dust a field of this size gets: a deep night, capped so phones keep 60fps. */
 export function cloudCountFor(width: number, height: number): number {
-  return Math.round(clamp((width * height) / 70, 3000, 11000))
+  return Math.round(clamp((width * height) / 240, 1200, 5200))
+}
+
+/** How many fireflies a field of this size gets: few enough that each one reads as a light. */
+export function fireflyCountFor(width: number, height: number): number {
+  return Math.round(clamp((width * height) / 1700, 140, 560))
 }
 
 /** The shared beat's phase at animation-clock second `time`: 0 is the moment of the flash. */
@@ -194,31 +236,29 @@ export function beatPhase(time: number): number {
   return wrapPhase((time * TAU) / BEAT_SECONDS)
 }
 
+/** Where a light's wander has taken it from home at animation-clock second `time`, in pixels. */
+export function wanderAt({ reachX, reachY, rates, phases }: Wander, time: number) {
+  const [rx, ox, ry, oy] = rates
+  const [px, qx, py, qy] = phases
+  // The overtone adds a lazy wobble to the loop, so no two paths look like the same ellipse.
+  return {
+    x: (reachX * (Math.sin(rx * time + px) + 0.35 * Math.sin(ox * time + qx))) / 1.35,
+    y: (reachY * (Math.sin(ry * time + py) + 0.35 * Math.sin(oy * time + qy))) / 1.35,
+  }
+}
+
 /**
- * Moves every crowd mote along the flow field's curl (so the cloud swirls without bunching up
- * or thinning out), wraps it round the edges, advances its twinkle, pulls an awake mote into
- * step with the beat, and springs every pushed mote back towards home. `time` slowly shifts the
- * currents so the swirls evolve. Mutates the cloud: it runs every animation frame.
+ * Advances every light by `dt` seconds: moves it along its wandering loop, advances its glow,
+ * pulls an awake light into step with the beat, and springs every pushed light back towards
+ * home. Mutates the cloud: it runs every animation frame.
  */
-export function advanceCloud(cloud: Cloud, dt: number, time: number, aspect: number): void {
-  const step = 0.002
-  const shift = time * 0.02
-  const potential = (x: number, y: number) =>
-    cloud.flow(x * FLOW_SCALE * aspect + shift, y * FLOW_SCALE - shift * 0.6)
+export function advanceCloud(cloud: Cloud, dt: number, time: number): void {
   const beat = beatPhase(time)
   const settle = Math.exp(-dt / AWAKE_SECONDS)
   for (const mote of cloud.motes) {
-    if (mote.slot === null) {
-      const dPdy =
-        (potential(mote.x, mote.y + step) - potential(mote.x, mote.y - step)) / (2 * step)
-      const dPdx =
-        (potential(mote.x + step, mote.y) - potential(mote.x - step, mote.y)) / (2 * step)
-      // Curl of the potential, in height units; divide x by aspect to get back to unit width.
-      const vx = (dPdy / FLOW_SCALE) * DRIFT
-      const vy = (-dPdx / (FLOW_SCALE * aspect)) * DRIFT
-      mote.x = wrapUnit(mote.x + (vx * dt) / aspect)
-      mote.y = wrapUnit(mote.y + vy * dt)
-    }
+    const { x, y } = wanderAt(mote.wander, time)
+    mote.wx = x
+    mote.wy = y
     // Its own rhythm, plus (while awake) a pull towards the shared beat: Kuramoto coupling to
     // one leader, so everything a hand wakes ends up flashing together, then drifts apart again.
     const pull = mote.awake > 0 ? SYNC * mote.awake * Math.sin(beat - mote.phase) : 0
@@ -237,7 +277,7 @@ function springHome(mote: Mote, dt: number) {
   mote.dy += mote.vy * dt
   // No hard limit on the offset: a clamp would pile lights into a visible ridge. The stir eases
   // towards a bounded speed instead, so how far a light travels is bounded too.
-  // Close enough to home and nearly still: rest exactly, so a calm cloud costs nothing here.
+  // Close enough to home and nearly still: rest exactly, so a calm swarm costs nothing here.
   if (Math.hypot(mote.dx, mote.dy) < 0.05 && Math.hypot(mote.vx, mote.vy) < 0.5) {
     mote.dx = 0
     mote.dy = 0
@@ -246,33 +286,23 @@ function springHome(mote: Mote, dt: number) {
   }
 }
 
-/** Where the cloud is drawn this frame: the field's size, and the mark (if any) with its gather. */
+/** Where the cloud is drawn this frame: its area in the canvas, in pixels. */
 export interface Placement {
+  /** Where the swarm's own area starts in the canvas (px); 0 when it fills the canvas. */
+  left?: number
+  top?: number
   width: number
   height: number
-  mark: MarkLayout | null
-  /** How far the mark has gathered, 0 to 1. */
-  gather: number
 }
 
 /**
- * Sets each mote's drawn pixel position (`px`, `py`): its home plus its offset. A mark mote's
- * home moves from its waiting place in the crowd to its place in the mark as the mark gathers,
- * and, once there, circles its place by about a pixel so the mark shimmers rather than sits.
+ * Sets each light's drawn pixel position (`px`, `py`): home, plus its wander, plus a hand's
+ * offset.
  */
-export function placeCloud(cloud: Cloud, { width, height, mark, gather }: Placement): void {
+export function placeCloud(cloud: Cloud, { left = 0, top = 0, width, height }: Placement): void {
   for (const mote of cloud.motes) {
-    let x = mote.x * width
-    let y = mote.y * height
-    if (mote.slot !== null && mark !== null) {
-      const here = arrival(gather, mote.slot.stagger)
-      const slotX = mark.centerX + mote.slot.x * mark.size + Math.cos(mote.phase) * 0.8
-      const slotY = mark.centerY + mote.slot.y * mark.size + Math.sin(mote.phase) * 0.8
-      x += (slotX - x) * here
-      y += (slotY - y) * here
-    }
-    mote.px = x + mote.dx
-    mote.py = y + mote.dy
+    mote.px = left + mote.x * width + mote.wx + mote.dx
+    mote.py = top + mote.y * height + mote.wy + mote.dy
   }
 }
 
@@ -455,9 +485,24 @@ export function podClearance(distance: number, ringRadius: number, formed: numbe
 /** Below this width the layout stacks: text runs full width under the field. */
 export const NARROW = 720
 
-/** Brightness of a mote's twinkle at `phase`, in [0, 1]: a gentle shimmer plus a brief spark. */
+/** Brightness of a dust light's twinkle at `phase`, in [0, 1]: a gentle shimmer plus a spark. */
 export function twinkle(phase: number): number {
   const shimmer = 0.62 + 0.3 * Math.sin(phase)
   const spark = ((1 + Math.cos(phase)) / 2) ** 24
   return Math.max(shimmer, spark)
+}
+
+/** Share of a firefly's cycle spent rising to its glow, and the time constant of its fade. */
+const FLASH_RISE = 0.16
+const FLASH_FADE = 0.15
+
+/**
+ * Brightness of a firefly at `phase`, in [0, 1]: dim most of the cycle, then a slow swell to
+ * full at phase 0 (about a second and a half) and a slower fade, a lantern breathing rather than
+ * a blink.
+ */
+export function fireflyGlow(phase: number): number {
+  const u = wrapPhase(phase + FLASH_RISE * TAU) / TAU
+  if (u < FLASH_RISE) return smoothstep(u / FLASH_RISE)
+  return Math.exp(-(u - FLASH_RISE) / FLASH_FADE)
 }

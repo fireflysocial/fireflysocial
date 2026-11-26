@@ -151,9 +151,10 @@ components:
 **Creative North Star: "Fireflies in Step"**
 
 Firefly's world is a dark city full of small lights, and one of them answers you. Soft black runs
-edge to edge; above the text hangs a dense cloud of thousands of tiny flat squares in three tones
-(Glow, Dusk violet and Ember warm white), gathered in clumps and dark voids and drifting like
-smoke. Over it sits a civic, almost municipal grotesk layer: very large, tight Host Grotesk in
+edge to edge. The first screen is a civic poster in two halves (revised 2026-11-26): a night
+meadow of line-drawn grass where yellow fireflies float and glow, and a giant "Firefly"
+wordmark with the Firefly mark beside it. Further down, the story's
+swarm is a deep field in three tones (Glow, Dusk violet and Ember warm white). Over it sits a civic, almost municipal grotesk layer: very large, tight Host Grotesk in
 warm white, small two-line labels, hairline rules and solid square cells. Nothing is decorated.
 Hierarchy comes from size and from the muted-over-ink pairing, not from weight, colour or
 containers.
@@ -161,18 +162,18 @@ containers.
 The interface has no blue (decided 2026-11-25). Black is the ground and the neutrals are warm.
 Dusk is violet, not blue: it comes from the cloud and returns in the interface as a quiet second
 accent for state and for "Coming next". Night and Wing survive only inside the logo files, and
-the mark keeps its own colours wherever it appears as the mark itself. The one exception is the
-hero's gathered mark, which is not the logo but the cloud taking its shape: it is drawn in the
-cloud's own tones (Dusk and Ember wings, a solid Glow tail). The landing page (`src/features/landing/`) is
+the mark keeps its own colours wherever it appears as the mark itself, including the hero's
+lockup beside the wordmark. The landing page (`src/features/landing/`) is
 always dark regardless of the visitor's setting, a confirmed exception. App screens will follow
 the system light/dark setting, but no light system has been built, so this file records no
 light-mode tokens; the root stylesheet's light defaults are placeholders.
 
-Motion is drawn from real fireflies. The cloud drifts along a curl-noise flow and twinkles. On
-the hero, part of it gathers into the Firefly mark, whose tail keeps a steady beat. Stir: a
-pointer or finger moving through the dark sweeps the lights along its path and they spring back
-home, and every light it wakes falls into step with the mark's beat. Call and response: tap the
-dark and the lights nearby flash back in a ripple. Falling into step: on scroll, five strangers
+Motion is drawn from real fireflies, and kept quiet (revised 2026-11-26: quick flashes read as
+"constant flashing"). Every light wanders its own slow loop round a fixed home, so nothing
+streaks or bunches; fireflies glow and dim slowly, each on its own 6s to 11s rhythm. Brush: a
+pointer or finger moving through the meadow bends the grass aside and eases the fireflies away,
+and both spring back; every firefly it wakes falls into step with one shared 2.6s beat. Call and response: tap the meadow and the fireflies nearby glow back in a
+ripple. Falling into step: on scroll, five strangers
 gather, turn solid Glow and synchronise (Kuramoto coupling) while the cloud dims around them. Every motion has a still frame. There is no photography; example events and the
 example pod are synthetic and say so, and features that have not launched carry a "Coming next"
 label.
@@ -185,7 +186,7 @@ label.
 - Host Grotesk only, regular weight, tight negative tracking; size carries hierarchy.
 - Two-line labels: a context line over the warm-white fact.
 - Hairline rules and square cells instead of cards, shadows or gradients.
-- Flat squares and dots: a flash is size and brightness, never blur or bloom.
+- Flat squares, dots and hairline grass; the only soft light is a firefly's halo as it glows.
 - Phone first from 360px; everything readable with the motion switched off.
 
 ## Colors
@@ -302,9 +303,16 @@ the invite body split into two equal columns). Side gutters are a fluid `clamp(1
 32px)` plus the safe-area insets; sections are separated by a fluid 96px to 200px. Edge-to-edge
 bands (header, strip, footer) run full width with hairlines; content columns are not boxed.
 
-The page opens on a full-height (`100dvh`) hero: the cloud behind, the H1 and intro low, and a
-foot row with a small muted tap hint left and the scroll cue right. On wide screens the intro sits
-beside the H1 in a 22rem column. The feed demo puts heading, lede and chips left and the drawn
+The page opens on a full-height (`100dvh`) hero in two halves, after the Lugano Living Lab poster
+grammar (revised 2026-11-26). Phones and tablets below 900px stack it: the meadow edge to edge on
+top (at least `clamp(240px, 40dvh, 420px)`, growing to take any spare height so a tall tablet has
+no dead gap), a hairline, a row of three words spread across the width ("Events", "People",
+"Vancouver"), then the wordmark lockup, the H1 at statement size, the muted intro and the scroll
+cue. From 900px the meadow takes the right half (1.08fr), full height and edge to edge on the
+right, behind a hairline; the left half sets the three words at the top and the lockup, H1,
+intro and cue at the foot. The wordmark is sized to its column (`26cqi` stacked, `24cqi` wide,
+capped at 10.5rem), Host Grotesk 400 at -0.055em, with the mark's slot (0.72em tall, at the
+mark's proportions) beside it. The feed demo puts heading, lede and chips left and the drawn
 phone right, top-aligned so the chips never move under the pointer as the feed changes height.
 The "Coming next" story is a sticky full-height stage with five full-screen chapters scrolling
 over it; chapter text sits low (phones) or low-left (wide), and the pod sits centred in the upper
@@ -332,9 +340,11 @@ hairlines, and from the field itself: a canvas of motes behind the text, dimming
 
 ### Named Rules
 
-**The Flat Light Rule.** Every light is flat. Cloud motes are solid squares; the pod, the
-best-fit dot and the marquee separators are solid circles. A flash is shown by size and
-brightness, never by blur, bloom or glow.
+**The Flat Light Rule.** Every light is flat, with one exception. Dust motes and the mark are
+solid squares; the pod, the best-fit dot and the marquee separators are solid circles; a flash on
+any of them is shown by size and brightness. The exception (approved 2026-11-26, "soft halo,
+flashes only"): a firefly in the field glows with a soft radial halo while it flashes, drawn
+under its flat core. Nothing else in the system gets blur, bloom or glow.
 
 ## Shapes
 
@@ -405,22 +415,61 @@ glides through view transitions (420ms, `cubic-bezier(0.16, 1, 0.3, 1)`) where s
 not under reduced motion; a visually hidden status line announces the top pick. Always captioned
 as example events. The only rounded object in the system.
 
-### Firefly cloud (signature)
+### Night meadow (hero, signature)
 
-A canvas of thousands of tiny flat squares on black: area / 70 motes, clamped to 3,000 to
-11,000. Each mote's side is twice its size (1.4px to 3px). Seeded fractal Perlin noise places them
-in dense clumps with near-empty voids (a 4% floor keeps a faint scatter, so the dark never looks
-cut out), sized to the field's shorter side so tall phone fields get clumps across their width,
-and weighted towards the open band above the text. Once the story's pod forms, the cloud clears
-inside the pod's ring (to 8%, with a soft edge), so the five names sit on clean black. Tones: 16% Ember; of the rest, Dusk
-takes 15% to 65% by region and Glow the remainder. The cloud drifts along a slowly shifting
-curl-noise flow and twinkles (a gentle shimmer plus a brief spark). It is drawn in 8 brightness
-steps batched by tone; a mote that rounds to step 0 is not drawn, so the ground behind text and
-at the field's edge stays clean black. Pixel ratio is capped at 2, the loop pauses off-screen and
-on tab hide, and the canvas is decorative and hidden from assistive technology: every idea is
-also in the text.
+A canvas over the whole hero, drawing only inside the `.hero__meadow` frame (clipped to it),
+re-measured whenever the frame resizes.
 
-- **Home and offset:** every mote has a home (where the drift has carried it) and a pixel offset
+- **Grass:** `width / 3.5` plants (80 to 320), in three layers back to front (40%, 35%, 25%),
+  filled in Muted at 16%, 24% and 36% alpha. Blades are tapered quadratic curves 1.6px to 4px at
+  the base, 16% to 46% of the meadow's height (the back layer grows to 55% of that, the middle to
+  75%); about one in eight is a hairline seed stem (42% to 72%) with five to eight 1.3px seed
+  dots at its tip. One wind swell crosses the meadow every 9s, 1.4 swells wide, swaying each plant
+  3% to 7% of its height round its own lean. The back and middle layers are drawn under the
+  fireflies' light and the front layer over it.
+- **Fireflies:** all Glow. `area / 5000` (30 to 90) round flat cores in the meadow, floating
+  mostly round the grass tips (none in the top 8% or the roots), and `area / 1500` (60 to 380)
+  specks of faint, flat, distant dust. A firefly rests at 14% and glows to full over about a
+  second and a half, then fades more slowly (`fireflyGlow`: rise over 16% of its cycle, fade with
+  a 15% time constant), every 6s to 11s, with a soft halo (radius 9px to 28px by depth, drawn
+  additively at 80%). Lights fade out over the last 28px of the meadow's frame.
+- **Brush:** a hand's whole path since the last frame is sampled every 12px; each plant whose
+  upper part the path passes within 90px of bends away from the nearest point, up to 50% of its
+  height, and springs back upright (stiffness 18/s², damping 3.2/s, a little sway as it
+  settles). The fireflies are stirred as in the story's swarm, more gently (80px reach, 110px/s
+  push), and tapping the meadow makes the fireflies within 180px glow back, rippling at 260px/s.
+  `.hero__meadow` sets `touch-action: pan-y pinch-zoom`; only the meadow listens, never the text.
+- **Logo:** the real mark (`FireflyMark cropped`: Wing wings, a Glow tail, flat) stands beside
+  the wordmark from the first frame, with no animation (revised 2026-11-26: the user preferred
+  the plain logo to lights gathering into it). The cropped viewBox (`125.7 95 260.6 326`) is the
+  mark's true extent (the outer wing arcs bulge to x 126.7 and 385.3; the tail's foot is at y 420) plus one unit of clear space. Its slot (0.72em tall, aspect 260.6 / 326) stands on the
+  wordmark's baseline, so the tail's foot sits on it and the wing tips meet the cap height.
+- **Reduced motion:** one still frame of the meadow, no hint, no listening.
+
+### Firefly swarm (story)
+
+The "Coming next" story's canvas swarm on black, rebuilt 2026-11-26 after the earlier curl-noise
+drift slowly combed the cloud into long filaments. Nothing follows a shared current: every light
+has a fixed home and wanders its own slow loop round it (two sine terms per axis), so the swarm
+keeps its shape for as long as the page is open.
+
+- **Dust** (area / 240, 1,200 to 5,200): tiny flat squares (side 1.1px to 2.5px), mostly far
+  (depth skewed low), looping 4px to 16px over 28s to 60s. Brightness scales with depth (35% to
+  85%) under a gentle shimmer plus a brief spark. Tones: 16% Ember; of the rest, Dusk takes 15% to
+  65% by region and Glow the remainder.
+- **Fireflies** (area / 1,700, 140 to 560): round flat cores (radius 0.8px to 1.7px by depth),
+  looping 16px to 62px over 16s to 40s. 70% Glow, 20% Ember, 10% Dusk. They glow slowly, as in
+  the meadow, resting at 10%, with a soft radial halo (radius 7px to 24px by depth, peak alpha
+  0.5) drawn additively under the cores, so overlapping lights pool.
+- **Placement:** seeded fractal Perlin noise places homes in soft groves with open dark between
+  them (a 12% floor for dust and 30% for fireflies keeps a scatter in the voids), weighted towards
+  the open band above the text. Once the pod forms, the swarm clears inside the pod's ring (to
+  8%, with a soft edge), so the five names sit on clean black.
+- **Drawing:** 12 brightness steps batched by tone and shape; nothing under 1/16 brightness is
+  drawn, so the ground behind text and at the field's edge stays clean black. Pixel ratio is
+  capped at 2, the loop pauses off-screen and on tab hide, and the canvas is decorative and
+  hidden from assistive technology: every idea is also in the text.
+- **Home and offset:** every mote has a fixed home, its wander round it, and a pixel offset
   from it. Interaction only moves the offset; a damped spring (stiffness 11/s², damping 4.6/s,
   damping ratio about 0.7, so it heals in about 2s with no visible bounce) pulls it back, so the
   cloud parts and heals and is never scarred by a pass. There is no hard limit on the offset,
@@ -432,31 +481,17 @@ also in the text.
   160px/s out of its way. The outward push scales with hand speed (full at 600px/s) and fades as
   a mote gets further from home, so a slow, jittering or circling hand leaves a soft eddy rather
   than digging a ringed hole. Motes right on the path part to alternate sides. A pointer that
-  has stopped, or only just arrived, does not stir. The hero sets `touch-action: pan-y
-pinch-zoom`, so a sideways finger sweep stirs while vertical drags still scroll; a cancelled
-  pointer (the browser taking a touch to scroll) ends the path.
+  has stopped, or only just arrived, does not stir. A cancelled
+  pointer (the browser taking a touch to scroll) ends the path. (The story's sticky stage is
+  scrolled through, so there a hand stirs only as it moves.)
 - **Waking into step:** a stirred mote wakes (fully across most of the reach, fading only at its
-  edge; decaying with a 3.2s time constant, about two beats) and is pulled into step with one
-  shared beat (1.6s per flash, Kuramoto coupling 9/s scaled by how awake it is). On the beat a
+  edge; decaying with a 4s time constant, about two beats) and is pulled into step with one
+  shared beat (2.6s per flash, Kuramoto coupling 9/s scaled by how awake it is). On the beat a
   woken mote brightens by up to 0.35 over its own resting light and grows up to 1.25x, then
   drifts back to its own rhythm as it falls asleep. The wake lifts only motes that are already
   showing: it never reveals one the text clearance hides, and answers to a call are limited by
   the same clearance, so nothing ever flashes behind text. The beat is the mark's tail: what a hand passes through
   falls into step with Firefly.
-- **Gathered mark (hero):** extra lights (mark height² / 32, 800 to 3,400) gather into the Firefly
-  mark, sampled from the mark's own geometry (two lenses of radius 200, a tail circle of radius
-  72). Wings take most of them, in Dusk (72%) and Ember, twinkling at no less than 72%; the tail is
-  solid Glow, every tail light on the beat, flashing by swelling up to 1.3x. A mark light takes
-  the larger of its swells rather than their sum, capped at 1.4x, so a stirred tail keeps its
-  grain. They wait scattered in the open band and gather from 0.4s over 3.2s, each setting off
-  at its own moment and flying a smootherstep (lifting off and landing at rest, top speed under
-  twice the average), then shimmer about a pixel around their places. The drifting crowd thins
-  to 20% inside the mark so its shape reads. Placement: the hero measures its open band (an empty
-  `.hero__stage` in the first grid row, between the header and the text) and centres the mark in
-  it, no taller than 78% of the band. It is also no taller than 30% of the height or 62% of the
-  width when stacked (below 900px, centred), or 46% of the height or 28% of the width when wide
-  (above the intro column, right-aligned to the gutter). A hand passing through scatters it like
-  the rest; it re-forms.
 - **Call and response:** tapping the dark (not a link or control) makes motes within 220px
   answer, nearest first, rippling at 340px/s. Each answering mote brightens and swells up to 1.4x
   for 0.5s either side of its peak. One 1px Ember ring at 14% marks the call and fades as it
@@ -465,8 +500,8 @@ pinch-zoom`, so a sideways finger sweep stirs while vertical drags still scroll;
   solid Glow, gain a Muted hairline ring at 40% and muted 500 name labels, and synchronise as
   coupling rises with scroll. The cloud dims by 55% while the pod is lit. Lit pod dots flash by
   swelling.
-- **Reduced motion:** still frames, with no stir or call. The hero shows the cloud with the mark
-  already gathered; the story shows its end state, the pod gathered, lit and in step.
+- **Reduced motion:** a still frame, with no stir or call: the story's end state, the pod
+  gathered, lit and in step.
 
 ### Story HUD
 
@@ -505,7 +540,7 @@ A two-line footer line at lede size, then the mark and "Firefly" at display size
 
 ### Don't:
 
-- **Don't** add shadows, gradients, blur, bloom or glows to motes, dots, the mark or surfaces.
+- **Don't** add shadows, gradients, blur, bloom or glows to dust, dots, the mark or surfaces (a flashing firefly's halo is the one exception).
 - **Don't** make Dusk a call to action or a highlight that competes with Glow.
 - **Don't** use bold weights for hierarchy; use size.
 - **Don't** wrap content in cards; the drawn phone is the one framed object.

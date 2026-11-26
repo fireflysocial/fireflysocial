@@ -452,7 +452,7 @@
       "Host Grotesk only, regular weight, tight negative tracking; size carries hierarchy.",
       "Two-line labels: a context line over the warm-white fact.",
       "Hairline rules and square cells instead of cards, shadows or gradients.",
-      "Flat squares and dots: a flash is size and brightness, never blur or bloom.",
+      "Flat squares, dots and hairline grass; the only soft light is a firefly's halo as it glows.",
       "Phone first from 360px; everything readable with the motion switched off."
     ],
     "rules": [
@@ -493,7 +493,7 @@
       },
       {
         "name": "The Flat Light Rule",
-        "body": "Every light is flat. Cloud motes are solid squares; the pod, the best-fit dot and the marquee separators are solid circles. A flash is shown by size and brightness, never by blur, bloom or glow.",
+        "body": "Every light is flat, with one exception. Dust motes and the mark are solid squares; the pod, the best-fit dot and the marquee separators are solid circles; a flash on any of them is shown by size and brightness. The exception (approved 2026-11-26, \"soft halo, flashes only\"): a firefly in the field glows with a soft radial halo while it flashes, drawn under its flat core. Nothing else in the system gets blur, bloom or glow.",
         "section": "elevation"
       }
     ],
@@ -510,7 +510,7 @@
       "Do label example events and the example pod as made up, and unlaunched features as \"Coming next\"."
     ],
     "donts": [
-      "Don't add shadows, gradients, blur, bloom or glows to motes, dots, the mark or surfaces.",
+      "Don't add shadows, gradients, blur, bloom or glows to dust, dots, the mark or surfaces (a flashing firefly's halo is the one exception).",
       "Don't make Dusk a call to action or a highlight that competes with Glow.",
       "Don't use bold weights for hierarchy; use size.",
       "Don't wrap content in cards; the drawn phone is the one framed object.",
