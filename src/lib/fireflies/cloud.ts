@@ -323,6 +323,20 @@ export interface Point {
   y: number
 }
 
+/**
+ * Adds a pointer sample to a hand's path since the last frame (mutating `path`). Every sample is
+ * kept until the frame consumes it, so a fast curve is swept as the curve it was. Only past `max`
+ * samples (when frames stall) is the path thinned to every other point, always keeping its first
+ * and newest, so it still covers the whole sweep at a coarser grain rather than cutting a chord.
+ */
+export function extendPath(path: Point[], point: Point, max: number): void {
+  path.push(point)
+  if (path.length <= max) return
+  const last = path.length - 1
+  const thinned = path.filter((_, index) => index % 2 === 0 || index === last)
+  path.splice(0, path.length, ...thinned)
+}
+
 /** Hand speed (px/s) at which the outward push reaches full strength; slower hands push less. */
 const FULL_PUSH_SPEED = 600
 

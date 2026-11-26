@@ -2,6 +2,7 @@ import { useEffect, useRef, type RefObject } from 'react'
 import {
   advanceCloud,
   answerCall,
+  extendPath,
   createCloud,
   fireflyGlow,
   placeCloud,
@@ -48,8 +49,8 @@ const ANSWER_SECONDS = 0.7
 const STIR = { radius: 80, drag: 0.15, push: 110, maxSpeed: 1400 } as const
 /** How much a woken firefly brightens on the beat, over its own light. */
 const WAKE_LIFT = 0.3
-/** Most pointer events kept per frame for the path. */
-const PATH_POINTS = 12
+/** Pointer samples a frame's path holds before it is thinned (see extendPath); rarely reached. */
+const PATH_POINTS = 64
 /** A firefly's halo radius at depth 0, the extra at depth 1 (px), and the faintest worth one. */
 const HALO = { radius: 9, depthRadius: 19, faintest: 0.04 } as const
 /** A firefly's light between glows: low, so the meadow is calm, but enough to follow it. */
@@ -196,12 +197,18 @@ export function HeroField({ still, meadow, seed = 1126 }: HeroFieldProps) {
       calls.push({ x, y, start: clock })
       if (calls.length > 6) calls.shift()
     }
+    // A hand moving through the meadow brushes the grass and stirs the fireflies along its path.
     const onMove = (event: PointerEvent) => {
       hand = pointAt(event)
-      if (path.length < PATH_POINTS) path.push(hand)
-      else path[path.length - 1] = hand
+      extendPath(path, hand, PATH_POINTS)
     }
+    // Leaving ends the hand, but the movement since the last frame still sweeps: the next frame
+    // consumes it, so a fast swipe out of the meadow brushes all the way to the edge.
     const onLeave = () => {
+      hand = null
+    }
+    // The browser took the touch over to scroll: that movement was a scroll, not a stroke.
+    const onCancel = () => {
       hand = null
       path = []
     }
@@ -210,7 +217,7 @@ export function HeroField({ still, meadow, seed = 1126 }: HeroFieldProps) {
     target?.addEventListener('pointerdown', onCall)
     target?.addEventListener('pointermove', onMove)
     target?.addEventListener('pointerleave', onLeave)
-    target?.addEventListener('pointercancel', onLeave)
+    target?.addEventListener('pointercancel', onCancel)
 
     if (!still) frameId = requestAnimationFrame(tick)
 
@@ -222,7 +229,7 @@ export function HeroField({ still, meadow, seed = 1126 }: HeroFieldProps) {
       target?.removeEventListener('pointerdown', onCall)
       target?.removeEventListener('pointermove', onMove)
       target?.removeEventListener('pointerleave', onLeave)
-      target?.removeEventListener('pointercancel', onLeave)
+      target?.removeEventListener('pointercancel', onCancel)
     }
   }, [still, meadow, seed])
 

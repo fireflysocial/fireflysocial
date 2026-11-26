@@ -2,6 +2,7 @@ import { useEffect, useRef, type RefObject } from 'react'
 import {
   advanceCloud,
   answerCall,
+  extendPath,
   cloudCountFor,
   createCloud,
   fireflyCountFor,
@@ -55,8 +56,8 @@ const ANSWER_SECONDS = 0.5
 const STIR = { radius: 90, drag: 0.2, push: 160, maxSpeed: 1600 } as const
 /** How much a woken light brightens on the beat, over its own brightness. */
 const WAKE_LIFT = 0.35
-/** Most pointer events kept per frame for the path (one frame rarely sees more than a few). */
-const PATH_POINTS = 12
+/** Pointer samples a frame's path holds before it is thinned (see extendPath); rarely reached. */
+const PATH_POINTS = 64
 /**
  * A firefly's halo: its radius at depth 0 and the extra at depth 1 (px), and the faintest glow
  * worth a halo. Halos are the one soft light on the page; dust stays flat.
@@ -209,15 +210,18 @@ export function FireflyField({
       calls.push({ x, y, start: clock })
       if (calls.length > 6) calls.shift()
     }
-    // A hand moving through the dark stirs the cloud along its path; leaving ends the path, and
-    // so does the browser taking over a touch (to scroll), which cancels the pointer.
+    // A hand moving through the dark stirs the cloud along its path.
     const onMove = (event: PointerEvent) => {
       hand = pointAt(event)
-      // Every event since the last frame, so a fast curve is swept as a curve, not a chord.
-      if (path.length < PATH_POINTS) path.push(hand)
-      else path[path.length - 1] = hand
+      extendPath(path, hand, PATH_POINTS)
     }
+    // Leaving ends the hand, but the movement since the last frame still sweeps: the next frame
+    // consumes it, so a fast move out of the field stirs all the way to the edge.
     const onLeave = () => {
+      hand = null
+    }
+    // The browser took the touch over to scroll: that movement was a scroll, not a stroke.
+    const onCancel = () => {
       hand = null
       path = []
     }
@@ -226,7 +230,7 @@ export function FireflyField({
     target?.addEventListener('pointerdown', onCall)
     target?.addEventListener('pointermove', onMove)
     target?.addEventListener('pointerleave', onLeave)
-    target?.addEventListener('pointercancel', onLeave)
+    target?.addEventListener('pointercancel', onCancel)
 
     if (!still) frameId = requestAnimationFrame(tick)
 
@@ -238,7 +242,7 @@ export function FireflyField({
       target?.removeEventListener('pointerdown', onCall)
       target?.removeEventListener('pointermove', onMove)
       target?.removeEventListener('pointerleave', onLeave)
-      target?.removeEventListener('pointercancel', onLeave)
+      target?.removeEventListener('pointercancel', onCancel)
     }
   }, [progress, still, stillProgress, callTarget, seed])
 

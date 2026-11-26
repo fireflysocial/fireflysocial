@@ -8,6 +8,7 @@ import {
   beatPhase,
   cloudCountFor,
   createCloud,
+  extendPath,
   fireflyCountFor,
   fireflyGlow,
   pickFireflyTone,
@@ -620,5 +621,34 @@ describe('wanderAt', () => {
       expect(Math.abs(x)).toBeLessThanOrEqual(10)
       expect(Math.abs(y)).toBeLessThanOrEqual(5)
     }
+  })
+})
+
+describe('extendPath', () => {
+  const at = (x: number) => ({ x, y: 0 })
+
+  it('keeps every sample until the frame consumes it', () => {
+    const path = [at(0)]
+    for (let x = 1; x <= 9; x++) extendPath(path, at(x), 10)
+    expect(path.map((point) => point.x)).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+  })
+
+  it('thins a stalled path to every other point, keeping the first and the newest', () => {
+    const path = [at(0)]
+    for (let x = 1; x <= 10; x++) extendPath(path, at(x), 10)
+    // Eleven samples over a limit of ten: halved, but still the whole sweep, end to end.
+    expect(path.map((point) => point.x)).toEqual([0, 2, 4, 6, 8, 10])
+    extendPath(path, at(11), 10)
+    expect(path.at(0)?.x).toBe(0)
+    expect(path.at(-1)?.x).toBe(11)
+  })
+
+  it('keeps the newest point when thinning would otherwise drop it', () => {
+    const path = [at(0)]
+    // Twelve samples over a limit of eleven: the newest sits at an odd index, and is kept.
+    for (let x = 1; x <= 11; x++) extendPath(path, at(x), 11)
+    expect(path.map((point) => point.x)).toEqual([0, 2, 4, 6, 8, 10, 11])
+    extendPath(path, at(12), 6)
+    expect(path.map((point) => point.x)).toEqual([0, 4, 8, 11, 12])
   })
 })

@@ -23,6 +23,26 @@ function phone({ still = false } = {}) {
   return { ...canvas, meadow, view }
 }
 
+/** A pointer move over the meadow at (x, y). */
+function move(meadow: HTMLElement, x: number, y: number) {
+  meadow.dispatchEvent(new PointerEvent('pointermove', { clientX: x, clientY: y }))
+}
+
+/**
+ * The grass's tip positions in the frame after `act` runs on a fresh moving meadow, before that
+ * frame: what the meadow looks like once the frame has consumed whatever `act` did.
+ */
+function tipsAfter(act: (meadow: HTMLElement) => void) {
+  const { context, meadow, frame, view } = phone()
+  frame(1000)
+  act(meadow)
+  context.quadraticCurveTo.mockClear()
+  frame(1040)
+  const tips = context.quadraticCurveTo.mock.calls.map(([, , x, y]) => [x, y])
+  view.unmount()
+  return tips
+}
+
 describe('HeroField', () => {
   it('is hidden from assistive technology, and safe without canvas support', () => {
     const requestFrame = vi.fn()
@@ -121,25 +141,36 @@ describe('HeroField', () => {
     expect(tips(true, 6000)).toEqual(tips(false, 6000))
   })
 
-  it('ends the brush when the browser takes the touch to scroll', () => {
-    const { meadow, frame, context } = phone()
-    frame(1000)
-    meadow.dispatchEvent(new PointerEvent('pointermove', { clientX: 60, clientY: 250 }))
-    meadow.dispatchEvent(new PointerEvent('pointercancel'))
-    context.clearRect.mockClear()
-    frame(1040)
-    expect(context.clearRect).toHaveBeenCalledTimes(1)
+  it('still brushes with a swipe that leaves the meadow before the next frame', () => {
+    const swipe = (meadow: HTMLElement) => {
+      move(meadow, 60, 250)
+      move(meadow, 200, 250)
+      meadow.dispatchEvent(new PointerEvent('pointerleave'))
+    }
+    expect(tipsAfter(swipe)).not.toEqual(tipsAfter(() => undefined))
   })
 
-  it('keeps a frame’s path short however many events arrive', () => {
-    const { meadow, frame, context } = phone()
-    frame(1000)
-    for (let i = 0; i < 30; i++) {
-      meadow.dispatchEvent(new PointerEvent('pointermove', { clientX: 10 * i, clientY: 250 }))
+  it('drops the movement when the browser takes the touch over to scroll', () => {
+    const scroll = (meadow: HTMLElement) => {
+      move(meadow, 60, 250)
+      move(meadow, 200, 250)
+      meadow.dispatchEvent(new PointerEvent('pointercancel'))
     }
-    context.clearRect.mockClear()
-    frame(1040)
-    expect(context.clearRect).toHaveBeenCalledTimes(1)
+    expect(tipsAfter(scroll)).toEqual(tipsAfter(() => undefined))
+  })
+
+  it('sweeps every sample of a long move made within one frame, to its far end', () => {
+    /** Out to the right and back, in 10px steps: 61 samples before the next frame. */
+    const outAndBack = (meadow: HTMLElement) => {
+      for (let x = 0; x <= 300; x += 10) move(meadow, x, 250)
+      for (let x = 290; x >= 0; x -= 10) move(meadow, x, 250)
+    }
+    /** Only the start of that sweep: what a path that kept just its first samples would brush. */
+    const start = (meadow: HTMLElement) => {
+      for (let x = 0; x <= 100; x += 10) move(meadow, x, 250)
+      move(meadow, 0, 250)
+    }
+    expect(tipsAfter(outAndBack)).not.toEqual(tipsAfter(start))
   })
 
   it('pauses while scrolled out of view or the tab is hidden, and stops when removed', () => {
@@ -158,8 +189,11 @@ describe('HeroField', () => {
   })
 
   it('does not listen when still, and redraws the still frame on resize', () => {
-    const { context, meadow, measure } = phone({ still: true })
+    const { context, measure } = withCanvas()
+    const meadow = boxed({ x: 0, y: 56, width: 360, height: 300 })
+    // Watched from before it mounts, so a listener added while mounting would be caught.
     const add = vi.spyOn(meadow, 'addEventListener')
+    render(<HeroField still meadow={{ current: meadow }} />)
     expect(add).not.toHaveBeenCalled()
     measure.mockReturnValue(DOMRect.fromRect({ width: 402, height: 874 }))
     FakeResizeObserver.latest?.()

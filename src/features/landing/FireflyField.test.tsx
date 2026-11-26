@@ -86,6 +86,25 @@ describe('FireflyField', () => {
     expect(afterDrag(true)).not.toEqual(dragged)
   })
 
+  it('still stirs with a move that leaves the field before the next frame', () => {
+    /** The squares drawn in the frame after a quick move, optionally leaving straight after. */
+    const afterMove = (move: boolean, leave: boolean) => {
+      const { context, target, frame } = fieldWithTarget()
+      frame(1000)
+      if (move) {
+        target.dispatchEvent(new PointerEvent('pointermove', { clientX: 120, clientY: 300 }))
+        target.dispatchEvent(new PointerEvent('pointermove', { clientX: 180, clientY: 300 }))
+      }
+      if (leave) target.dispatchEvent(new PointerEvent('pointerleave'))
+      context.fillRect.mockClear()
+      frame(1040)
+      const squares = context.fillRect.mock.calls
+      cleanup()
+      return squares
+    }
+    expect(afterMove(true, true)).not.toEqual(afterMove(false, false))
+  })
+
   it('never lights the ground behind the text, even where a hand passes', () => {
     const { context, target, frame } = fieldWithTarget()
     frame(1000)
