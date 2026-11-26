@@ -1,0 +1,53 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "pitch/project/slides/close.html"
+        ],
+        "createdAt": "2026-11-26T15:10:25.312Z",
+        "reason": "Claude: slide files are bare <section> fragments scanned without pitch/project/deck.css, so the detector assumes a white background or black text; the real slides are dark (#050505/#11110E) and were checked in a rendered preview"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "pitch/project/slides/competition.html"
+        ],
+        "createdAt": "2026-11-26T15:10:25.326Z",
+        "reason": "Claude: slide files are bare <section> fragments scanned without pitch/project/deck.css, so the detector assumes a white background or black text; the real slides are dark (#050505/#11110E) and were checked in a rendered preview"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "pitch/project/slides/cover.html"
+        ],
+        "createdAt": "2026-11-26T15:10:25.340Z",
+        "reason": "Claude: slide files are bare <section> fragments scanned without pitch/project/deck.css, so the detector assumes a white background or black text; the real slides are dark (#050505/#11110E) and were checked in a rendered preview"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "pitch/project/slides/solution.html"
+        ],
+        "createdAt": "2026-11-26T15:10:25.352Z",
+        "reason": "Claude: slide files are bare <section> fragments scanned without pitch/project/deck.css, so the detector assumes a white background or black text; the real slides are dark (#050505/#11110E) and were checked in a rendered preview"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "pitch/project/slides/traction.html"
+        ],
+        "createdAt": "2026-11-26T15:10:25.364Z",
+        "reason": "Claude: slide files are bare <section> fragments scanned without pitch/project/deck.css, so the detector assumes a white background or black text; the real slides are dark (#050505/#11110E) and were checked in a rendered preview"
+      }
+    ]
+  }
+}
