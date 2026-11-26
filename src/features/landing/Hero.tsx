@@ -4,11 +4,14 @@ import { FireflyField } from './FireflyField.tsx'
 import { usePrefersReducedMotion } from './usePrefersReducedMotion.ts'
 
 /**
- * The first screen: a black field of drifting fireflies, the promise, and a quiet invitation to
- * tap the dark. Taps on the field make nearby fireflies flash back (call and response).
+ * The first screen: a black field of drifting fireflies, part of which gathers into the Firefly
+ * mark, the promise, and a quiet invitation to tap the dark. Taps on the field make nearby
+ * fireflies flash back (call and response); a hand moving through wakes them into step.
  */
 export function Hero() {
   const heroRef = useRef<HTMLElement>(null)
+  // The open band between the header and the text, where the mark gathers.
+  const stageRef = useRef<HTMLDivElement>(null)
   // The hero's field has no scroll story: it is always the crowd.
   const progress = useRef(0)
   const still = usePrefersReducedMotion()
@@ -21,7 +24,10 @@ export function Hero() {
         stillProgress={0}
         callTarget={heroRef}
         seed={1125}
+        mark
+        markStage={stageRef}
       />
+      <div ref={stageRef} className="hero__stage" />
       <div className="hero__copy">
         <h1 id="hero-title" className="display hero__title">
           Meet your people at the events you’d go to anyway.

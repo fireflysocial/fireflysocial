@@ -23,7 +23,7 @@ export function SyncStory() {
         <div className="story__hud" aria-hidden="true">
           {/* Shown through every chapter: none of this has launched yet. */}
           <p className="label" data-shown="true">
-            <span className="muted">Coming next</span>
+            <span className="story__tag">Coming next</span>
             <span>{still || chapter >= 2 ? 'Example: Tuesday run club' : 'People to go with'}</span>
           </p>
           <p className="story__week" data-shown={still || chapter >= 3}>

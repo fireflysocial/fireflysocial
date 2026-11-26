@@ -103,7 +103,7 @@ src/
   test/setup.ts         # Vitest setup (jest-dom matchers, cleanup, canvas stub)
   assets/fonts/         # self-hosted WOFF2 fonts (Host Grotesk, SIL OFL)
   lib/                  # pure logic, no React/Supabase imports
-    fireflies/          # landing-page field: seeded random, Kuramoto sync, swarm, scroll story
+    fireflies/          # landing-page field: seeded random and noise, colour cloud, Kuramoto sync, pod, scroll story
   data/                 # typed Supabase data-access functions (invites.ts is a stub for now)
   components/           # shared UI components (FireflyMark)
   features/<feature>/   # feature-scoped components, hooks, tests (landing/ exists)
@@ -258,7 +258,7 @@ The same code runs in a mobile browser, the iOS app (WKWebView) and the Android 
 
 ### Visual design
 
-Use the brand palette from [brand/README.md](brand/README.md): Glow `#D9F84A` as the one light, on a **soft black `#050505`** interface ground with warm neutrals (ink `#F2F2EE`, muted `#9A9A92`). **No blue in the interface** (decided 2026-11-25): Night `#0E1424` and Wing `#313C62` stay inside the logo files only.
+Use the brand palette from [brand/README.md](brand/README.md): Glow `#D9F84A` as the one light, on a **soft black `#050505`** interface ground with warm neutrals (ink `#F2F2EE`, muted `#9A9A92`). **Dusk `#C3A0FF`** (violet) is a quiet second accent for state and "coming next"; the landing page's firefly cloud uses Glow, Dusk and warm white together (decided 2026-11-25). **No blue in the interface** (decided 2026-11-25): Night `#0E1424` and Wing `#313C62` stay inside the logo files only.
 
 - **Glow is for one highlight per screen**, and must never carry text or essential indicators on a white or light background (contrast is too low).
 - No gradients, glows or drop shadows on the mark.

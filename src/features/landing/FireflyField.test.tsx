@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react'
+import { cleanup, render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, onTestFinished, vi } from 'vitest'
 import { FireflyField } from './FireflyField.tsx'
@@ -34,6 +34,7 @@ function fakeContext() {
     beginPath: vi.fn(),
     arc: vi.fn<(x: number, y: number, radius: number, start: number, end: number) => void>(),
     fill: vi.fn(),
+    fillRect: vi.fn<(x: number, y: number, width: number, height: number) => void>(),
     stroke: vi.fn(),
     fillText: vi.fn<(text: string, x: number, y: number) => void>(),
     fillStyle: '',
@@ -120,15 +121,218 @@ describe('FireflyField', () => {
       <FireflyField progress={{ current: 0 }} still={false} callTarget={{ current: target }} />,
     )
     expect(add).toHaveBeenCalledWith('pointerdown', expect.any(Function))
+    expect(add).toHaveBeenCalledWith('pointermove', expect.any(Function))
     unmount()
     expect(remove).toHaveBeenCalledWith('pointerdown', expect.any(Function))
+    expect(remove).toHaveBeenCalledWith('pointerleave', expect.any(Function))
+    expect(remove).toHaveBeenCalledWith('pointercancel', expect.any(Function))
+  })
+
+  it('ends the stir when the browser takes a touch over to scroll', () => {
+    /** The squares drawn a while after a short drag, optionally cancelled by the browser. */
+    const afterDrag = (cancel: boolean) => {
+      const { context, target, frame } = fieldWithTarget()
+      frame(1000)
+      target.dispatchEvent(new PointerEvent('pointermove', { clientX: 120, clientY: 300 }))
+      if (cancel) target.dispatchEvent(new PointerEvent('pointercancel'))
+      target.dispatchEvent(new PointerEvent('pointermove', { clientX: 180, clientY: 300 }))
+      frame(1040)
+      context.fillRect.mockClear()
+      frame(1080)
+      return context.fillRect.mock.calls
+    }
+    const dragged = afterDrag(false)
+    cleanup()
+    // Cancelled after the first point, the second is a fresh arrival: no path, no stir.
+    expect(afterDrag(true)).not.toEqual(dragged)
+  })
+
+  it('never lights the ground behind the text, even where a hand passes', () => {
+    const { context, target, frame } = fieldWithTarget()
+    frame(1000)
+    // Sweep back and forth across the lowest part of a 360x760 field, behind the text.
+    for (let i = 0; i < 20; i++) {
+      target.dispatchEvent(
+        new PointerEvent('pointermove', { clientX: i % 2 === 0 ? 20 : 340, clientY: 700 }),
+      )
+      frame(1000 + (i + 1) * 40)
+    }
+    expect(context.fillRect.mock.calls.every(([, y]) => y < 760 * 0.8)).toBe(true)
+  })
+
+  it('sizes the mark to the measured band above the text', () => {
+    const { context } = withCanvas()
+    const stage = document.createElement('div')
+    vi.spyOn(stage, 'getBoundingClientRect').mockReturnValue(
+      DOMRect.fromRect({ x: 0, y: 80, width: 360, height: 100 }),
+    )
+    const solid: [number, number][] = []
+    context.fillRect.mockImplementation((x, y) => {
+      if (context.fillStyle === 'rgba(217, 248, 74, 1)') solid.push([x, y])
+    })
+    render(
+      <FireflyField
+        progress={{ current: 0 }}
+        still
+        stillProgress={0}
+        mark
+        markStage={{ current: stage }}
+      />,
+    )
+    // A 78px mark centred at y 130 puts its tail about (180, 152); unmeasured, it would be at
+    // about (180, 267).
+    const near = (x: number, y: number) =>
+      solid.filter(([sx, sy]) => Math.hypot(sx - x, sy - y) < 15).length
+    expect(near(180, 152)).toBeGreaterThan(30)
+    expect(near(180, 267)).toBeLessThan(10)
   })
 
   it('draws only the crowd as a still frame when its story is at the start', () => {
     const { context } = withCanvas()
     render(<FireflyField progress={{ current: 0 }} still stillProgress={0} />)
-    expect(context.arc).toHaveBeenCalled()
+    // Hundreds of tiny lights, and no named pod yet.
+    expect(context.fillRect.mock.calls.length).toBeGreaterThan(500)
     expect(context.fillText).not.toHaveBeenCalled()
+  })
+
+  it('keeps the ground behind the text and at the bottom edge clean', () => {
+    const { context } = withCanvas()
+    render(<FireflyField progress={{ current: 0 }} still stillProgress={0} />)
+    const squares = context.fillRect.mock.calls
+    expect(squares.length).toBeGreaterThan(500)
+    // On a 360x760 field the text runs from about 55% down; nothing is drawn in the lower third.
+    expect(squares.every(([, y]) => y < 760 * 0.67)).toBe(true)
+  })
+
+  it('paints the cloud in yellow, violet and warm white', () => {
+    const { context } = withCanvas()
+    const styles: string[] = []
+    context.fillRect.mockImplementation(() => {
+      styles.push(context.fillStyle)
+    })
+    render(<FireflyField progress={{ current: 0 }} still stillProgress={0} />)
+    expect(styles.some((style) => style.startsWith('rgba(217, 248, 74'))).toBe(true)
+    expect(styles.some((style) => style.startsWith('rgba(195, 160, 255'))).toBe(true)
+    expect(styles.some((style) => style.startsWith('rgba(242, 236, 206'))).toBe(true)
+  })
+
+  it('stirs the cloud along a moving pointer’s path', () => {
+    /** The squares drawn in a later frame of a fresh field, optionally after a pointer moves. */
+    const laterFrame = (move: boolean) => {
+      const { context, target, frame } = fieldWithTarget()
+      frame(1000)
+      if (move) {
+        target.dispatchEvent(new PointerEvent('pointermove', { clientX: 120, clientY: 300 }))
+        target.dispatchEvent(new PointerEvent('pointermove', { clientX: 180, clientY: 300 }))
+      }
+      frame(1040)
+      context.fillRect.mockClear()
+      frame(1080)
+      return context.fillRect.mock.calls
+    }
+    const calm = laterFrame(false)
+    cleanup()
+    const stirred = laterFrame(true)
+    expect(stirred).not.toEqual(calm)
+  })
+
+  it('does not stir under a pointer that has stopped, or one that has left', () => {
+    /** The squares drawn a while after the pointer arrives, optionally leaving straight after. */
+    const settled = (leave: boolean) => {
+      const { context, target, frame } = fieldWithTarget()
+      frame(1000)
+      // One event is a pointer arriving, not moving: no path, so no stir.
+      target.dispatchEvent(new PointerEvent('pointermove', { clientX: 180, clientY: 300 }))
+      if (leave) target.dispatchEvent(new PointerEvent('pointerleave'))
+      for (let now = 1040; now <= 1400; now += 40) frame(now)
+      context.fillRect.mockClear()
+      frame(1440)
+      return context.fillRect.mock.calls
+    }
+    const resting = settled(false)
+    cleanup()
+    const left = settled(true)
+    expect(resting).toEqual(left)
+  })
+
+  it('keeps a frame’s path short however many events arrive', () => {
+    const { context, target, frame } = fieldWithTarget()
+    frame(1000)
+    for (let i = 0; i < 30; i++) {
+      target.dispatchEvent(new PointerEvent('pointermove', { clientX: 10 * i, clientY: 300 }))
+    }
+    context.clearRect.mockClear()
+    frame(1040)
+    expect(context.clearRect).toHaveBeenCalledTimes(1)
+  })
+
+  it('gathers part of the cloud into the Firefly mark, with a solid Glow tail', () => {
+    /** Full-strength Glow squares drawn in the field's upper band. */
+    const solidGlow = (mark: boolean) => {
+      const { context } = withCanvas()
+      const styles: string[] = []
+      context.fillRect.mockImplementation(() => {
+        styles.push(context.fillStyle)
+      })
+      render(<FireflyField progress={{ current: 0 }} still stillProgress={0} mark={mark} />)
+      return styles.filter((style) => style === 'rgba(217, 248, 74, 1)').length
+    }
+    const without = solidGlow(false)
+    cleanup()
+    // The tail: a hundred or more lights at full Glow, on top of the crowd's own sparks.
+    expect(solidGlow(true)).toBeGreaterThan(without + 100)
+  })
+
+  it('leaves the mark out, and its lights in the crowd, when the band is squeezed shut', () => {
+    const { context } = withCanvas()
+    // The open band has no height: the text fills the hero (a short window, or enlarged text).
+    const stage = document.createElement('div')
+    vi.spyOn(stage, 'getBoundingClientRect').mockReturnValue(
+      DOMRect.fromRect({ x: 0, y: 300, width: 360, height: 0 }),
+    )
+    const solid: [number, number][] = []
+    const squares: number[] = []
+    context.fillRect.mockImplementation((x, y) => {
+      squares.push(y)
+      if (context.fillStyle === 'rgba(217, 248, 74, 1)') solid.push([x, y])
+    })
+    render(
+      <FireflyField
+        progress={{ current: 0 }}
+        still
+        stillProgress={0}
+        mark
+        markStage={{ current: stage }}
+      />,
+    )
+    // No collapsed knot of solid Glow where the band was…
+    expect(solid.filter(([x, y]) => Math.hypot(x - 180, y - 300) < 10).length).toBeLessThan(5)
+    // …and the mark's lights obey the crowd's clearance, so nothing sits behind the text.
+    expect(squares.length).toBeGreaterThan(500)
+    expect(squares.every((y) => y < 760 * 0.67)).toBe(true)
+  })
+
+  it('gathers the mark over the first few seconds when moving', () => {
+    const { context, frame } = withCanvas()
+    // Solid Glow squares drawn in the latest frame, by position.
+    let solid: [number, number][] = []
+    context.fillRect.mockImplementation((x, y) => {
+      if (context.fillStyle === 'rgba(217, 248, 74, 1)') solid.push([x, y])
+    })
+    render(<FireflyField progress={{ current: 0 }} still={false} mark />)
+    // On a 360x760 field the mark is 223px tall, centred at (180, 205); its tail sits about
+    // 0.28 mark heights below that centre.
+    const tail = { x: 180, y: 205 + 0.278 * 223 }
+    const solidOnTail = () =>
+      solid.filter(([x, y]) => Math.hypot(x - tail.x, y - tail.y) < 25).length
+    frame(1000)
+    solid = []
+    frame(1040)
+    const early = solidOnTail()
+    for (let now = 1080; now < 6000; now += 50) frame(now)
+    solid = []
+    frame(6040)
+    expect(solidOnTail()).toBeGreaterThan(early + 50)
   })
 
   it('draws one still frame, with the pod named and gathered, for reduced motion', () => {
@@ -175,8 +379,8 @@ describe('FireflyField', () => {
       coords: { clientX: 100, clientY: 200 },
     })
     frame(1040)
-    expect(ringAt(context, 100, 200)).toBeCloseTo(0.04 * 320)
-    // Well past the reach of a call (200 px at 320 px/s), the ring is gone.
+    expect(ringAt(context, 100, 200)).toBeCloseTo(0.04 * 340)
+    // Well past the reach of a call (220 px at 340 px/s), the ring is gone.
     for (let now = 1090; now < 2500; now += 50) frame(now)
     context.arc.mockClear()
     frame(2550)
@@ -219,7 +423,7 @@ describe('FireflyField', () => {
       new PointerEvent('pointerdown', { bubbles: true, clientX: 100, clientY: 200 }),
     )
     frame(1040)
-    expect(ringAt(context, 100, 200)).toBeCloseTo(0.04 * 320)
+    expect(ringAt(context, 100, 200)).toBeCloseTo(0.04 * 340)
   })
 
   it('keeps only the latest six calls', async () => {

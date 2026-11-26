@@ -30,6 +30,8 @@
   --wing: #313c62;
   /* The interface ground on dark surfaces (decided 2026-11-25). Night stays in the logo files. */
   --black: #050505;
+  /* Dusk: the cloud's violet, a quiet second accent for state and 'coming next' (2026-11-25). */
+  --dusk: #c3a0ff;
   /* Wing on light surfaces, and the light surface itself (brand/firefly-mark-light.svg). */
   --wing-light: #c9cfde;
   --paper: #f5f6f0;
