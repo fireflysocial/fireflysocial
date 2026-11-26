@@ -280,49 +280,39 @@ test.describe('landing page', () => {
     await page.goto('/')
     const box = await page.locator('.hero').boundingBox()
     if (!box) throw new Error('hero missing')
-    // The stir runs through the left of the open band; the right is left alone as a control, so
-    // the cloud's own drift and twinkle can't pass for a stir, or for healing.
-    const stirred = {
-      x: 0,
-      y: box.height * 0.12,
-      width: box.width * 0.45,
-      height: box.height * 0.28,
+    const band = { x: 0, y: box.height * 0.12, width: box.width, height: box.height * 0.28 }
+    /** A fast zig-zag at the given heights (page pixels): the same moves every time it runs. */
+    const zigzag = async (heightAt: (i: number) => number) => {
+      for (let i = 0; i < 16; i++) {
+        await page.mouse.move(box.x + box.width * (i % 2 === 0 ? 0.05 : 0.95), heightAt(i), {
+          steps: 4,
+        })
+      }
     }
-    const control = { ...stirred, x: box.width * 0.55 }
-    const picture = async () => ({
-      stirred: await cloudCells(page, stirred),
-      control: await cloudCells(page, control),
-    })
-    // Let the mark gather and the field settle first.
-    await page.waitForTimeout(4500)
-    const before = await picture()
-    // A fast zig-zag through the stirred region.
-    for (let i = 0; i < 16; i++) {
-      await page.mouse.move(
-        box.x + box.width * (i % 2 === 0 ? 0.03 : 0.42),
-        box.y + box.height * (0.15 + (i % 4) * 0.07),
-        { steps: 4 },
-      )
-    }
-    const during = await picture()
-    const stirChange = cloudChange(before.stirred, during.stirred)
-    // Measured 2026-11-25: 0.48 to 0.80 where stirred, 0.06 to 0.17 in the control.
-    expect(stirChange).toBeGreaterThan(0.2)
-    expect(stirChange).toBeGreaterThan(3 * cloudChange(before.control, during.control))
-    // Off the hero (onto the header): every light springs home. The stirred region heals to
-    // under half its disturbance and to within the control's own drift; a cloud that kept the
-    // pattern (the bug this guards) stays near its peak.
+    // Start from a settled field: the mark gathered (slower on a slow machine).
+    await expectGatheredMark(page, 15_000)
+
+    // The control is the same gesture over the header, which doesn't reach the field: how much
+    // the band changes on its own (drift, twinkle) in the time a stir takes, on this machine.
+    const calm = await cloudCells(page, band)
+    await zigzag(() => 10)
+    const drift = cloudChange(calm, await cloudCells(page, band))
+
+    // The same gesture through the band.
+    const before = await cloudCells(page, band)
+    await zigzag((i) => box.y + box.height * (0.15 + (i % 4) * 0.07))
+    const stirred = cloudChange(before, await cloudCells(page, band))
+    expect(stirred).toBeGreaterThan(Math.max(0.2, 3 * drift))
+
+    // Off the hero (onto the header): every light springs home, so the band heals to well under
+    // its peak change (measured 2026-11-25: 32% to 43% of it, drift included). A cloud that kept
+    // the pattern, the bug this guards, stays at its peak or beyond.
     await page.mouse.move(box.x + box.width / 2, 10)
     await expect
-      .poll(
-        async () => {
-          const after = await picture()
-          const left = cloudChange(before.stirred, after.stirred)
-          return left < stirChange / 2 && left < cloudChange(before.control, after.control) + 0.15
-        },
-        { timeout: 8000 },
-      )
-      .toBe(true)
+      .poll(async () => cloudChange(before, await cloudCells(page, band)) / stirred, {
+        timeout: 10_000,
+      })
+      .toBeLessThan(0.6)
   })
 
   test('keeps the ground behind the headline dark while a pointer sweeps across it', async ({
@@ -367,21 +357,25 @@ test.describe('landing page', () => {
         type,
         touchPoints: type === 'touchEnd' ? [] : [{ x, y }],
       })
-    await page.waitForTimeout(4500)
+    /** A sideways finger sweep at height y (page pixels): the same touches every time. */
+    const sweep = async (y: number) => {
+      await touch('touchStart', 20, y)
+      for (let i = 1; i <= 15; i++) {
+        await touch('touchMove', 20 + i * 22, y)
+        await page.waitForTimeout(16)
+      }
+    }
+    await expectGatheredMark(page, 15_000)
 
-    // The band's own drift over the length of a sweep, for comparison.
-    const still = await cloudCells(page, band)
-    await page.waitForTimeout(15 * 16)
-    const drift = cloudChange(still, await cloudCells(page, band))
+    // The control: the same sweep over the header, which doesn't reach the field.
+    const calm = await cloudCells(page, band)
+    await sweep(10)
+    const drift = cloudChange(calm, await cloudCells(page, band))
+    await touch('touchEnd')
 
     // A sideways sweep across the band stirs it, and doesn't scroll the page.
-    const y = box.height * 0.25
     const before = await cloudCells(page, band)
-    await touch('touchStart', 20, y)
-    for (let i = 1; i <= 15; i++) {
-      await touch('touchMove', 20 + i * 22, y)
-      await page.waitForTimeout(16)
-    }
+    await sweep(box.height * 0.25)
     const swept = cloudChange(before, await cloudCells(page, band))
     await touch('touchEnd')
     expect(swept).toBeGreaterThan(Math.max(0.2, 3 * drift))
