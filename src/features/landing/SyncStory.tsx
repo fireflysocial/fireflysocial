@@ -45,7 +45,7 @@ export function SyncStory() {
         </div>
 
         <div className="chapter">
-          <p className="statement">Vancouver is full of people you’ve almost met.</p>
+          <p className="statement">Your city is full of people you’ve almost met.</p>
           <p className="chapter__note">
             You see them at the run club, the startup meetup, the gallery opening. You chat once.
             “We should keep in touch.” Then nothing.

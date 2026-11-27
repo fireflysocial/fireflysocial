@@ -6,7 +6,7 @@
 
 A firefly at rest, seen from above: two folded wings and a glowing tail.
 
-The wings are muted and the glow is the only bright thing in the frame. That's the product in one image: in a dark, quiet room (the "Vancouver Freeze"), Firefly makes one signal visible: *I'm here, and I'm open to meeting people.* Fireflies light up so others like them can find them. The upward chevron of the wings also reads as rising, moving forward.
+The wings are muted and the glow is the only bright thing in the frame. That's the product in one image: in a dark, quiet room (the "Vancouver Freeze" where the idea started, and its equivalent in every big city), Firefly makes one signal visible: *I'm here, and I'm open to meeting people.* Fireflies light up so others like them can find them. The upward chevron of the wings also reads as rising, moving forward.
 
 ## Colors
 

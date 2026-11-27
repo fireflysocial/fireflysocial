@@ -36,7 +36,7 @@ describe('LandingPage', () => {
   it('tells the whole story in text, not only in the animation', () => {
     render(<LandingPage />)
     for (const line of [
-      'Vancouver is full of people you’ve almost met.',
+      'Your city is full of people you’ve almost met.',
       'Same event. Same faces. Week after week.',
       'Until you’re in step.',
     ]) {
@@ -55,7 +55,9 @@ describe('LandingPage', () => {
   it('labels the example feed as made up', () => {
     render(<LandingPage />)
     expect(
-      screen.getByText('Example events. Real listings come from across Vancouver.'),
+      screen.getByText(
+        'Example events, set in Vancouver, our first city. Real listings come from your city.',
+      ),
     ).toBeInTheDocument()
   })
 

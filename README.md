@@ -1,6 +1,6 @@
 # Firefly
 
-Firefly brings together people in Vancouver who share a sense of purpose, at the events happening across the city: startup meetups, run clubs, gallery openings, hackathons, language exchanges and many other events where people get to talk (concerts, loud bars and large venues are left out of the feed). People come for friendship, a professional network, collaborators or a co-founder. This repository holds the research, the product design and the app: **iOS and Android apps plus a web version**, built from one React + TypeScript + Vite codebase with Supabase, wrapped for the app stores with Capacitor (planned). See [engineering/quality-and-ci.md §0](engineering/quality-and-ci.md#0-platforms-ios-android-and-web) for the platform plan.
+Firefly brings together people who share a sense of purpose, at the events happening across their city: startup meetups, run clubs, gallery openings, hackathons, language exchanges and many other events where people get to talk (concerts, loud bars and large venues are left out of the feed). People come for friendship, a professional network, collaborators or a co-founder. It is built for many cities across several countries, starting with Vancouver. This repository holds the research, the product design and the app: **iOS and Android apps plus a web version**, built from one React + TypeScript + Vite codebase with Supabase, wrapped for the app stores with Capacitor (planned). See [engineering/quality-and-ci.md §0](engineering/quality-and-ci.md#0-platforms-ios-android-and-web) for the platform plan.
 
 **Launch scope (decided 2026-11-25):** an easy onboarding and a personal event feed, with events found by AI-assisted search ([workflow/v4-user-flow.md](workflow/v4-user-flow.md)). Groups, the Firefly corner, picks and chat come next; hosts are long-term ([workflow/v3-user-flow.md](workflow/v3-user-flow.md)).
 
@@ -57,7 +57,7 @@ research/
   README.md            # open questions + the decision each one informs
   problem.md           # inspiration and problem statement
   competitors/         # landscape overview + one file per competitor
-  organizers.md        # Vancouver event supply
+  organizers.md        # event supply in Vancouver, the first city
   interviews/          # findings from pre-existing interviews and studies
   safety-privacy.md
   science.md

@@ -28,7 +28,7 @@ export function Hero() {
       <p className="hero__words" aria-hidden="true">
         <span>Events</span>
         <span>People</span>
-        <span>Vancouver</span>
+        <span>Your city</span>
       </p>
       <div className="hero__copy">
         <p className="wordmark" aria-hidden="true">
@@ -41,7 +41,7 @@ export function Hero() {
           Meet your people at the events you’d go to anyway.
         </h1>
         <p className="hero__intro">
-          Firefly finds events across Vancouver that fit you. Next, it’ll introduce you to the
+          Firefly finds events across your city that fit you. Next, it’ll introduce you to the
           people going too: future friends, collaborators, maybe a co-founder.
         </p>
       </div>
