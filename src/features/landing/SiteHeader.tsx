@@ -1,7 +1,7 @@
 import { FireflyMark } from '../../components/FireflyMark.tsx'
 import { ArrowIcon } from './ArrowIcon.tsx'
 
-/** Block header: mark cell, two-line name, section links (wider screens), invite cell. */
+/** Block header: mark cell, name, section links (wider screens), invite cell. */
 export function SiteHeader() {
   return (
     <header className="header">
@@ -11,7 +11,6 @@ export function SiteHeader() {
         </span>
         <span className="header__name">
           <span>Firefly</span>
-          <span className="muted">Vancouver</span>
         </span>
       </a>
       <nav className="header__nav" aria-label="Sections">

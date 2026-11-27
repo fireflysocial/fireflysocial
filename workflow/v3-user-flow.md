@@ -116,7 +116,7 @@ These P0 and P1 gaps can't be closed by designing the flow. Each one must be don
   - **Selfie liveness check**, required before a user can appear in any pod or room. **[#28]**
   - **Age check (18+)** using the method chosen in the age-assurance gate. Liveness does not prove age. **[#32]**
   - Optional ID badge for users who want extra trust. **[#28]**
-- **Profile (kept small):** first name, photo (EXIF and GPS removed on upload **[#30]**), neighbourhood (optional), 3–5 interests, "new to Vancouver?" with when, and 2 short "both-answer" prompts. **[#17]**
+- **Profile (kept small):** first name, photo (EXIF and GPS removed on upload **[#30]**), neighbourhood (optional), 3–5 interests, "new to [city]?" with when, and 2 short "both-answer" prompts. **[#17]**
 - **Life stage (optional):** newly arrived, student or co-op, new grad, recently moved, other. Used to measure who benefits most; never shown to others. **[#37]**
 - **Respect pledge:** "I'm here to meet people with good intent. No selling, no spam, no unwanted advances." **[#7]**
 - **Preferences:**
@@ -228,7 +228,7 @@ These shape the design but aren't built until willingness to pay is tested. **[#
 2. **Venues:** cafés and bars pay to host featured Firefly corners. **[#10]**
 3. **Optional "Plus" for users:** more pods per week, priority placement. Never gates safety or matching. **[#10]**
 
-What competitors can't easily copy is the **host relationships plus the pod-to-circle loop on recurring events**, built city by city starting with Vancouver. Competitor changelogs are reviewed quarterly. **[#43]**
+What competitors can't easily copy is the **host relationships plus the pod-to-circle loop on recurring events**, built city by city across several countries, starting with Vancouver. Competitor changelogs are reviewed quarterly. **[#43]**
 
 ---
 

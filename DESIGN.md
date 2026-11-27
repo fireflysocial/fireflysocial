@@ -1,6 +1,6 @@
 ---
 name: Firefly
-description: Events across Vancouver that fit you, and next, the people going too.
+description: Events across your city that fit you, and next, the people going too.
 colors:
   black: '#050505'
   glow: '#D9F84A'
@@ -307,7 +307,7 @@ The page opens on a full-height (`100dvh`) hero in two halves, after the Lugano 
 grammar (revised 2026-11-26). Phones and tablets below 900px stack it: the meadow edge to edge on
 top (at least `clamp(240px, 40dvh, 420px)`, growing to take any spare height so a tall tablet has
 no dead gap), a hairline, a row of three words spread across the width ("Events", "People",
-"Vancouver"), then the wordmark lockup, the H1 at statement size, the muted intro and the scroll
+"Your city"), then the wordmark lockup, the H1 at statement size, the muted intro and the scroll
 cue. From 900px the meadow takes the right half (1.08fr), full height and edge to edge on the
 right, behind a hairline; the left half sets the three words at the top and the lockup, H1,
 intro and cue at the foot. The wordmark is sized to its column (`26cqi` stacked, `24cqi` wide,
@@ -361,7 +361,7 @@ stroke, square caps) drawn to match the hairlines.
 ### Block header
 
 Square cells on a black bar with a hairline bottom, fixed to the top under the safe area. A mark
-cell (header-height square, hairline right), a two-line name ("Firefly" over muted "Vancouver"),
+cell (header-height square, hairline right), the name ("Firefly"),
 two-line nav links on wide screens (muted context over the link, underline on hover), and a
 solid warm-white invite cell flush right with black 500 text and an arrow. The invite cell lifts
 to pure white over 200ms ease-out; its focus ring is black, inset 4px, so it shows on Ink.

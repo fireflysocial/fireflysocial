@@ -42,7 +42,7 @@ export function FeedDemo() {
           Tell it what you like. Watch it pick.
         </h2>
         <p className="demo__lede">
-          Tap a few. This is how your feed works: events from across Vancouver, ranked for you, each
+          Tap a few. This is how your feed works: events from across your city, ranked for you, each
           with a reason.
         </p>
         <div className="chips" role="group" aria-labelledby="chips-label">
@@ -107,7 +107,7 @@ export function FeedDemo() {
           <span className="phone__home" aria-hidden="true" />
         </div>
         <figcaption className="phone__caption">
-          Example events. Real listings come from across Vancouver.
+          Example events, set in Vancouver, our first city. Real listings come from your city.
         </figcaption>
       </figure>
     </section>

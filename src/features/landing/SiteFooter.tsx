@@ -13,7 +13,6 @@ export function SiteFooter() {
           Firefly
         </p>
         <p className="footer__meta">
-          <span>Made in Vancouver</span>
           <span className="muted">© 2026 Firefly</span>
         </p>
       </div>

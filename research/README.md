@@ -2,6 +2,8 @@
 
 Every research question should inform a decision. If it doesn't, cut it.
 
+> **Scope note (2026-11-27):** Firefly is now built for many cities across several countries, with Vancouver as the first launch city. Everything in this folder was gathered in and about Vancouver and stays that way: cite it as Vancouver evidence, and do new local research before relying on it for another city.
+>
 > **Positioning note (2026-11-25):** Firefly's positioning broadened from platonic friendship to bringing together people with a shared sense of purpose (friendship, networking, collaborators, a co-founder), across the many kinds of events in the city where people get to talk (concerts, loud bars and large venues are left out of the feed, per [v4](../workflow/v4-user-flow.md)). The research below was gathered under the friendship framing and is left as its sources state it; the friendship and loneliness evidence still applies to the friendship side of Firefly. Current positioning lives in [PRODUCT.md](../PRODUCT.md) and [workflow/v4-user-flow.md](../workflow/v4-user-flow.md).
 
 Evidence reviewed on **2026-11-15**. Product recommendations are hypotheses, not results of a Firefly pilot. Historical reporting is not evidence of current pricing or availability. See the [audit and citation ledger](documentation-audit.md) before reusing claims externally; an accessible link alone does not verify every claim attributed to it.

@@ -1,8 +1,9 @@
 import type { EventSummary } from '../../lib/feed/rank.ts'
 
 /**
- * Made-up events for the landing page's feed demo. Kinds of events that really happen in
- * Vancouver, but no real organiser, venue or listing. Labelled as examples on the page.
+ * Made-up events for the landing page's feed demo, set in Vancouver (the first launch city).
+ * Kinds of events that really happen there, but no real organiser, venue or listing. Labelled as
+ * examples on the page.
  */
 export const EXAMPLE_EVENTS: readonly EventSummary[] = [
   {

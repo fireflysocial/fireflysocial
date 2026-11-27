@@ -7,7 +7,7 @@ const STEPS = [
   {
     when: 'Every week',
     title: 'Get a short list that fits',
-    body: 'Events from across Vancouver, each with a line on why it’s there. Tap “Not for me” and the list learns.',
+    body: 'Events from across your city, each with a line on why it’s there. Tap “Not for me” and the list learns.',
   },
   {
     when: 'When you’re in',
