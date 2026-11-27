@@ -178,3 +178,22 @@ section.lit { background: #D9F84A; color: #050505; }
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+/* ---------- tags, funnel, stage rows ---------- */
+.tag {
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: #9A9A92;
+  margin: 0;
+}
+.tag.on { color: #C3A0FF; }
+.bar {
+  height: 20px;
+  border-radius: 10px;
+  background: #2C2C27;
+}
+.step {
+  border-top: 2px solid #2C2C27;
+  padding-top: 28px;
+}

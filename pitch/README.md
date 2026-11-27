@@ -1,6 +1,6 @@
 # Pitch deck
 
-Firefly's pre-seed pitch deck: 14 slides that follow the eight sections of a YC-style pitch (vision, problem, why now, solution, market, traction, business model, team and ask). The narrative borrows from Airbnb, the product framing from Dropbox, and the business model framing from LinkedIn.
+Firefly's pre-seed pitch deck: 10 slides in the order YC-backed seed decks use (restructured 2026-11-27): title, problem, solution, traction, unique advantage, business model, market, team, ask, close. Design discipline is applied to every slide rather than given one: large type, one idea per slide, the caveats in the speaker notes. The narrative borrows from Airbnb, the product framing from Dropbox, and the business model framing from LinkedIn.
 
 - **Live, editable deck:** <https://claude.ai/artifact/PCzS7mCZL2jRaWLY3UpTqg> (a claude.ai Slides artifact; private until shared from its Share menu, which also exports PowerPoint and PDF).
 - **Source of truth:** the files in [`project/`](project/). The deck is republished from them, so change the files here and republish (or, after editing in the browser, pull the changes back here). Don't let the two drift.
@@ -23,16 +23,15 @@ Each slide rests on a document in this repo. When that document changes, check t
 
 | Slide(s) | Depends on | Update when |
 |----------|------------|-------------|
-| cover, vision | [PRODUCT.md](../PRODUCT.md) positioning | The one-line positioning changes |
-| story | [research/problem.md](../research/problem.md) | The founder story changes |
-| problem, leak | [research/interviews/](../research/interviews/) (Vancouver Foundation, Daily Hive) | Newer or better survey data arrives |
-| whynow | [research/organizers.md](../research/organizers.md), [statcan-friendship-surveys.md](../research/interviews/statcan-friendship-surveys.md) | The event pipeline approach or the evidence changes |
-| solution | [workflow/v4-user-flow.md](../workflow/v4-user-flow.md) onboarding and feed | The launch flow changes, or a **real screenshot** exists (replace the design-concept phone) |
-| roadmap | [v4](../workflow/v4-user-flow.md) "Later", [v3](../workflow/v3-user-flow.md), [research/science.md](../research/science.md) | Pods, the Firefly corner or picks are redesigned or ship |
-| market, competition | [research/competitors/](../research/competitors/) | A competitor changes, or market sizing is done |
+| cover, close | [PRODUCT.md](../PRODUCT.md) positioning | The one-line positioning changes |
+| problem | [research/interviews/](../research/interviews/) (Daily Hive, Vancouver Foundation) | Newer or better survey data arrives |
+| solution | [workflow/v4-user-flow.md](../workflow/v4-user-flow.md) onboarding and feed, [v3](../workflow/v3-user-flow.md), [research/science.md](../research/science.md) | The launch flow changes, pods or picks are redesigned or ship, or a **real screenshot** exists (replace the design-concept phone) |
 | traction | [v4 launch metrics](../workflow/v4-user-flow.md#launch-metrics), CLAUDE.md "Current status" | Anything ships, or real numbers exist (waitlist, interviews, pilot results) |
+| advantage | [research/competitors/](../research/competitors/), [research/organizers.md](../research/organizers.md), [statcan-friendship-surveys.md](../research/interviews/statcan-friendship-surveys.md) | A competitor changes, or the event pipeline approach or the evidence changes |
 | model | [research/organizers.md](../research/organizers.md) | Pricing or revenue lines are tested with real customers |
-| team, close | — | The team, the raise or contact details change |
+| market | Census and newcomer data (to do) | Market sizing is done |
+| team | [research/problem.md](../research/problem.md) | The team or the founder story changes |
+| ask | — | The raise, its split or the milestone changes |
 
 ## Rules
 
