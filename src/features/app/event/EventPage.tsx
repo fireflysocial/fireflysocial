@@ -12,6 +12,7 @@ import { useClock } from '../clock.ts'
 import { EventsStatus } from '../feed/EventsStatus.tsx'
 import { ExampleNote } from '../ui/ExampleNote.tsx'
 import { useEventView } from '../useEventView.ts'
+import { MeetingPeople } from '../pods/MeetingPeople.tsx'
 import { GoingAnswers } from './GoingAnswers.tsx'
 
 export function EventPage() {
@@ -162,6 +163,8 @@ export function EventPage() {
             <p className="small">Free, and no registration needed.</p>
           </div>
         )}
+
+        {going && <MeetingPeople event={event} />}
 
         <div className="row-actions">
           <button

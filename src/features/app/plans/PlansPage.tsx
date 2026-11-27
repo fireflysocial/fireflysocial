@@ -5,6 +5,7 @@ import { isGoing } from '../../../lib/plans.ts'
 import { readyEvents, useAppState } from '../appState.ts'
 import { useClock } from '../clock.ts'
 import { EventsStatus } from '../feed/EventsStatus.tsx'
+import { YourPeople } from '../pods/YourPeople.tsx'
 import { EventWhen } from '../ui/EventWhen.tsx'
 
 /** The person's own plans: events they're going to and events they saved. Owner-only. */
@@ -27,14 +28,17 @@ export function PlansPage() {
       {events.status !== 'ready' ? (
         <EventsStatus />
       ) : (
-        <div className="pair">
-          <PlanList
-            heading="Going"
-            events={going}
-            empty="Nothing yet. When you register for an event, tell Firefly you’re going and it shows up here."
-          />
-          <PlanList heading="Saved" events={saved} empty="Events you save show up here." />
-        </div>
+        <>
+          <div className="pair">
+            <PlanList
+              heading="Going"
+              events={going}
+              empty="Nothing yet. When you register for an event, tell Firefly you’re going and it shows up here."
+            />
+            <PlanList heading="Saved" events={saved} empty="Events you save show up here." />
+          </div>
+          <YourPeople />
+        </>
       )}
     </div>
   )

@@ -1,10 +1,12 @@
 import { render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { createMemoryRouter, RouterProvider } from 'react-router'
+import { saveConnections } from '../data/connections.ts'
 import { savePlans } from '../data/plans.ts'
 import { saveProfile } from '../data/profile.ts'
 import { ClockContext } from '../features/app/clock.ts'
 import type { Plans } from '../lib/plans.ts'
+import type { ConnectionsState } from '../lib/pods/connections.ts'
 import type { Profile } from '../lib/profile.ts'
 import { routes } from '../routes.tsx'
 import { makeProfile, NOW } from './fixtures.ts'
@@ -20,14 +22,16 @@ export const vancouverProfile = (overrides: Partial<Profile> = {}) =>
 interface Options {
   profile?: Profile
   plans?: Plans
+  connections?: ConnectionsState
   now?: Date
 }
 
 /** Renders the real routes at `path`, with stored answers and a fixed clock. */
-export function renderApp(path: string, { profile, plans, now = NOW }: Options = {}) {
+export function renderApp(path: string, { profile, plans, connections, now = NOW }: Options = {}) {
   localStorage.clear()
   if (profile) saveProfile(profile)
   if (plans) savePlans(plans)
+  if (connections) saveConnections(connections)
   const router = createMemoryRouter(routes, { initialEntries: [path] })
   const user = userEvent.setup()
   const view = render(
