@@ -6,7 +6,7 @@
 
 web
 
-One React + Vite codebase ships as the web app and, wrapped with Capacitor (planned, not added yet), as the iOS and Android apps. Confirmed 2026-11-25: **one consistent Firefly design language on every platform**, not per-OS adaptive styling. Platform conventions are still respected where users expect them: safe areas, back gestures, the native share sheet, and 44×44 pt touch targets. The phone is the primary device for every attendee-facing surface; design at 360 px first, then up to about 440 px, then scale up.
+One React + Vite codebase ships as the web app and, wrapped with Capacitor (added 2026-11-27), as the iOS and Android apps. Confirmed 2026-11-25: **one consistent Firefly design language on every platform**, not per-OS adaptive styling. Platform conventions are still respected where users expect them: safe areas, back gestures, the native share sheet, and 44×44 pt touch targets. The phone is the primary device for every attendee-facing surface; design at 360 px first, then up to about 440 px, then scale up.
 
 ## Users
 
