@@ -1,5 +1,5 @@
 import { FireflyMark } from '../../components/FireflyMark.tsx'
-import { ArrowIcon } from './ArrowIcon.tsx'
+import { ArrowIcon } from '../../components/ArrowIcon.tsx'
 
 /** Block header: mark cell, name, section links (wider screens), invite cell. */
 export function SiteHeader() {

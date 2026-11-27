@@ -1,7 +1,11 @@
-import { LandingPage } from './features/landing/LandingPage.tsx'
+import { createBrowserRouter } from 'react-router'
+import { RouterProvider } from 'react-router/dom'
+import { routes } from './routes.tsx'
+
+const router = createBrowserRouter(routes)
 
 function App() {
-  return <LandingPage />
+  return <RouterProvider router={router} />
 }
 
 export default App
