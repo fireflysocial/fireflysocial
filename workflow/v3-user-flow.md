@@ -2,6 +2,8 @@
 
 > **Update 2026-11-25:** [v4-user-flow.md](v4-user-flow.md) is now the spec for launch: no hosts, no groups, an easy onboarding and a personal feed of events found across the city. This v3 flow remains the reference for the next phase (pods, the Firefly corner, picks, chat, check-in) and for hosts (long-term). It will be redesigned on top of v4.
 
+> **Update 2026-11-27:** the group features (pods, the pod reveal, picks, sharing socials) are redesigned in [connection-flow.md](connection-flow.md): pods form by each person's intent for the event, and pod-mates see intents and interests only. Where the two differ, connection-flow.md is the newer draft. Hosts, check-in, the room, circles and trust and safety operations below are unchanged.
+
 > Builds on the v2 draft ([v1-user-flow.md](v1-user-flow.md)) and folds in the proposed fix for every gap in [open-gaps.md](open-gaps.md). Each fix is tagged with its gap number, e.g. **[#11]**. The [gap traceability table](#gap-traceability) at the end maps all 52 gaps to where they're handled.
 
 **Platforms:** Firefly ships as **iOS and Android apps** (App Store and Google Play) plus a web version, from one codebase. Push notifications, QR check-in and the in-app browser in this flow assume the native apps. See [engineering/quality-and-ci.md §0](../engineering/quality-and-ci.md#0-platforms-ios-android-and-web).
