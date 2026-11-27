@@ -1,6 +1,6 @@
 # Firefly
 
-Firefly brings together people who share a sense of purpose, at the events happening across their city: startup meetups, run clubs, gallery openings, hackathons, language exchanges and many other events where people get to talk (concerts, loud bars and large venues are left out of the feed). People come for friendship, a professional network, collaborators or a co-founder. It is built for many cities across several countries, starting with Vancouver. This repository holds the research, the product design and the app: **iOS and Android apps plus a web version**, built from one React + TypeScript + Vite codebase with Supabase, wrapped for the app stores with Capacitor (planned). See [engineering/quality-and-ci.md §0](engineering/quality-and-ci.md#0-platforms-ios-android-and-web) for the platform plan.
+Firefly brings together people who share a sense of purpose, at the events happening across their city: startup meetups, run clubs, gallery openings, hackathons, language exchanges and many other events where people get to talk (concerts, loud bars and large venues are left out of the feed). People come for friendship, a professional network, collaborators or a co-founder. It is built for many cities across several countries, starting with Vancouver. This repository holds the research, the product design and the app: **iOS and Android apps plus a web version**, built from one React + TypeScript + Vite codebase with Supabase, wrapped for the app stores with Capacitor. See [engineering/quality-and-ci.md §0](engineering/quality-and-ci.md#0-platforms-ios-android-and-web) for the platform plan.
 
 **Launch scope (decided 2026-11-25):** an easy onboarding and a personal event feed, with events found by AI-assisted search ([workflow/v4-user-flow.md](workflow/v4-user-flow.md)). Groups, the Firefly corner, picks and chat come next; hosts are long-term ([workflow/v3-user-flow.md](workflow/v3-user-flow.md)).
 
@@ -8,7 +8,7 @@ Firefly brings together people who share a sense of purpose, at the events happe
 
 - **Built:** tooling and CI, and the public landing page (`src/features/landing/`), frontend only. Its invite form is not connected yet: `src/data/invites.ts` is a stub that always fails honestly until the waitlist table lands.
 - **Next:** onboarding, the event pipeline and the personal feed. No attendee features exist yet.
-- **Not added yet:** Capacitor and the `ios/` / `android/` projects. Supabase is initialised locally with no migrations.
+- **Native apps:** Capacitor 8 with `ios/` and `android/` projects (2026-11-27). Run `npm run cap:ios` or `npm run cap:android` (needs Xcode / Android Studio). Supabase is initialised locally with no migrations.
 
 ## Pitch deck
 

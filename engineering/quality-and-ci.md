@@ -2,9 +2,9 @@
 
 Status: **Phases 1, 2 and 4 are implemented** (scaffold, local quality tooling, CI, E2E). Supabase is initialised locally with a pgTAP guardrail test, but no remote project, keys or migrations exist yet (Phase 3). Branch rules and repo security settings are applied in the GitHub UI (see §6).
 
-**Platforms:** **iOS and Android apps** (App Store and Google Play) plus a **web** version, all built from one React codebase. The native apps wrap the web build with [Capacitor](https://capacitorjs.com/) (planned, see §0).
+**Platforms:** **iOS and Android apps** (App Store and Google Play) plus a **web** version, all built from one React codebase. The native apps wrap the web build with [Capacitor](https://capacitorjs.com/) (added 2026-11-27, see §0).
 
-**Stack:** React + TypeScript (Vite), Capacitor (planned), Supabase (Postgres, Auth, Storage), Vitest, Playwright, GitHub Actions, CodeRabbit. **Package manager:** npm. **Node:** 24 LTS (pinned in `.nvmrc`; run `nvm use`).
+**Stack:** React + TypeScript (Vite), Capacitor 8, Supabase (Postgres, Auth, Storage), Vitest, Playwright, GitHub Actions, CodeRabbit. **Package manager:** npm. **Node:** 24 LTS (pinned in `.nvmrc`; run `nvm use`).
 
 ### Version pins to revisit
 | Pin | Why | Revisit when |
@@ -30,8 +30,15 @@ Firefly is a phone-first product: QR check-in at the event, push notifications f
 - Native features come through Capacitor plugins: **push notifications** (APNs / FCM), **camera** (QR check-in, profile photos), **secure storage** (auth session), **deep links** (auth redirects, event links), in-app browser (register-and-return flow).
 - Escape hatch: if Firefly outgrows Capacitor, `src/lib` (logic) and `src/data` (Supabase access) carry over to React Native unchanged; only the UI is rewritten.
 
-### When Capacitor is added
-**Right before building auth or QR check-in**, whichever comes first. Until then there's nothing native to test, and an untested `ios/` / `android/` project would only drift. Adding it to the existing Vite app is a small step (`@capacitor/core`, `@capacitor/cli`, `npx cap add ios`, `npx cap add android`, `webDir: 'dist'`).
+### Capacitor setup (added 2026-11-27)
+The original plan was to add it right before auth or QR check-in. It was added earlier, with the launch flow, so the apps are deployable from the start (decided 2026-11-27).
+
+- **Config:** `capacitor.config.ts`: app ID `com.fireflysocial.app` (permanent once in the stores), app name Firefly, `webDir: 'dist'`, black background so there's no white flash, iOS `contentInset: 'never'` because safe areas are handled in CSS.
+- **Projects:** `ios/` (Swift Package Manager, no CocoaPods) and `android/` are committed. Their copied web assets and generated config files are git-ignored by Capacitor's own `.gitignore` files. Prettier and ESLint skip both folders.
+- **Plugins:** `@capacitor/browser` (the in-app browser for "Register ↗") and `@capacitor/app` (knowing when the person comes back). Neither asks for a native permission.
+- **Workflow:** `npm run cap:sync` after any web change you want in the apps; `npm run cap:ios` / `npm run cap:android` sync and open Xcode / Android Studio. Building needs Xcode and Android Studio locally.
+- **Tests:** plugin modules are mocked at the import boundary in unit tests (`src/test/capacitorMocks.ts`; Capacitor's plugin proxies can't be spied on). Native-only behaviour is checked by hand on the iOS Simulator and Android Emulator until native CI exists.
+- **Not done yet:** Firefly app icons and splash screens (still Capacitor's defaults), deep links, push, secure storage.
 
 ### Build rules that apply now (so the apps drop in cleanly)
 - **Design mobile-first:** phone width first, 44×44 pt minimum touch targets, safe-area insets (`viewport-fit=cover` + `env(safe-area-inset-*)`).
@@ -322,8 +329,9 @@ e2e/                         # Playwright specs
 
 **Phase 6: iOS and Android apps**
 - [x] Mobile-first groundwork: `viewport-fit=cover` + safe-area CSS, mobile Playwright projects, horizontal-scroll check, `dev:host`
-- [ ] `src/lib/platform/` wrapper (created with the first device feature: camera, push or storage)
-- [ ] Add Capacitor, `ios/` and `android/` projects (when auth or check-in starts)
+- [x] `src/lib/platform/` wrapper (2026-11-27): external links in the in-app browser, returning to the app
+- [x] Add Capacitor 8, `ios/` and `android/` projects (2026-11-27)
+- [ ] Firefly app icons and splash screens
 - [ ] Push notifications (APNs + FCM), camera QR scanning, deep links, secure session storage
 - [ ] Apple Developer and Google Play organisation accounts
 - [ ] Store requirements: account deletion, privacy labels / data safety, content rating, Sign in with Apple if needed
@@ -335,7 +343,6 @@ e2e/                         # Playwright specs
 
 - **Routing / data fetching:** e.g. React Router + TanStack Query
 - **Hosting for previews:** Vercel / Netlify / Cloudflare Pages
-- **App ID / bundle ID** (e.g. `com.fireflysocial.app`): permanent once published to the stores; confirm the org and domain first
 - **Long-term role of the web version:** attendee web app, host tools only, or development/pilot only
 - **Push provider:** Capacitor push plugin (APNs/FCM) sending from Supabase Edge Functions, vs a hosted service
 - **Native build pipeline:** Xcode Cloud / Fastlane / a hosted service

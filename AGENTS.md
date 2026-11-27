@@ -12,7 +12,7 @@ Firefly brings together people who share a sense of purpose, at the events happe
 
 **Launch scope (decided 2026-11-25):** an extremely easy onboarding and a personal event feed, with events found by AI-assisted search. No hosts and no groups at launch; groups, the Firefly corner, picks and chat come next, and hosts are long-term.
 
-**Platforms: iOS and Android apps (App Store and Google Play) plus a web version, all from this one React codebase.** The native apps wrap the Vite web build with Capacitor (planned, not added yet). Treat the phone as the primary device for every attendee-facing feature. See section 9 ("Mobile-first and cross-platform") and [engineering/quality-and-ci.md §0](engineering/quality-and-ci.md#0-platforms-ios-android-and-web).
+**Platforms: iOS and Android apps (App Store and Google Play) plus a web version, all from this one React codebase.** The native apps wrap the Vite web build with Capacitor (added 2026-11-27; app ID `com.fireflysocial.app`). Treat the phone as the primary device for every attendee-facing feature. See section 9 ("Mobile-first and cross-platform") and [engineering/quality-and-ci.md §0](engineering/quality-and-ci.md#0-platforms-ios-android-and-web).
 
 Key documents (read the relevant ones before building a feature):
 
@@ -35,7 +35,7 @@ Key documents (read the relevant ones before building a feature):
 
 - **Built:** the public landing page (`src/features/landing/`), frontend only. Its invite form is UI only: `src/data/invites.ts` is a stub that always fails honestly until the waitlist table, RLS and pgTAP tests land in a follow-up PR. Don't deploy the page publicly before then.
 - **Next to build:** onboarding, the event pipeline and the personal feed ([v4](workflow/v4-user-flow.md)). No attendee features exist yet.
-- **Capacitor and the `ios/` / `android/` projects don't exist yet.** They're added right before auth or QR check-in is built. Until then, write code so it will work inside the native apps unchanged (section 9).
+- **Capacitor 8 is set up** (added 2026-11-27): `capacitor.config.ts`, the generated `ios/` and `android/` projects, and the Browser and App plugins (no native permissions beyond Android's default internet access). Building the apps needs Xcode (iOS) and Android Studio (Android) on the developer's machine; CI builds the web only. App icons and splash screens are still Capacitor's defaults.
 - Supabase is initialised locally (`supabase/`) with no migrations. The cloud project exists, and its URL and publishable key go in `.env.local` (git-ignored).
 - The flow documents describe **proposed** behaviour, not implemented behaviour. Don't describe a design as shipped.
 
@@ -46,7 +46,7 @@ Key documents (read the relevant ones before building a feature):
 | Area                   | Choice                                                                                                                |
 | ---------------------- | --------------------------------------------------------------------------------------------------------------------- |
 | UI                     | React 19, TypeScript, Vite 8                                                                                          |
-| Native apps            | Capacitor wrapping the web build for iOS and Android (**planned**)                                                    |
+| Native apps            | Capacitor 8 wrapping the web build for iOS and Android (`@capacitor/browser`, `@capacitor/app`)                       |
 | Backend                | Supabase (Postgres, Auth, Storage, Edge Functions)                                                                    |
 | Unit / component tests | Vitest 5 + React Testing Library + jest-dom (jsdom)                                                                   |
 | E2E tests              | Playwright on mobile Safari (iPhone 17, WebKit), mobile Chrome (Pixel 10) and desktop Chrome + `@axe-core/playwright` |
@@ -78,6 +78,8 @@ Run `nvm use` once per shell first. On older Node (e.g. 22), Vitest refuses to s
 | `npm run dev:host`                        | Dev server reachable from a phone or tablet on the same Wi-Fi (see engineering/quality-and-ci.md §3.6) |
 | `npm run build`                           | Typecheck + production build                                                                           |
 | `npm run preview`                         | Serve the production build                                                                             |
+| `npm run cap:sync`                        | Build the web app and copy it and the plugins into `ios/` and `android/`                               |
+| `npm run cap:ios` / `npm run cap:android` | Sync, then open the project in Xcode / Android Studio to run it on a simulator, emulator or device     |
 | `npm run typecheck`                       | `tsc -b`                                                                                               |
 | `npm run lint` / `npm run lint:fix`       | ESLint, **zero warnings allowed**                                                                      |
 | `npm run format` / `npm run format:check` | Prettier                                                                                               |
@@ -111,10 +113,11 @@ src/
   data/                 # typed Supabase data-access functions (invites.ts is a stub for now)
   components/           # shared UI components (FireflyMark)
   features/<feature>/   # feature-scoped components, hooks, tests (landing/ exists)
-  lib/platform/         # the ONLY place that touches device features: camera, push, storage, share, links (planned)
+  lib/platform/         # the ONLY place that touches device features: external links, returning to the app (camera, push, storage come later)
   types/database.ts     # GENERATED by `npm run db:types`; never edit by hand
 e2e/                    # Playwright specs (*.spec.ts)
-ios/ android/           # native projects generated by Capacitor (planned; don't hand-edit generated files)
+ios/ android/           # native projects generated by Capacitor (edit native settings in Xcode / Android Studio; never edit copied web assets)
+capacitor.config.ts     # app ID, app name, webDir
 supabase/
   config.toml
   migrations/           # timestamped SQL migrations, the only way the schema changes
@@ -250,7 +253,7 @@ The same code runs in a mobile browser, the iOS app (WKWebView) and the Android 
 - **Respect safe areas** (notch, home indicator). `src/index.css` defines `--safe-top`, `--safe-right`, `--safe-bottom` and `--safe-left` (with `viewport-fit=cover` in `index.html`); use those variables for anything fixed to a screen edge, like headers, tab bars and bottom sheets.
 - **Use `dvh`, not `vh`,** for full-height layouts, so they fit when mobile browser toolbars show and hide.
 - Every E2E spec runs at iPhone 17 (402 px) and Pixel 10 (360 px) widths. Add a horizontal-scroll check for new pages, and spot-check UI changes on a real device (`npm run dev:host`).
-- **Device features go through `src/lib/platform/` only:** camera, push notifications, secure storage, share sheet, haptics, opening external links or the in-app browser. Feature code imports from there and never calls `navigator.*`, `window.open`, or Capacitor plugins directly. Each wrapper has a web implementation now and gets a native one when Capacitor is added.
+- **Device features go through `src/lib/platform/` only:** camera, push notifications, secure storage, share sheet, haptics, opening external links or the in-app browser. Feature code imports from there and never calls `navigator.*`, `window.open`, or Capacitor plugins directly. Each wrapper has a web and a native implementation; links to outside pages use `src/components/ExternalLink.tsx`.
 - **No browser-only assumptions:** no `window.open` popups, no web push as a substitute for native push, no cookie-based auth, no `alert`/`confirm`/`prompt` dialogs.
 - **Auth must survive the native apps:** prefer phone OTP (the spec's verification method). Any magic-link or OAuth flow must return via a deep link. Store the Supabase session through a pluggable storage adapter so it can move to secure native storage.
 - **Assume a flaky network.** Phones lose signal at events: show loading and offline states, and make check-in and picks safe to retry (idempotent).
