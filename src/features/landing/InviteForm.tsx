@@ -1,7 +1,7 @@
 import { useId, useState, type SubmitEvent } from 'react'
 import { InvitesNotOpenError, type RequestInvite } from '../../data/invites.ts'
 import { checkEmail } from '../../lib/email.ts'
-import { ArrowIcon } from './ArrowIcon.tsx'
+import { ArrowIcon } from '../../components/ArrowIcon.tsx'
 
 type Status =
   | { kind: 'idle' }

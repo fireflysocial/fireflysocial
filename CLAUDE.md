@@ -34,7 +34,8 @@ Key documents (read the relevant ones before building a feature):
 ### Current status
 
 - **Built:** the public landing page (`src/features/landing/`), frontend only. Its invite form is UI only: `src/data/invites.ts` is a stub that always fails honestly until the waitlist table, RLS and pgTAP tests land in a follow-up PR. Don't deploy the page publicly before then.
-- **Next to build:** onboarding, the event pipeline and the personal feed ([v4](workflow/v4-user-flow.md)). No attendee features exist yet.
+- **Built (frontend, 2026-11-27): the v4 launch flow** under `/app` (`src/features/app/`): onboarding, the personal feed, the event page with register-and-return, Plans, and You (with delete my data). It runs on **stubs**: made-up example events (`src/data/exampleEvents.ts`, always labelled in the UI) and answers stored on the device only (`src/data/profile.ts`, `src/data/plans.ts`). Phone sign-up (v4 step 2), reminders and the after-event push aren't built.
+- **Next to build:** the backend for the launch flow (auth, profiles and the owner-only going list with RLS and expiry), and the event pipeline ([v4](workflow/v4-user-flow.md)).
 - **Capacitor 8 is set up** (added 2026-11-27): `capacitor.config.ts`, the generated `ios/` and `android/` projects, and the Browser and App plugins (no native permissions beyond Android's default internet access). Building the apps needs Xcode (iOS) and Android Studio (Android) on the developer's machine; CI builds the web only. App icons and splash screens are still Capacitor's defaults.
 - Supabase is initialised locally (`supabase/`) with no migrations. The cloud project exists, and its URL and publishable key go in `.env.local` (git-ignored).
 - The flow documents describe **proposed** behaviour, not implemented behaviour. Don't describe a design as shipped.
@@ -45,7 +46,7 @@ Key documents (read the relevant ones before building a feature):
 
 | Area                   | Choice                                                                                                                |
 | ---------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| UI                     | React 19, TypeScript, Vite 8                                                                                          |
+| UI                     | React 19, TypeScript, Vite 8, React Router 8                                                                          |
 | Native apps            | Capacitor 8 wrapping the web build for iOS and Android (`@capacitor/browser`, `@capacitor/app`)                       |
 | Backend                | Supabase (Postgres, Auth, Storage, Edge Functions)                                                                    |
 | Unit / component tests | Vitest 5 + React Testing Library + jest-dom (jsdom)                                                                   |
@@ -64,7 +65,7 @@ Key documents (read the relevant ones before building a feature):
 - **TypeScript stays on `~6.0`.** typescript-eslint doesn't support TypeScript 7 yet ([typescript-eslint#10940](https://github.com/typescript-eslint/typescript-eslint/issues/10940)). Upgrading breaks `npm ci` and every CI job. Migrate only once typescript-eslint ships TS 7 support.
 - **`@types/node` stays on 24**, matching the Node major in `.nvmrc`.
 - **The `overrides` entry for `eslint-plugin-jsx-a11y`** in `package.json` lets it install alongside ESLint 10, which its peer range doesn't list yet. Its rules have been verified to run. Remove it when the plugin officially supports ESLint 10.
-- Don't add or swap frameworks or major libraries (state management, router, UI kit, ORM, cross-platform framework) without asking. Capacitor is the chosen native wrapper; don't introduce React Native, Expo, Ionic UI components or a PWA-only approach. Routing and data fetching are still open decisions (likely React Router + TanStack Query).
+- Don't add or swap frameworks or major libraries (state management, router, UI kit, ORM, cross-platform framework) without asking. Capacitor is the chosen native wrapper; don't introduce React Native, Expo, Ionic UI components or a PWA-only approach. Routing is React Router 8 (decided 2026-11-27; routes in `src/routes.tsx`). Data fetching is still open (likely TanStack Query, once there's a real backend).
 
 ---
 
@@ -110,9 +111,10 @@ src/
   assets/fonts/         # self-hosted WOFF2 fonts (Host Grotesk, SIL OFL)
   lib/                  # pure logic, no React/Supabase imports
     fireflies/          # landing-page fields: seeded random and noise, firefly swarm, hero meadow, Kuramoto sync, pod, scroll story
-  data/                 # typed Supabase data-access functions (invites.ts is a stub for now)
+  data/                 # data access; stubs for now (invites, example events, on-device profile and plans)
   components/           # shared UI components (FireflyMark)
-  features/<feature>/   # feature-scoped components, hooks, tests (landing/ exists)
+  features/<feature>/   # feature-scoped components, hooks, tests (landing/, app/)
+  routes.tsx            # every screen and its URL (the app lives under /app)
   lib/platform/         # the ONLY place that touches device features: external links, returning to the app (camera, push, storage come later)
   types/database.ts     # GENERATED by `npm run db:types`; never edit by hand
 e2e/                    # Playwright specs (*.spec.ts)
