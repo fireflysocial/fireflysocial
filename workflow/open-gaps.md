@@ -101,3 +101,13 @@ Each gap: what's wrong → proposed fix → how we'll validate it (research sour
 | 47 | **Vancouver organizer list incomplete** | H | P1 | Build [organizers.md](../research/organizers.md) table: 30 recurring Vancouver events across categories. **7 listed so far** (mostly running, walking, and newcomer groups; see #15 on category coverage). | List complete. 10 contacted. |
 | 48 | **Unverified assumption that people will mark themselves "open to meet" publicly** | 2, 4 | P1 | Concierge MVP: a manual pilot with a printed sign and a Google Form before building the app. | % of attendees who opt in when asked at the door. |
 | 49 | **Multi-country readiness:** Firefly is meant to run in many cities across several countries (decided 2026-11-27), but all research, organizers and examples are from Vancouver | — | P1 | Keep every city-specific value (timezone, currency, neighbourhoods, budget defaults, language) as per-city data. Before each new country: privacy-law review (e.g. GDPR, US state laws), age rules, app store disclosures, and local desk research plus first-party interviews, since Vancouver evidence doesn't transfer automatically. | Second city chosen with its own evidence. No hard-coded city in code. |
+
+## H. Connection flow
+
+Added 2026-11-27 with [connection-flow.md](connection-flow.md). Step letters refer to that draft.
+
+| # | Gap | Step | P | Proposed fix | How we'll validate |
+|---|-----|------|---|--------------|--------------------|
+| 53 | **Intent mismatch:** people going to the same event for different reasons (a co-founder search, a run-club friendship) end up in one pod | B, C | P1 | Ask each person's intent per event, prefilled from onboarding. Form pods by intent first, then interests. Honest "No pod this time" when nobody is compatible. | Pod rating and mutual "keep meeting" rate, by intent pair. |
+| 54 | **Re-identification from intent cards:** at a small event, an intent plus interests can point to one person | D | P1 | Intents and cards visible only inside the pod, never to the whole event. Minimum opted-in count before pods form. No name, photo or gender on cards. Prompt answers checked for contact details. | Threat-model gate (#8) covers intent cards. |
+| 55 | **Finding a pod without names or photos** | D, E | P0 (later phase) | Fixed meeting point and time, a pod word, a Firefly sign or sticker. Pilot a variant that shows first names before the event (v3 showed name and photo, #20). | % of pod members who meet within 10 min of the set time (v3 target ≥ 80%). |

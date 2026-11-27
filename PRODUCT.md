@@ -36,7 +36,7 @@ Success at launch: onboarding completed in under 2 minutes, a feed that feels pe
 - **Browsing:** a short, ranked list of this week's events, each saying why it's there, with one-tap "More like this" / "Not for me".
 - **Going:** tap through to the event's own page in the in-app browser, register there, come back and confirm.
 - **Around the event:** an opt-in reminder before, one optional "Did you go?" after.
-- **Later phase:** groups for the same event, the Firefly corner at the venue, picks and chat (v3 spec, to be redesigned).
+- **Later phase:** each person says what they want out of an event they're going to; pods form by that intent; pod-mates see intents and interests only (no name, photo or gender) before meeting at the Firefly corner; both confirm they met; a mutual "keep meeting" lets each choose which socials to share ([workflow/connection-flow.md](workflow/connection-flow.md), draft).
 - **Roles at launch:** attendee, Firefly team.
 
 ## Capabilities and Constraints

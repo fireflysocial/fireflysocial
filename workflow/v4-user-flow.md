@@ -63,26 +63,27 @@ Firefly finds events itself instead of waiting for hosts to list them.
 
 ### 0. Onboarding (target: under 2 minutes, value on the last screen)
 
-The goal is to show a feed that feels personal before the person has done any real work. Every screen has one job, and only the essentials are required.
+The goal is to show a feed that feels personal before the person has done any real work. Every screen has one job, and only the essentials are required. Proposal (2026-11-27): pace it like Duolingo's onboarding (one question per screen, a visible progress bar, value at the end). The aim is that it feels quick, not that it is long.
 
 1. **Welcome:** one sentence on what Firefly is, then **Get started**.
 2. **Sign up:** phone number with a one-time code (works inside the iOS and Android apps; one account per number, v3 #28).
 3. **18+ and the respect pledge:** "I'm 18 or older" plus "I'm here to meet people with good intent. No selling, no spam, no unwanted advances." The full age-assurance method is still a pre-pilot gate (v3 #32).
 4. **First name and city:** the first name is used to greet the person (no last name). The city is picked from the cities Firefly runs in (a list, never GPS); while Vancouver is the only city, this choice is skipped.
-5. **Interests (the core screen):** tap at least 3 from a set of chips, grouped loosely (Tech & startups, Careers & networking, Arts & music, Active, Games, Creative, Food & drink, Learning, Outdoors, Community). Chips use everyday words ("startup meetups", "run clubs", "pottery").
-6. **When you're free:** weekday evenings / weekend days / weekend evenings (tap any).
-7. **Optional, skippable together on one screen:**
+5. **What brings you to Firefly?** (added 2026-11-27, tap any): new friends / a professional network / collaborators / a co-founder / just good events. Launch purpose: ranking. Someone looking for a co-founder sees founder meetups and hackathons higher, and the card says so ("Because you're looking for a co-founder"). It's private and never shown to anyone. When group features launch, it becomes the default intent for each event ([connection-flow.md](connection-flow.md)).
+6. **Interests (the core screen):** tap at least 3 from a set of chips, grouped loosely (Tech & startups, Careers & networking, Arts & music, Active, Games, Creative, Food & drink, Learning, Outdoors, Community). Chips use everyday words ("startup meetups", "run clubs", "pottery").
+7. **When you're free:** weekday evenings / weekend days / weekend evenings (tap any).
+8. **Optional, skippable together on one screen:**
    - Neighbourhoods you'd happily go to (a list, never GPS)
    - Budget, defaulting to free or low-cost in the city's currency (under $20 in Vancouver; v3 #16)
    - "New to [city]?" (yes / no), e.g. "New to Vancouver?". Launch purpose: newcomer-welcoming events (newcomer meetups, language exchanges, "new members welcome" nights) rank higher for people who say yes. No arrival date is asked at launch.
    - Accessibility needs: step-free, quieter venues, captions or hearing support (private, v3 #42)
-8. **Your feed:** onboarding ends on the first personal feed, so the first thing the person sees is the value.
+9. **Your feed:** onboarding ends on the first personal feed, so the first thing the person sees is the value.
 
 **Not collected at launch:** photo, selfie check, pod preferences, socials. They come back, asked at the moment they're needed, when group features launch. Notifications are requested only when the person first saves an event or says they're going, never during onboarding.
 
 ### 1. The personal feed
 
-- **This week's events, ranked for this person** by interests, free times, budget, neighbourhoods and accessibility needs.
+- **This week's events, ranked for this person** by what brings them to Firefly, interests, free times, budget, neighbourhoods and accessibility needs.
 - **Accessibility is never assumed.** An event whose page confirms a need the person set ranks higher and says so ("Step-free, per the organiser"). An event whose page says nothing is still shown, labelled "Accessibility not listed", never presented as confirmed. An event whose page states it doesn't meet a set need (for example, stairs only) is hidden for that person.
 - **Every card says why it's there:** "Because you like board games · Thursday evening · Free".
 - **One-tap feedback:** **More like this** / **Not for me** (with an optional reason: "too far", "too expensive", "not my thing"). Feedback updates the ranking right away.
@@ -111,7 +112,7 @@ Firefly can't see other sites' guest lists, so going is self-reported in two ste
 
 ## Later (not at launch)
 
-Designed in [v3-user-flow.md](v3-user-flow.md) and to be redesigned on top of the launch flow:
+The group features are redesigned on top of this flow in [connection-flow.md](connection-flow.md) (draft, 2026-11-27): people say what they want out of each event they're going to, pods form by that intent, pod-mates see intents and interests only (never gender, photo or personal details), both people confirm they met, and a mutual "keep meeting" lets each person choose which socials to share. Hosts, check-in and the room are still as designed in [v3-user-flow.md](v3-user-flow.md):
 
 - **Groups of people going to the same event** (pods), and their size.
 - **The Firefly corner:** where Firefly removes the friction of approaching. A set meeting point, a reveal before the event, an icebreaker. This is where the product's real job begins, so it gets its own design pass.
@@ -142,5 +143,6 @@ All targets are proposals to confirm with real users.
 - **Source terms:** the scraping reversal above, before launch.
 - **Age assurance** method (v3 #32, a pre-pilot gate).
 - **Retention** for the going list and feedback.
-- **Group size** and when group features start.
+- **Group size** and when group features start (see [connection-flow.md](connection-flow.md#open-decisions)).
+- **Sign up before or after the first feed** (proposal, 2026-11-27): Duolingo asks for an account only after the first lesson. Firefly could show the feed first and ask for the phone number when the person first saves an event or says they're going. Answers would stay on the device until then, so nothing is stored before there's an account. Trade-off: the 18+ pledge would also move later.
 - **City rollout:** which cities and countries come after Vancouver, in what order, and what density of events and people a city needs before it opens.

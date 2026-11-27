@@ -19,7 +19,8 @@ Key documents (read the relevant ones before building a feature):
 | Document                                                       | Read it when                                                                                                                                          |
 | -------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [workflow/v4-user-flow.md](workflow/v4-user-flow.md)           | Building any user-facing feature. This is the **current product spec** for launch: the event pipeline, onboarding, the personal feed, going, metrics. |
-| [workflow/v3-user-flow.md](workflow/v3-user-flow.md)           | Building group features (pods, the Firefly corner, picks, chat, check-in) or host features. Next phase and long-term; to be redesigned on top of v4.  |
+| [workflow/connection-flow.md](workflow/connection-flow.md)     | Building group features: intent per event, pods, the pod reveal, "We met", picks and sharing socials. Next phase; redesigns v3's group flow on v4.    |
+| [workflow/v3-user-flow.md](workflow/v3-user-flow.md)           | Building host features, check-in, the room or circles. Long-term; its group flow is superseded by connection-flow.md where they differ.               |
 | [workflow/open-gaps.md](workflow/open-gaps.md)                 | A flow step references a gap number like **[#11]**.                                                                                                   |
 | [research/safety-privacy.md](research/safety-privacy.md)       | Touching profiles, visibility, check-in, picks, chat, photos, reports, blocking, or data retention.                                                   |
 | [engineering/quality-and-ci.md](engineering/quality-and-ci.md) | Changing tooling, tests, CI, or the Supabase workflow.                                                                                                |
@@ -29,7 +30,7 @@ Key documents (read the relevant ones before building a feature):
 | `.impeccable/surfaces/*.md`                                    | Changing a designed surface. Each holds that page's brief and direction contract (e.g. the landing page's).                                           |
 | [pitch/README.md](pitch/README.md)                             | Changing anything a pitch slide states: positioning, launch scope, status, metrics, research. Maps each slide to the docs it depends on.              |
 
-`workflow/v1-user-flow.md` is the older v2 draft (the filename was kept). Use v4 for launch and v3 for later group and host features.
+`workflow/v1-user-flow.md` is the older v2 draft (the filename was kept). Use v4 for launch, connection-flow.md for the next phase's group features, and v3 for hosts, check-in and anything connection-flow.md doesn't cover.
 
 ### Current status
 
