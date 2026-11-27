@@ -25,7 +25,7 @@ describe('event page', () => {
   it('shows the facts, why it’s here, access and the source, labelled as an example', async () => {
     renderApp(path(registered.id), { profile: vancouverProfile() })
     expect(await screen.findByRole('heading', { name: registered.title })).toBeInTheDocument()
-    expect(screen.getByText(/Example event, made up/)).toBeInTheDocument()
+    expect(screen.getByText(/^Made up. Firefly/)).toBeInTheDocument()
     expect(screen.getByText(/^Because you like language exchange · /)).toBeInTheDocument()
     expect(
       screen.getByText('Step-free, per the organiser · Quieter venue, per the organiser'),

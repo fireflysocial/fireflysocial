@@ -27,7 +27,10 @@ export function QuietCards({ events }: { events: readonly CityEvent[] }) {
   const after = afterEventQuestions(plans, events, now)
   if (reminders.length === 0 && after.length === 0) return null
   return (
-    <section className="quiet" aria-label="Waiting for your answer">
+    <section className="quiet" aria-labelledby="quiet-heading">
+      <h2 className="ctx ctx--dusk" id="quiet-heading">
+        Waiting for your answer
+      </h2>
       {reminders.map((event) => (
         <div key={event.id} className="quiet__card">
           <p className="body">

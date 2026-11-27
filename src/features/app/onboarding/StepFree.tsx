@@ -6,10 +6,12 @@ import type { StepProps } from './Onboarding.tsx'
 /** "When you're free" (v4 step 7). */
 export function StepFree({ draft, update }: StepProps) {
   return (
-    <div className="stack">
-      <h1 className="title">When are you usually free?</h1>
-      <p className="a-muted">Tap any.</p>
-      <div className="a-chips" role="group" aria-label="When you’re free">
+    <div className="step">
+      <div className="step__intro stack stack--tight">
+        <h1 className="title">When are you usually free?</h1>
+        <p className="a-muted">Tap any.</p>
+      </div>
+      <div className="step__body a-chips" role="group" aria-label="When you’re free">
         {FREE_TIMES.map((time) => (
           <Chip
             key={time.id}

@@ -2,10 +2,10 @@ import { Link } from 'react-router'
 import type { CityEvent } from '../../../lib/events.ts'
 import { hasEnded, hasStarted } from '../../../lib/events.ts'
 import { isGoing } from '../../../lib/plans.ts'
-import { formatEventWhen } from '../../../lib/time.ts'
 import { readyEvents, useAppState } from '../appState.ts'
 import { useClock } from '../clock.ts'
 import { EventsStatus } from '../feed/EventsStatus.tsx'
+import { EventWhen } from '../ui/EventWhen.tsx'
 
 /** The person's own plans: events they're going to and events they saved. Owner-only. */
 export function PlansPage() {
@@ -27,14 +27,14 @@ export function PlansPage() {
       {events.status !== 'ready' ? (
         <EventsStatus />
       ) : (
-        <>
+        <div className="pair">
           <PlanList
             heading="Going"
             events={going}
             empty="Nothing yet. When you register for an event, tell Firefly you’re going and it shows up here."
           />
           <PlanList heading="Saved" events={saved} empty="Events you save show up here." />
-        </>
+        </div>
       )}
     </div>
   )
@@ -52,16 +52,13 @@ function PlanList({ heading, events, empty }: PlanListProps) {
     <section className="stack stack--tight" aria-label={heading}>
       <h2 className="subtitle">{heading}</h2>
       {events.length === 0 ? (
-        <p className="a-muted">{empty}</p>
+        <p className="a-muted empty-note">{empty}</p>
       ) : (
         <ul className="a-rows">
           {events.map((event) => (
-            <li key={event.id} className="a-row">
-              <div className="label2">
-                <span className="ctx">
-                  {formatEventWhen(new Date(event.startsAt), event.timeZone, city.locale)} ·{' '}
-                  {event.neighbourhood}
-                </span>
+            <li key={event.id} className="a-row a-row--event">
+              <EventWhen event={event} locale={city.locale} />
+              <div className="a-row__body">
                 <Link className="a-row__title" to={`/app/events/${encodeURIComponent(event.id)}`}>
                   {event.title}
                 </Link>

@@ -99,4 +99,21 @@ test.describe('launch flow', () => {
     await expect(page).toHaveURL(/\/app\/start\/welcome$/)
     expect(await page.evaluate(() => localStorage.length)).toBe(0)
   })
+
+  test('navigation is a bottom tab bar on phones and a header on wide screens', async ({
+    page,
+  }) => {
+    await onboard(page)
+    const nav = page.getByRole('navigation', { name: 'Main' })
+    const box = await nav.boundingBox()
+    const viewport = page.viewportSize()
+    if (!box || !viewport) throw new Error('no layout')
+    if (viewport.width >= 900) {
+      expect(box.y).toBe(0)
+      await expect(page.getByText('Ranked by what you told us')).toBeVisible()
+    } else {
+      expect(Math.round(box.y + box.height)).toBe(viewport.height)
+      await expect(page.getByText('Ranked by what you told us')).toBeHidden()
+    }
+  })
 })

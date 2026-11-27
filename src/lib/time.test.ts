@@ -3,6 +3,8 @@ import {
   addLocalDays,
   dayPart,
   dayPartLabel,
+  formatEventDate,
+  formatEventTime,
   formatEventWhen,
   localParts,
   zonedToInstant,
@@ -100,6 +102,17 @@ describe('dayPartLabel', () => {
     expect(dayPartLabel(local(9), zone, 'en-CA')).toBe('Thursday morning')
     expect(dayPartLabel(local(14), zone, 'en-CA')).toBe('Thursday afternoon')
     expect(dayPartLabel(local(19), zone, 'en-CA')).toBe('Thursday evening')
+  })
+})
+
+describe('formatEventDate and formatEventTime', () => {
+  it('give the two halves of the date line separately', () => {
+    const instant = zonedToInstant(
+      { year: 2026, month: 12, day: 3, hour: 19, minute: 30 },
+      'America/Toronto',
+    )
+    expect(formatEventDate(instant, 'America/Toronto', 'en-CA')).toBe('Thu Dec 3')
+    expect(formatEventTime(instant, 'America/Toronto', 'en-CA')).toBe('7:30 p.m.')
   })
 })
 

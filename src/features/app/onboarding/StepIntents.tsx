@@ -6,10 +6,12 @@ import type { StepProps } from './Onboarding.tsx'
 /** "What brings you to Firefly?" (v4 step 5). Private; it ranks the feed. */
 export function StepIntents({ draft, update }: StepProps) {
   return (
-    <div className="stack">
-      <h1 className="title">What brings you to Firefly?</h1>
-      <p className="a-muted">Tap any. This stays private. It helps us pick events for you.</p>
-      <div className="a-chips" role="group" aria-label="What brings you to Firefly">
+    <div className="step">
+      <div className="step__intro stack stack--tight">
+        <h1 className="title">What brings you to Firefly?</h1>
+        <p className="a-muted">Tap any. This stays private. It helps us pick events for you.</p>
+      </div>
+      <div className="step__body a-chips" role="group" aria-label="What brings you to Firefly">
         {INTENTS.map((intent) => (
           <Chip
             key={intent.id}

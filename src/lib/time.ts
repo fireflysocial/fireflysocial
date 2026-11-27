@@ -119,10 +119,9 @@ export function dayPartLabel(instant: Date, timeZone: string, locale: string): s
   return `${weekday} ${part}`
 }
 
-/** "Thu 3 Dec · 7 p.m." (minutes only when they aren't :00), in the event's zone. */
-export function formatEventWhen(instant: Date, timeZone: string, locale: string): string {
-  const { minute } = localParts(instant, timeZone)
-  const date = new Intl.DateTimeFormat(locale, {
+/** "Thu Dec 3" (in the locale's own order), in the event's zone. */
+export function formatEventDate(instant: Date, timeZone: string, locale: string): string {
+  return new Intl.DateTimeFormat(locale, {
     timeZone,
     weekday: 'short',
     day: 'numeric',
@@ -132,10 +131,19 @@ export function formatEventWhen(instant: Date, timeZone: string, locale: string)
     .filter((part) => part.type !== 'literal')
     .map((part) => part.value.replace(/\.$/, ''))
     .join(' ')
-  const time = new Intl.DateTimeFormat(locale, {
+}
+
+/** "7 p.m." or "7:30 p.m." (minutes only when they aren't :00), in the event's zone. */
+export function formatEventTime(instant: Date, timeZone: string, locale: string): string {
+  const { minute } = localParts(instant, timeZone)
+  return new Intl.DateTimeFormat(locale, {
     timeZone,
     hour: 'numeric',
     ...(minute === 0 ? {} : { minute: '2-digit' }),
   }).format(instant)
-  return `${date} · ${time}`
+}
+
+/** "Thu Dec 3 · 7 p.m.", in the event's zone and locale. */
+export function formatEventWhen(instant: Date, timeZone: string, locale: string): string {
+  return `${formatEventDate(instant, timeZone, locale)} · ${formatEventTime(instant, timeZone, locale)}`
 }

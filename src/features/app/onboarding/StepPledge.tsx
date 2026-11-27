@@ -3,12 +3,14 @@ import type { StepProps } from './Onboarding.tsx'
 /** 18+ and the respect pledge (v4 step 3). Both are required. */
 export function StepPledge({ draft, update }: StepProps) {
   return (
-    <div className="stack">
-      <h1 className="title">Before we start</h1>
-      <p className="a-muted">
-        Firefly is for adults who come to meet people with a shared purpose.
-      </p>
-      <div className="checks">
+    <div className="step">
+      <div className="step__intro stack stack--tight">
+        <h1 className="title">Before we start</h1>
+        <p className="a-muted">
+          Firefly is for adults who come to meet people with a shared purpose.
+        </p>
+      </div>
+      <div className="step__body checks">
         <label className="check">
           <input
             type="checkbox"

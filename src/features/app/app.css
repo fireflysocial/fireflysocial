@@ -1,12 +1,16 @@
 /* The attendee app (/app). Same grammar as the landing page (DESIGN.md): soft black ground, warm
-   neutrals, hairlines instead of cards, square controls, Dusk for picked state, and one Glow per
-   screen. Always dark for now: the light interface isn't designed yet (DESIGN.md, "Don't invent
-   light-mode tokens"). Phone first, from 360px; content stays in one readable column on wide
-   screens. */
+   neutrals, hairlines instead of cards, square controls, Dusk for state, one Glow per screen.
+   Always dark for now: the light interface isn't designed yet (DESIGN.md).
+
+   Phone first, from 360px: one column and a bottom tab bar in thumb reach. From 900px the same
+   navigation becomes a block header like the landing page's, and each screen uses the width:
+   the feed puts a sticky summary beside time-led rows, the event page puts its facts beside a
+   sticky action column, onboarding sets the question beside its answers. */
 
 html:has(.app) {
   color-scheme: dark;
   background: var(--black);
+  scrollbar-color: #2a2a27 var(--black);
 }
 
 .app {
@@ -17,9 +21,12 @@ html:has(.app) {
   --raised: #111111;
   --glow-hover: #e6ff7a;
   --error: #ff9a8a;
-  --gutter: clamp(16px, 4vw, 32px);
-  --tabbar: 64px;
+  --gutter: clamp(16px, 2.4vw, 32px);
+  --gutter-left: calc(var(--gutter) + var(--safe-left));
+  --gutter-right: calc(var(--gutter) + var(--safe-right));
+  --bar: 64px;
   --column: 36rem;
+  --wide: 72rem;
 
   --text-display: clamp(2.25rem, 10vw, 3.5rem);
   --text-title: clamp(1.625rem, 6vw, 2.25rem);
@@ -35,6 +42,12 @@ html:has(.app) {
   font-size: var(--text-body);
   line-height: 1.5;
   font-variant-numeric: tabular-nums;
+  caret-color: var(--glow);
+}
+
+.app ::selection {
+  background: var(--glow);
+  color: var(--black);
 }
 
 .app :focus-visible {
@@ -58,38 +71,60 @@ html:has(.app) {
   width: 100%;
   max-width: calc(var(--column) + 2 * var(--gutter));
   margin: 0 auto;
-  padding: calc(var(--safe-top) + 24px) calc(var(--gutter) + var(--safe-right))
-    calc(var(--tabbar) + var(--safe-bottom) + 32px) calc(var(--gutter) + var(--safe-left));
+  padding: calc(var(--safe-top) + 24px) var(--gutter-right)
+    calc(var(--bar) + var(--safe-bottom) + 32px) var(--gutter-left);
 }
 
 .app-main--bare {
   padding-bottom: calc(var(--safe-bottom) + 32px);
 }
 
-.tabbar {
+/* Phone: a bottom tab bar. The brand cell and the context lines appear on wide screens only. */
+.appbar {
   position: fixed;
   inset: auto 0 0;
   z-index: 10;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
   padding: 0 var(--safe-right) var(--safe-bottom) var(--safe-left);
   background: var(--black);
   border-top: 1px solid var(--rule);
 }
 
-.tabbar__link {
+.appbar__home,
+.appbar__context {
+  display: none;
+}
+
+.appbar__tabs {
+  display: grid;
+  flex: 1;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.appbar__tab {
   display: grid;
   place-items: center;
-  min-height: var(--tabbar);
+  min-height: var(--bar);
   border-top: 2px solid transparent;
   color: var(--muted);
   font-size: var(--text-label);
   text-decoration: none;
+  transition: color 180ms ease-out;
 }
 
-.tabbar__link[aria-current='page'] {
-  border-top-color: var(--ink);
+.appbar__tab:hover,
+.appbar__tab[aria-current='page'] {
   color: var(--ink);
+}
+
+.appbar__tab[aria-current='page'] {
+  border-top-color: var(--ink);
+}
+
+@media (width < 900px) {
+  .wide-only {
+    display: none;
+  }
 }
 
 /* ---------- Type ---------- */
@@ -135,7 +170,12 @@ html:has(.app) {
 
 .ctx {
   font-size: var(--text-label);
+  font-weight: 400;
   line-height: 1.3;
+}
+
+.ctx--dusk {
+  color: var(--dusk);
 }
 
 .small {
@@ -149,11 +189,8 @@ html:has(.app) {
   gap: 4px;
 }
 
-.notice {
-  font-size: var(--text-small);
-  color: var(--muted);
-  border-left: 1px solid var(--dusk);
-  padding-left: 12px;
+.note {
+  max-width: 52ch;
 }
 
 /* ---------- Layout ---------- */
@@ -166,6 +203,13 @@ html:has(.app) {
 
 .stack--tight {
   gap: 12px;
+}
+
+.split,
+.pair {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
 }
 
 /* ---------- Controls ---------- */
@@ -232,7 +276,8 @@ html:has(.app) {
   color: var(--error);
 }
 
-.btn .arrow {
+.btn .arrow,
+.text-link .arrow {
   width: 20px;
   height: 20px;
   flex: none;
@@ -241,6 +286,7 @@ html:has(.app) {
 .text-link {
   display: inline-flex;
   align-items: center;
+  gap: 8px;
   min-height: 44px;
   padding: 0;
   border: 0;
@@ -253,16 +299,20 @@ html:has(.app) {
   text-underline-offset: 4px;
   cursor: pointer;
   align-self: flex-start;
+  transition: text-decoration-color 180ms ease-out;
 }
 
 .text-link:hover {
   text-decoration-color: var(--ink);
 }
 
-.back::before {
-  content: '←';
-  margin-right: 8px;
+.back {
   text-decoration: none;
+  color: var(--muted);
+}
+
+.back:hover {
+  color: var(--ink);
 }
 
 .a-chips {
@@ -340,7 +390,6 @@ html:has(.app) {
   border-radius: 0;
   background: transparent;
   color: var(--ink);
-  caret-color: var(--glow);
   font: inherit;
   font-size: clamp(1.25rem, 5vw, 1.75rem);
   letter-spacing: -0.01em;
@@ -371,14 +420,14 @@ html:has(.app) {
 
 .check input {
   appearance: none;
+  display: grid;
+  place-items: center;
   width: 24px;
   height: 24px;
   margin: 0;
   border: 1px solid var(--rule-strong);
   border-radius: 0;
   background: transparent;
-  display: grid;
-  place-items: center;
   cursor: pointer;
 }
 
@@ -416,6 +465,13 @@ html:has(.app) {
   color: var(--muted);
 }
 
+.a-row__body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
 .a-row__title {
   font-size: var(--text-item);
   line-height: 1.3;
@@ -426,7 +482,13 @@ html:has(.app) {
 
 .a-row__title:hover {
   text-decoration: underline;
+  text-decoration-color: var(--rule-strong);
   text-underline-offset: 4px;
+}
+
+/* "Thu Dec 3 · 7 p.m. · Main Street" on one line on phones; a stacked column on wide screens. */
+.when > span + span::before {
+  content: ' · ';
 }
 
 .reason {
@@ -477,21 +539,30 @@ html:has(.app) {
 .quiet {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.quiet > h2 {
+  padding-bottom: 12px;
 }
 
 .quiet__card {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 16px 0 16px 16px;
-  border-left: 1px solid var(--dusk);
+  padding: 16px 0;
+  border-top: 1px solid var(--rule);
 }
 
 .quiet__card .text-link {
   display: inline;
   min-height: 0;
   font-size: inherit;
+}
+
+.empty-note {
+  padding-top: 16px;
+  border-top: 1px solid var(--rule);
 }
 
 .empty {
@@ -504,7 +575,7 @@ html:has(.app) {
   border-top: 1px solid var(--rule);
 }
 
-/* ---------- The return prompt (a bottom sheet) ---------- */
+/* ---------- The return prompt: a bottom sheet on phones, a centred dialog on wide screens ---------- */
 
 .sheet-backdrop {
   position: fixed;
@@ -522,10 +593,13 @@ html:has(.app) {
   gap: 16px;
   width: 100%;
   max-width: calc(var(--column) + 2 * var(--gutter));
-  padding: 24px calc(var(--gutter) + var(--safe-right)) calc(var(--safe-bottom) + 24px)
-    calc(var(--gutter) + var(--safe-left));
+  padding: 24px var(--gutter-right) calc(var(--safe-bottom) + 24px) var(--gutter-left);
   background: var(--raised);
   border-top: 1px solid var(--rule-strong);
+}
+
+.sheet .title:focus {
+  outline: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -548,11 +622,14 @@ html:has(.app) {
   min-height: 100dvh;
   max-width: calc(var(--column) + 2 * var(--gutter));
   margin: 0 auto;
-  padding: calc(var(--safe-top) + 12px) calc(var(--gutter) + var(--safe-right)) 0
-    calc(var(--gutter) + var(--safe-left));
+  padding: calc(var(--safe-top) + 12px) var(--gutter-right) 0 var(--gutter-left);
 }
 
-.onboarding__top {
+.onboarding--first .onboarding__top {
+  display: none;
+}
+
+.onboarding__progress {
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 16px;
@@ -571,8 +648,11 @@ html:has(.app) {
   transition: width 320ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.onboarding__body {
+.step {
+  display: flex;
   flex: 1;
+  flex-direction: column;
+  gap: 24px;
   padding: 32px 0;
 }
 
@@ -594,4 +674,258 @@ html:has(.app) {
 .lockup__mark {
   width: auto;
   height: 1.6em;
+}
+
+/* ================= Wide screens (900px and up) ================= */
+
+@media (width >= 900px) {
+  .app {
+    --bar: 72px;
+    --text-title: clamp(2.25rem, 3.2vw, 3rem);
+    --text-item: 1.3125rem;
+  }
+
+  .phone-only {
+    display: none;
+  }
+
+  /* The navigation becomes a block header: mark cell, name, two-line tabs. */
+  .appbar {
+    inset: 0 0 auto;
+    height: calc(var(--bar) + var(--safe-top));
+    padding: var(--safe-top) var(--safe-right) 0 var(--safe-left);
+    border-top: 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .appbar__home {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    width: 30%;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .appbar__mark {
+    display: grid;
+    place-items: center;
+    width: var(--bar);
+    height: 100%;
+    border-right: 1px solid var(--rule);
+  }
+
+  .appbar__mark svg {
+    width: 62%;
+    height: 62%;
+  }
+
+  .appbar__name {
+    font-size: var(--text-label);
+  }
+
+  .appbar__tabs {
+    display: flex;
+    flex: none;
+    gap: 40px;
+    align-items: stretch;
+  }
+
+  .appbar__tab {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    place-items: initial;
+    min-height: 0;
+    border-top: 0;
+    border-bottom: 2px solid transparent;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+
+  .appbar__tab[aria-current='page'] {
+    border-bottom-color: var(--ink);
+  }
+
+  .appbar__context {
+    display: block;
+    color: var(--muted);
+  }
+
+  .app-main {
+    max-width: calc(var(--wide) + 2 * var(--gutter));
+    padding-top: calc(var(--bar) + var(--safe-top) + 56px);
+    padding-bottom: calc(var(--safe-bottom) + 96px);
+  }
+
+  .app-main--bare {
+    padding-top: calc(var(--safe-top) + 96px);
+  }
+
+  /* Two columns. The aside sticks below the header while the main column scrolls. */
+  .split {
+    display: grid;
+    gap: 64px;
+    align-items: start;
+  }
+
+  .split--feed {
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  }
+
+  .split--event {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  }
+
+  .split__aside {
+    position: sticky;
+    top: calc(var(--bar) + var(--safe-top) + 56px);
+  }
+
+  .split--event .split__aside {
+    padding-left: 40px;
+    border-left: 1px solid var(--rule);
+  }
+
+  .pair {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 64px;
+    align-items: start;
+  }
+
+  .ranked {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-top: 16px;
+    border-top: 1px solid var(--rule);
+  }
+
+  .btn--fit {
+    width: auto;
+    min-width: 20rem;
+    align-self: flex-start;
+  }
+
+  /* Event rows: a leading "when" column, then what, why and the actions, like the landing
+     page's hairline rows. */
+  .a-row--event {
+    display: grid;
+    grid-template-columns: 8.5rem minmax(0, 1fr);
+    gap: 12px 32px;
+    align-items: start;
+    padding: 24px 0;
+  }
+
+  .a-row--event .when {
+    display: flex;
+    grid-row: span 2;
+    flex-direction: column;
+    padding-top: 4px;
+  }
+
+  .a-row--event .when > span + span::before {
+    content: none;
+  }
+
+  .a-row--event .when > span:first-child {
+    color: var(--ink);
+  }
+
+  .a-row--event .row-actions {
+    grid-column: 2;
+  }
+
+  .title--event {
+    font-size: clamp(2.5rem, 4vw, 3.5rem);
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+  }
+
+  .event-actions .btn--glow {
+    min-height: 64px;
+  }
+
+  .sheet-backdrop {
+    align-items: center;
+  }
+
+  .sheet {
+    max-width: 32rem;
+    padding: 40px;
+    border: 1px solid var(--rule-strong);
+  }
+
+  /* Onboarding: the question on the left, its answers on the right, Continue under the answers. */
+  .onboarding {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-rows: auto 1fr auto;
+    column-gap: 96px;
+    max-width: calc(var(--wide) + 2 * var(--gutter));
+    padding-top: calc(var(--safe-top) + 32px);
+  }
+
+  .onboarding__top,
+  .onboarding--first .onboarding__top {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    align-items: center;
+    min-height: 44px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .onboarding__progress {
+    grid-column: 2;
+    grid-template-columns: auto 1fr auto;
+    gap: 24px;
+  }
+
+  .step {
+    display: contents;
+  }
+
+  .step__intro {
+    grid-column: 1;
+    position: sticky;
+    top: 32px;
+    align-self: start;
+    padding: 80px 0 48px;
+  }
+
+  .step__body {
+    grid-column: 2;
+    padding: 80px 0 48px;
+  }
+
+  .onboarding--first .step__intro {
+    padding-top: 96px;
+  }
+
+  .onboarding--first .a-display {
+    font-size: clamp(3.5rem, 6vw, 5.5rem);
+    max-width: 11ch;
+  }
+
+  .onboarding--first .step__body {
+    padding-top: 112px;
+  }
+
+  .interest-groups {
+    gap: 20px;
+  }
+
+  .onboarding__foot {
+    grid-column: 2;
+    padding: 24px 0 calc(var(--safe-bottom) + 48px);
+    border-top: 1px solid var(--rule);
+  }
+
+  .onboarding__foot .btn {
+    width: auto;
+    min-width: 20rem;
+  }
 }
