@@ -1,0 +1,11 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+# CodeRabbit repository settings. See engineering/quality-and-ci.md.
+reviews:
+  path_instructions:
+    - path: 'pitch/**'
+      instructions: >
+        Pitch deck and problem-proof sources. Bracketed placeholders like [__]
+        and forward-looking statements on slides are intentional. Don't ask
+        to reword slide copy as a hypothesis; the speaker notes (<aside>)
+        carry the caveats. Only flag invented numbers, quotes or partners,
+        or a claim that contradicts its cited source.

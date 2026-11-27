@@ -81,7 +81,7 @@ macOS runners use about 10× the GitHub Actions minutes on private repos, so iOS
 | DB tests | pgTAP via `supabase test db` | RLS, functions, triggers, constraints. |
 | Local backend | Supabase CLI (`supabase start`) | Same stack locally and in CI. |
 | E2E | Playwright | Plus `@axe-core/playwright` for accessibility checks. |
-| AI review | CodeRabbit | Already set up. |
+| AI review | CodeRabbit | Already set up. Repo settings live in `.coderabbit.yaml` (e.g. how to review the pitch sources in `pitch/`). |
 | AI design review | [Impeccable](https://impeccable.style) skill for Claude Code (`.claude/skills/impeccable`) | Installed 2026-11-24 with `npx impeccable install --providers=claude --scope=project`; refresh with `npx impeccable update`. Gives agents `/impeccable` commands (`critique`, `audit`, `polish`, …). The automatic design hook lives in each developer's git-ignored `.claude/settings.local.json`, so rerun the installer to get it. `npx impeccable detect src/` runs the detector with no agent. Not in CI yet. |
 | Fonts | Self-hosted WOFF2 in `src/assets/fonts/`, declared in `src/index.css` | Host Grotesk (SIL OFL), a variable font: one file per subset covers every weight, about 32 KB in total. Fetched with `.claude/skills/impeccable/scripts/impeccable font-fetch "<Family>" --out src/assets/fonts`. Never load fonts from a CDN at runtime: it leaks visitors' IP addresses to a third party and fails offline. |
 | Security | GitHub secret scanning + push protection, Dependabot | CodeQL needs the paid GitHub Code Security add-on on private repos, so it's deferred. |
