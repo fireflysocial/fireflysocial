@@ -2,7 +2,7 @@
 
 > Drafted 2026-11-27. Redesigns the group features of [v3-user-flow.md](v3-user-flow.md) (pods, the Firefly corner, picks, chat, sharing socials) on top of the launch flow in [v4-user-flow.md](v4-user-flow.md). **v4 stays the spec for launch.** This is the next phase. v3 stays the reference for hosts, check-in methods, the room, circles and the trust and safety operations, which this draft doesn't change.
 
-**Status:** proposed design, not implemented behaviour. Nothing here is built. Every target, size and timing is a proposal to confirm in a pilot, and the [open decisions](#open-decisions) must be settled before the backend is designed.
+**Status:** proposed design. **Frontend built 2026-11-27 on example data** (`src/features/app/pods/`, pod forming in `src/lib/pods/formPods.ts`): the pod-mates are made up and labelled as such, their replies are simulated, and everything is stored on the device only. No backend, RLS or server-side pod job exists yet. Every target, size and timing is still a proposal to confirm in a pilot, and the [open decisions](#open-decisions) must be settled before the backend is designed. [What the build defaulted to](#what-the-frontend-build-defaulted-to) is listed below.
 
 **Where it came from:**
 
@@ -78,7 +78,7 @@ The intent is **per event and expires with it**. It is never shown to anyone out
 
 ### C. Pod forms (about 24 hours before)
 
-- **Pods of 3–5**, over-formed by one so a no-show doesn't leave a pair (v3 #11).
+- **Pods of 3–5:** pods grow to 4, and people who'd otherwise be left out can bring one up to 5, which also covers a no-show (v3 #11).
 - **Grouped by intent first, then shared interests.** Proposed compatibility: same intent, or anyone with *Open to anything*. *Find collaborators* and *Meet a co-founder* can share a pod. The exact rules are an open decision.
 - **A private pod-makeup preference** (mixed / same gender / no preference, v3 #7) can be honoured without showing gender to anyone. Collecting it is an [open decision](#open-decisions).
 - **People who both said "keep meeting" before** are placed together again (v3 #24).
@@ -179,5 +179,20 @@ All of these are enforced in RLS, not only in the UI (CLAUDE.md §8.2).
 - **Pod chat** 30 minutes before (v3) or the pod word and meeting point alone.
 - **Pod size** and the minimum number of opted-in people per event.
 - **Retention** for intents, "We met" taps and picks.
+
+### What the frontend build defaulted to
+
+Built 2026-11-27 so the flow can be tried; each is easy to change, and none replaces the decision above.
+
+- **No first name or photo before the event.** Pod-mates appear as "Pod-mate 1, 2…" with intent, interests (shared ones marked) and a prompt answer. First names appear only after both people mark "We met".
+- **No in-app chat.** Sharing socials (Instagram, LinkedIn), one network at a time, is the handoff. No phone numbers.
+- **No pod chat;** the pod word, the Firefly sign and the meeting point do that job.
+- **No gender collected,** so no pod-makeup preference until the privacy review.
+- **Intents:** pick 1–2, prefilled from onboarding. Can share a pod: the same intent, anyone with *Open to anything*, or *Find collaborators* with *Meet a co-founder*.
+- **Prompt answers** are chosen from four prompts and checked for links, handles, emails and phone numbers.
+- **Pod forming** (`formPods`): deterministic; seeds with the most constrained person (fewest compatible others) so flexible people don't fill early pods and strand others; grows pods to 4; a group that ends up too small borrows a compatible member from a pod that can spare one, then folds into pods with room (up to 5); blocked people are never placed together; people who both chose to keep meeting are placed together first. "One person first" pairs the same way.
+- **Report** (unwanted advance, selling or spam, something else) also blocks, and both are recorded on the device only until moderation exists.
+- **Retention on the device:** everything about an event (opt-in, taps, picks) is deleted when its 72-hour pick window closes; connections and blocks stay.
+- **Example events only:** "Example only" links jump ahead in time so each step can be seen without waiting a day. Real events follow the real clock.
 
 Gaps raised by this draft are #53–#55 in [open-gaps.md](open-gaps.md#h-connection-flow).

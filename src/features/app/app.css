@@ -676,6 +676,64 @@ html:has(.app) {
   height: 1.6em;
 }
 
+/* ---------- Pods ---------- */
+
+.meeting {
+  padding-top: 16px;
+  border-top: 1px solid var(--rule);
+}
+
+/* Interests on a pod-mate's card. Shared ones are Ink with a hollow ring; the rest Muted. */
+.interests {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  padding: 0;
+  list-style: none;
+  color: var(--muted);
+  font-size: var(--text-label);
+}
+
+.interests .is-shared {
+  color: var(--ink);
+}
+
+.interests .is-shared::before {
+  content: '';
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 8px;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  vertical-align: 1px;
+}
+
+.a-field--small {
+  min-height: 48px;
+  font-size: var(--text-body);
+}
+
+.field-error {
+  color: var(--error);
+}
+
+.demo-skip {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  text-decoration-color: var(--rule);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 /* ================= Wide screens (900px and up) ================= */
 
 @media (width >= 900px) {
