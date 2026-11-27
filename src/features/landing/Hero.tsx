@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { FireflyMark } from '../../components/FireflyMark.tsx'
-import { ArrowIcon } from './ArrowIcon.tsx'
+import { ArrowIcon } from '../../components/ArrowIcon.tsx'
 import { HeroField } from './HeroField.tsx'
 import { usePrefersReducedMotion } from './usePrefersReducedMotion.ts'
 

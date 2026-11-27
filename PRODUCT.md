@@ -41,7 +41,7 @@ Success at launch: onboarding completed in under 2 minutes, a feed that feels pe
 
 ## Capabilities and Constraints
 
-- **Status (2026-11-25):** the public landing page is built (frontend only). Onboarding, the event pipeline and the feed are the next builds. Every flow in the spec is proposed behaviour.
+- **Status (2026-11-27):** the public landing page and the launch flow's frontend (onboarding, feed, going, plans) are built, on made-up example events and on-device storage. The backend and the event pipeline are next. The rest of the spec is proposed behaviour.
 - **Event data:** AI-assisted web search run in scheduled batches per category and area (provider undecided), extracting facts from each event's own page and linking back to it. No personal data goes to the AI provider. Reversing the v3 "no scraping" decision needs a terms and legal check before launch.
 - **Privacy and safety are hard constraints** (CLAUDE.md §8, [research/safety-privacy.md](research/safety-privacy.md)):
   - No location data, maps or distances, ever. Neighbourhoods are picked from each city's list.

@@ -341,7 +341,7 @@ e2e/                         # Playwright specs
 
 ## 9. Open decisions
 
-- **Routing / data fetching:** e.g. React Router + TanStack Query
+- **Data fetching:** e.g. TanStack Query, once a real backend exists (routing decided 2026-11-27: React Router 8)
 - **Hosting for previews:** Vercel / Netlify / Cloudflare Pages
 - **Long-term role of the web version:** attendee web app, host tools only, or development/pilot only
 - **Push provider:** Capacitor push plugin (APNs/FCM) sending from Supabase Edge Functions, vs a hosted service
