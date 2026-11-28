@@ -1,5 +1,6 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test, type Page } from '@playwright/test'
+import { signedInWith } from './fakeSupabase.ts'
 
 // The connection flow (workflow/connection-flow.md) on the example pod: opt in, the pod reveal,
 // "We met", keep meeting and sharing a social. Pod-mates are made up; "Example only" controls
@@ -21,23 +22,26 @@ async function expectNoSideScroll(page: Page) {
 }
 
 test('opt in, meet the pod, keep meeting and share a social', async ({ page }) => {
-  await page.addInitScript(() => {
-    if (localStorage.getItem('firefly.profile.v1')) return
-    localStorage.setItem(
-      'firefly.profile.v1',
-      JSON.stringify({
-        firstName: 'Alex',
-        cityId: 'vancouver',
-        intents: ['friends'],
-        interests: ['board-games', 'language-exchange', 'pottery'],
-        freeTimes: [],
-        neighbourhoods: [],
-        budget: 'low',
-        newcomer: null,
-        accessNeeds: [],
-        pledgedAt: '2026-11-27T00:00:00.000Z',
-      }),
-    )
+  await signedInWith(page, {
+    first_name: 'Alex',
+    city_id: 'vancouver',
+    intents: ['friends'],
+    work_area: null,
+    project_roles: [],
+    project_stage: null,
+    interests: ['board-games', 'language-exchange', 'pottery'],
+    event_style: null,
+    group_size: null,
+    approach: null,
+    languages: [],
+    learning: [],
+    free_times: [],
+    pace: null,
+    neighbourhoods: [],
+    budget: 'low',
+    newcomer: null,
+    access_needs: [],
+    pledged_at: '2026-11-27T00:00:00.000Z',
   })
   await page.goto('/app/feed')
   // A free event with no registration, two or more days away: its pod hasn't formed yet.

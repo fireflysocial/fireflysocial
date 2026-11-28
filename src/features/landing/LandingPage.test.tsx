@@ -1,7 +1,11 @@
-import { render, screen, within } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import { describe, expect, it, vi } from 'vitest'
+import { render as rtlRender, screen, within } from '@testing-library/react'
+import type { ReactElement } from 'react'
+import { MemoryRouter } from 'react-router'
+import { describe, expect, it } from 'vitest'
 import { LandingPage } from './LandingPage.tsx'
+
+/** The landing page links into the app, so it renders inside a router, as it does for real. */
+const render = (ui: ReactElement) => rtlRender(<MemoryRouter>{ui}</MemoryRouter>)
 
 const HEADLINE = 'Meet your people at the events you’d go to anyway.'
 
@@ -19,7 +23,7 @@ describe('LandingPage', () => {
       'Coming next: Then, the people going too.',
       'Events Firefly finds',
       'Private by default.',
-      'Get an invite.',
+      'Get started.',
     ])
   })
 
@@ -44,12 +48,19 @@ describe('LandingPage', () => {
     }
   })
 
-  it('points every invite link at the invite form', () => {
+  it('takes people straight to sign-up, or to log in', () => {
     render(<LandingPage />)
-    for (const link of screen.getAllByRole('link', { name: /invite/i })) {
-      expect(link).toHaveAttribute('href', '#invite')
+    const start = screen.getAllByRole('link', { name: /Get started/ })
+    expect(start).toHaveLength(2)
+    for (const link of start) expect(link).toHaveAttribute('href', '/app/sign-in')
+    for (const link of screen.getAllByRole('link', { name: /Log in/ })) {
+      expect(link).toHaveAttribute('href', '/app/sign-in?mode=login')
     }
-    expect(document.getElementById('invite')).toContainElement(screen.getByLabelText('Email'))
+    expect(screen.getByRole('link', { name: 'Skip to getting started' })).toHaveAttribute(
+      'href',
+      '#start',
+    )
+    expect(document.getElementById('start')).toContainElement(start[1] ?? null)
   })
 
   it('labels the example feed as made up', () => {
@@ -72,21 +83,6 @@ describe('LandingPage', () => {
     ]) {
       expect(screen.getByRole('heading', { level: 3, name: promise })).toBeInTheDocument()
     }
-  })
-
-  it('sends invite requests to the function it is given', async () => {
-    const onRequestInvite = vi.fn(() => Promise.resolve())
-    const user = userEvent.setup()
-    render(<LandingPage onRequestInvite={onRequestInvite} />)
-    await user.type(screen.getByLabelText('Email'), 'sam@example.ca{Enter}')
-    expect(onRequestInvite).toHaveBeenCalledWith('sam@example.ca')
-  })
-
-  it('is honest that invites are not open yet by default', async () => {
-    const user = userEvent.setup()
-    render(<LandingPage />)
-    await user.type(screen.getByLabelText('Email'), 'sam@example.ca{Enter}')
-    expect(await screen.findByText(/Invites aren’t open yet/)).toBeInTheDocument()
   })
 
   it('paints the browser toolbar black while open and restores it after', () => {

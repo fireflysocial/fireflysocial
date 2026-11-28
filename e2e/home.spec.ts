@@ -159,10 +159,10 @@ async function expectSettled(page: Page, band: Box) {
 }
 
 test.describe('landing page', () => {
-  test('leads with the promise and the invite action', async ({ page }) => {
+  test('leads with the promise and the Get started action', async ({ page }) => {
     await page.goto('/')
     await expect(page.getByRole('heading', { level: 1, name: HEADLINE })).toBeVisible()
-    await expect(page.getByRole('link', { name: 'Get an invite' })).toBeVisible()
+    await expect(page.getByRole('banner').getByRole('link', { name: 'Get started' })).toBeVisible()
   })
 
   test('has no detectable accessibility violations', async ({ page }) => {
@@ -387,21 +387,23 @@ test.describe('landing page', () => {
     await expect(week).toContainText('4')
   })
 
-  test('takes the visitor from the header to the invite form', async ({ page }) => {
+  test('takes the visitor from the header straight to sign-up, and back', async ({ page }) => {
     await page.goto('/')
-    await page.getByRole('link', { name: 'Get an invite' }).click()
-    await expect(page).toHaveURL(/#invite$/)
-    await expect(page.getByLabel('Email')).toBeInViewport()
+    await page.getByRole('banner').getByRole('link', { name: 'Get started' }).click()
+    await expect(page).toHaveURL(/\/app\/sign-in$/)
+    await expect(page.getByRole('heading', { name: 'What’s your email?' })).toBeVisible()
+    await page.getByRole('link', { name: 'Back' }).click()
+    await expect(page.getByRole('heading', { level: 1, name: HEADLINE })).toBeVisible()
   })
 
-  test('checks the email and is honest that invites are not open yet', async ({ page }) => {
-    await page.goto('/#invite')
-    const submit = page.getByRole('button', { name: 'Get an invite' })
-    await submit.click()
-    await expect(page.getByRole('alert')).toHaveText('Enter your email address.')
-    await page.getByLabel('Email').fill('sam@example.ca')
-    await submit.click()
-    await expect(page.getByText(/Invites aren’t open yet/)).toBeVisible()
+  test('ends on Get started and Log in', async ({ page }) => {
+    await page.goto('/')
+    const start = page.locator('#start')
+    await start.scrollIntoViewIfNeeded()
+    await expect(start.getByRole('link', { name: 'Get started' })).toBeVisible()
+    await start.getByRole('link', { name: 'Log in' }).click()
+    await expect(page).toHaveURL(/\/app\/sign-in\?mode=login$/)
+    await expect(page.getByRole('heading', { name: 'Welcome back' })).toBeVisible()
   })
 })
 

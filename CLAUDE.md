@@ -24,6 +24,7 @@ Key documents (read the relevant ones before building a feature):
 | [workflow/open-gaps.md](workflow/open-gaps.md)                 | A flow step references a gap number like **[#11]**.                                                                                                   |
 | [research/safety-privacy.md](research/safety-privacy.md)       | Touching profiles, visibility, check-in, picks, chat, photos, reports, blocking, or data retention.                                                   |
 | [engineering/quality-and-ci.md](engineering/quality-and-ci.md) | Changing tooling, tests, CI, or the Supabase workflow.                                                                                                |
+| [engineering/supabase-setup.md](engineering/supabase-setup.md) | Setting up or changing accounts, profiles, the sign-in emails, or applying migrations to the hosted project.                                          |
 | [brand/README.md](brand/README.md)                             | Doing any visual or UI work.                                                                                                                          |
 | [PRODUCT.md](PRODUCT.md)                                       | Doing any design work. Product truth for design (users, voice, principles, evidence that must never be invented), read by `/impeccable`.              |
 | [DESIGN.md](DESIGN.md)                                         | Doing any visual or UI work. The design system (tokens, type, components, motion) as built; read by `/impeccable`.                                    |
@@ -34,12 +35,13 @@ Key documents (read the relevant ones before building a feature):
 
 ### Current status
 
-- **Built:** the public landing page (`src/features/landing/`), frontend only. Its invite form is UI only: `src/data/invites.ts` is a stub that always fails honestly until the waitlist table, RLS and pgTAP tests land in a follow-up PR. Don't deploy the page publicly before then.
-- **Built (frontend, 2026-11-27): the v4 launch flow** under `/app` (`src/features/app/`): onboarding, the personal feed, the event page with register-and-return, Plans, and You (with delete my data). It runs on **stubs**: made-up example events (`src/data/exampleEvents.ts`, always labelled in the UI) and answers stored on the device only (`src/data/profile.ts`, `src/data/plans.ts`). Phone sign-up (v4 step 2), reminders and the after-event push aren't built.
+- **Built:** the public landing page (`src/features/landing/`). Its **Get started** and **Log in** links go straight to sign-up and log-in at `/app/sign-in` (decided 2026-11-28: no invite waitlist; people go straight into the product). Before deploying it publicly, the `profiles` migration must be on the hosted project and custom SMTP set up, or sign-up codes won't reach real people ([engineering/supabase-setup.md](engineering/supabase-setup.md)).
+- **Built (frontend, 2026-11-27): the v4 launch flow** under `/app` (`src/features/app/`): the personal feed, the event page with register-and-return, Plans, and You. Events are still **stubs**: made-up example events (`src/data/exampleEvents.ts`, always labelled in the UI), and plans stay on the device (`src/data/plans.ts`). Reminders and the after-event push aren't built.
+- **Built (2026-11-28): accounts and the longer onboarding.** Sign-up and log-in with an emailed sign-in link that returns to `/app/sign-in` (`src/features/app/SignInPage.tsx`; Supabase's default email, the link's address must be in the project's allowed Redirect URLs, and the native apps need deep links before it works there; phone codes wait for an SMS provider), a 15–16 screen sectioned onboarding (`src/lib/onboarding.ts`, `src/features/app/onboarding/`), and the profile saved to Supabase through `src/data/account.ts` (the only module that talks to Supabase; tests use `src/test/fakeAccount.ts`). Log out and delete my account (`delete_my_account()`) are on You. The migration and its email-template changes still have to be applied to the hosted project by hand: [engineering/supabase-setup.md](engineering/supabase-setup.md).
 - **Built (frontend, 2026-11-27): the connection flow** ([connection-flow.md](workflow/connection-flow.md)): opting in per event with an intent, the pod reveal without names, "We met", private keep-meeting picks and sharing socials (`src/features/app/pods/`, pod forming in `src/lib/pods/formPods.ts`). Also stubs: made-up example pod-mates with simulated replies (`src/data/examplePeople.ts`, `src/data/pods.ts`), stored on the device only.
-- **Next to build:** the backend: auth, profiles and the owner-only going list (RLS and expiry), then pods and picks server-side (the `formPods` job, pod-only visibility in RLS, encrypted picks), and the event pipeline ([v4](workflow/v4-user-flow.md)).
+- **Next to build:** the rest of the backend: the owner-only going list (RLS and expiry), then pods and picks server-side (the `formPods` job, pod-only visibility in RLS, encrypted picks), and the event pipeline ([v4](workflow/v4-user-flow.md)).
 - **Capacitor 8 is set up** (added 2026-11-27): `capacitor.config.ts`, the generated `ios/` and `android/` projects, and the Browser and App plugins (no native permissions beyond Android's default internet access). Building the apps needs Xcode (iOS) and Android Studio (Android) on the developer's machine; CI builds the web only. App icons and splash screens are still Capacitor's defaults.
-- Supabase is initialised locally (`supabase/`) with no migrations. The cloud project exists, and its URL and publishable key go in `.env.local` (git-ignored).
+- Supabase has one migration, `profiles` (owner-only RLS, pgTAP tests in `supabase/tests/database/01_profiles.test.sql`). The cloud project exists, and its URL and publishable key go in `.env.local` (git-ignored). E2E fakes Supabase at the HTTP boundary (`e2e/fakeSupabase.ts`).
 - The flow documents describe **proposed** behaviour, not implemented behaviour. Don't describe a design as shipped.
 
 ---
@@ -113,11 +115,11 @@ src/
   assets/fonts/         # self-hosted WOFF2 fonts (Host Grotesk, SIL OFL)
   lib/                  # pure logic, no React/Supabase imports
     fireflies/          # landing-page fields: seeded random and noise, firefly swarm, hero meadow, Kuramoto sync, pod, scroll story
-  data/                 # data access; stubs for now (invites, example events, on-device profile and plans)
+  data/                 # data access: account.ts (Supabase auth + profiles), stubs for example events, on-device plans
   components/           # shared UI components (FireflyMark)
   features/<feature>/   # feature-scoped components, hooks, tests (landing/, app/)
   routes.tsx            # every screen and its URL (the app lives under /app)
-  lib/platform/         # the ONLY place that touches device features: external links, returning to the app (camera, push, storage come later)
+  lib/platform/         # the ONLY place that touches device features: external links, returning to the app, storage and the auth session (camera, push come later)
   types/database.ts     # GENERATED by `npm run db:types`; never edit by hand
 e2e/                    # Playwright specs (*.spec.ts)
 ios/ android/           # native projects generated by Capacitor (edit native settings in Xcode / Android Studio; never edit copied web assets)

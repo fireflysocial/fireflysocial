@@ -1,6 +1,6 @@
 # Engineering quality, testing & CI plan
 
-Status: **Phases 1, 2 and 4 are implemented** (scaffold, local quality tooling, CI, E2E). Supabase is initialised locally with a pgTAP guardrail test, but no remote project, keys or migrations exist yet (Phase 3). Branch rules and repo security settings are applied in the GitHub UI (see §6).
+Status: **Phases 1, 2 and 4 are implemented** (scaffold, local quality tooling, CI, E2E). Supabase has its first migration (`profiles`, with RLS and pgTAP tests) and the app signs in with an emailed link; applying it to the hosted project is a manual step, see [supabase-setup.md](supabase-setup.md) (Phase 3). Branch rules and repo security settings are applied in the GitHub UI (see §6).
 
 **Platforms:** **iOS and Android apps** (App Store and Google Play) plus a **web** version, all built from one React codebase. The native apps wrap the web build with [Capacitor](https://capacitorjs.com/) (added 2026-11-27, see §0).
 
@@ -118,7 +118,7 @@ Test pure logic, with no network and no Supabase:
 ### 3.2 Component tests (Vitest + React Testing Library)
 - Query elements the way a user finds them (`getByRole`, `getByLabelText`), not by test IDs where possible.
 - Test behaviour (what renders and what happens on click), not implementation details.
-- Mock the data layer at the module boundary or with MSW. Don't mock the Supabase client's internals. Example: `LandingPage` takes an optional `onRequestInvite`, so tests pass their own function instead of mocking `src/data/invites.ts`.
+- Mock the data layer at the module boundary or with MSW. Don't mock the Supabase client's internals. Example: app screens get their account service from `AccountContext`, so tests pass the in-memory `src/test/fakeAccount.ts` instead of mocking supabase-js.
 - **No canvas in jsdom.** `src/test/setup.ts` makes `HTMLCanvasElement.prototype.getContext` return `null` before every test (jsdom would otherwise log "Not implemented"), so canvas components must handle a missing context. A test that needs to check drawing calls `withCanvas()` from `src/test/fakeCanvas.ts`, which mocks `getContext` with a small fake that records calls and stubs `ResizeObserver`, `IntersectionObserver` and `requestAnimationFrame` with `vi.stubGlobal` (the setup file restores them after each test); a test drives the animation by running `frame(ms)`.
 - Hooks that read `matchMedia` (such as `usePrefersReducedMotion`) are tested by stubbing `window.matchMedia`; they must also work when it doesn't exist.
 
@@ -138,15 +138,15 @@ The typed data-access layer (`src/data/*`) runs against the real local Supabase 
 
 ### 3.5 E2E tests (Playwright)
 Cover the critical paths from the [v4 user flow](../workflow/v4-user-flow.md) (launch) and, later, the [v3 user flow](../workflow/v3-user-flow.md) (group features), and nothing more:
-1. The public landing page (`e2e/home.spec.ts`, done): headline and invite action visible, axe, no horizontal scroll, the firefly canvas actually paints, scrolling the story reveals the week counter, the header link reaches the invite form, form validation and the honest "not open yet" state, and a reduced-motion still frame.
-2. Onboarding: sign up / sign in, interests, first personal feed (launch)
+1. The public landing page (`e2e/home.spec.ts`, done): headline and Get started action visible, axe, no horizontal scroll, the firefly canvas actually paints, scrolling the story reveals the week counter, Get started and Log in reach the sign-in page (and Back returns), and a reduced-motion still frame.
+2. Sign up / log in with an emailed link (an expired link too), onboarding, first personal feed, log out and delete the account (`e2e/app.spec.ts`, done)
 3. Personal feed: feedback, save, and the register-and-return confirmation (launch)
 4. Core safety actions: report a listing now; report / block people once group features exist
 5. Group features (next phase): join a group, the Firefly corner, picks
 
 Rules:
 - Run against the production build (`vite build` + `vite preview`), which Playwright's `webServer` starts automatically.
-- Once flows touch data: run against local Supabase with deterministic seed data (`supabase/seed.sql`).
+- Supabase is faked at the HTTP boundary (`e2e/fakeSupabase.ts`, added 2026-11-28): each spec answers the auth and REST calls from memory, and `playwright.config.ts` builds with a placeholder local URL, so the `e2e` job needs no database. What the database allows is tested in pgTAP. Moving E2E onto local Supabase with seed data (`supabase/seed.sql`) is still the goal once more flows touch data.
 - Run an axe accessibility check on each key page.
 - Record traces and screenshots on failure, and upload them as CI artifacts.
 - Phone viewports are primary. Every spec runs on three Playwright projects:
@@ -192,6 +192,7 @@ Real iPhone hardware is not available on the team yet; before the pilot, cover i
 - **All schema changes go through migrations** (`supabase migration new <name>`). No editing schema in the dashboard.
 - **Seed data** in `supabase/seed.sql`, shared by local dev, CI, and E2E.
 - **Generated types:** `npm run db:types`. CI regenerates them and fails if the diff isn't empty, which means the types are stale. This check switches on automatically once `src/types/database.ts` is first committed.
+- **Setting up accounts and profiles**, locally and on the hosted project: [supabase-setup.md](supabase-setup.md).
 - **Docker is required** to run Supabase locally (`npm run db:start`, `npm run test:db`). CI runners already have it.
 - **Environments:** local → staging (separate Supabase project, or Supabase branching) → production. **Tests never run against production.**
 - **Keys:** the anon key can be used in the client. The **service-role key never goes into frontend code or the repo.** It lives only in GitHub Environment secrets and server-side functions.
@@ -312,13 +313,15 @@ e2e/                         # Playwright specs
 - [x] `supabase init`, empty seed file
 - [x] pgTAP: "RLS enabled on all tables" guardrail
 - [x] `db` job in CI
-- [ ] Remote project(s), keys in GitHub Environments, `@supabase/supabase-js` client
-- [ ] First migration + `npm run db:types` committed (switches on the type-drift check)
-- [ ] First per-policy RLS tests
+- [x] `@supabase/supabase-js` client (`src/data/supabase.ts`), session kept through `src/lib/platform/authStorage.ts`
+- [x] First migration (`profiles`) + `src/types/database.ts` committed (switches on the type-drift check; regenerate with `npm run db:types` if CI reports drift)
+- [x] First per-policy RLS tests (`supabase/tests/database/01_profiles.test.sql`)
+- [ ] Apply the migration to the hosted project and switch its emails to codes ([supabase-setup.md](supabase-setup.md))
+- [ ] Keys in GitHub Environments, staging project
 
 **Phase 4: E2E**
 - [x] Playwright + axe; smoke spec for the home page
-- [x] Landing page spec (2026-11-25): story scroll, invite form, canvas paint check, reduced motion
+- [x] Landing page spec (2026-11-25): story scroll, invite form (replaced 2026-11-28 by Get started / Log in links), canvas paint check, reduced motion
 - [x] `e2e` job in CI
 - [ ] Sign-in and core-flow specs as features land
 

@@ -30,6 +30,12 @@ export default defineConfig({
   webServer: {
     // Test the production build, not the dev server.
     command: `npm run build && npm run preview -- --port ${String(PORT)} --strictPort`,
+    // Supabase is faked at the HTTP boundary in each spec (e2e/fakeSupabase.ts), so the build
+    // only needs a well-formed local address. These override .env.local; no real keys are used.
+    env: {
+      VITE_SUPABASE_URL: 'http://127.0.0.1:54321',
+      VITE_SUPABASE_PUBLISHABLE_KEY: 'e2e-placeholder-key',
+    },
     url: `http://localhost:${String(PORT)}`,
     reuseExistingServer: !isCI,
     timeout: 120_000,

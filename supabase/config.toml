@@ -161,11 +161,16 @@ max_indexes = 5
 enabled = true
 # The base URL of your website. Used as an allow-list for redirects and for constructing URLs used
 # in emails.
-site_url = "http://127.0.0.1:3000"
+site_url = "http://localhost:5173"
 # The public URL that Auth serves on. Defaults to the API external URL with `/auth/v1` appended.
 # external_url = ""
 # A list of *exact* URLs that auth providers are permitted to redirect to post authentication.
-additional_redirect_urls = ["https://127.0.0.1:3000"]
+# Sign-in links may only lead back to these (the Vite dev server, by either name, and the preview).
+additional_redirect_urls = [
+  "http://localhost:5173/**",
+  "http://127.0.0.1:5173/**",
+  "http://localhost:4173/**",
+]
 # How long tokens are valid for, in seconds. Defaults to 3600 (1 hour), maximum 604,800 (1 week).
 jwt_expiry = 3600
 # JWT issuer URL. If not set, defaults to auth.external_url.
@@ -251,6 +256,10 @@ otp_expiry = 3600
 # pass = "env(SENDGRID_API_KEY)"
 # admin_email = "admin@email.com"
 # sender_name = "Admin"
+
+# Firefly signs people in with Supabase's default sign-in link email (decided 2026-11-28): the link
+# comes back to /app/sign-in with the session in the URL. No custom templates, so local matches the
+# hosted project, where editing templates needs custom SMTP.
 
 # Uncomment to customize email template
 # [auth.email.template.invite]

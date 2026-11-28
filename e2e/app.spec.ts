@@ -1,8 +1,10 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test, type Page } from '@playwright/test'
+import { fakeSupabase, openLink, type FakeSupabase } from './fakeSupabase.ts'
 
-// The launch flow (workflow/v4-user-flow.md): onboarding → personal feed → going.
-// Events are the made-up examples until the event pipeline is live.
+// The launch flow (workflow/v4-user-flow.md): sign up → onboarding → personal feed → going.
+// Events are the made-up examples until the event pipeline is live; Supabase is faked at the
+// HTTP boundary (fakeSupabase.ts).
 
 async function expectAccessible(page: Page) {
   const results = await new AxeBuilder({ page }).analyze()
@@ -17,12 +19,30 @@ async function expectNoSideScroll(page: Page) {
   expect(scrollWidth).toBeLessThanOrEqual(clientWidth)
 }
 
-async function onboard(page: Page) {
-  await page.goto('/app')
-  await expect(page).toHaveURL(/\/app\/start\/welcome$/)
-  await expectAccessible(page)
-  await page.getByRole('button', { name: 'Get started' }).click()
+/** Opens the last sign-in link, as tapping it in the email would. */
+async function openEmailedLink(page: Page, supabase: FakeSupabase) {
+  const sent = supabase.sent.at(-1)
+  if (!sent) throw new Error('no link was sent')
+  expect(sent.redirectTo).toMatch(/\/app\/sign-in$/)
+  // A link from an email is a fresh page load, not a change to the page already open.
+  await page.goto('about:blank')
+  await page.goto(openLink(sent))
+}
 
+async function onboard(page: Page): Promise<FakeSupabase> {
+  const supabase = await fakeSupabase(page)
+  await page.goto('/app')
+  await expect(page).toHaveURL(/\/app\/welcome$/)
+  await expectAccessible(page)
+  await page.getByRole('link', { name: 'Get started' }).click()
+
+  await page.getByLabel('What’s your email?').fill('sam@example.com')
+  await page.getByRole('button', { name: 'Send link' }).click()
+  await expect(page.getByRole('heading', { name: 'Check your email' })).toBeVisible()
+  await expectAccessible(page)
+  await openEmailedLink(page, supabase)
+
+  await expect(page).toHaveURL(/\/app\/start\/pledge$/)
   await page.getByLabel('I’m 18 or older').check()
   await page.getByLabel(/good intent/).check()
   await page.getByRole('button', { name: 'Continue' }).click()
@@ -33,6 +53,11 @@ async function onboard(page: Page) {
   await page.getByRole('button', { name: 'New friends' }).click()
   await page.getByRole('button', { name: 'Continue' }).click()
 
+  await page.getByLabel('Building my own thing').check()
+  await expectAccessible(page)
+  await expectNoSideScroll(page)
+  await page.getByRole('button', { name: 'Continue' }).click()
+
   for (const name of ['Board games', 'Language exchange', 'Pottery']) {
     await page.getByRole('button', { name }).click()
   }
@@ -40,10 +65,19 @@ async function onboard(page: Page) {
   await expectNoSideScroll(page)
   await page.getByRole('button', { name: 'Continue' }).click()
 
+  // The rest is optional: skip through, answering one on the way.
+  for (let screen = 0; screen < 4; screen++)
+    await page.getByRole('button', { name: 'Skip' }).click()
+  await page.getByRole('button', { name: 'Weekday evenings' }).click()
   await page.getByRole('button', { name: 'Continue' }).click()
+  for (let screen = 0; screen < 2; screen++)
+    await page.getByRole('button', { name: 'Skip' }).click()
+  await page.getByRole('button', { name: 'Continue' }).click()
+  await page.getByRole('button', { name: 'Skip' }).click()
   await expectNoSideScroll(page)
   await page.getByRole('button', { name: 'Show my feed' }).click()
   await expect(page).toHaveURL(/\/app\/feed$/)
+  return supabase
 }
 
 test.describe('launch flow', () => {
@@ -51,8 +85,20 @@ test.describe('launch flow', () => {
   // colours rather than a frame mid-transition. Nothing in these screens animates meaningfully.
   test.use({ reducedMotion: 'reduce' })
 
-  test('onboards to a personal feed that says why each event is there', async ({ page }) => {
-    await onboard(page)
+  test('signs up and onboards to a personal feed that says why each event is there', async ({
+    page,
+  }) => {
+    const supabase = await onboard(page)
+    expect(supabase.sent.map((s) => s.email)).toEqual(['sam@example.com'])
+    expect([...supabase.rows.values()]).toEqual([
+      expect.objectContaining({
+        first_name: 'Sam',
+        intents: ['friends'],
+        work_area: 'building',
+        interests: ['board-games', 'language-exchange', 'pottery'],
+        free_times: ['weekday-evenings'],
+      }),
+    ])
     await expect(page.getByRole('heading', { name: 'Hi, Sam' })).toBeVisible()
     await expect(page.getByText(/made-up example events/)).toBeVisible()
     await expect(page.getByText(/^Because you like /).first()).toBeVisible()
@@ -86,18 +132,37 @@ test.describe('launch flow', () => {
     await expect(register).toHaveAttribute('rel', 'noopener noreferrer')
   })
 
-  test('remembers the person on this device, and deletes everything on request', async ({
-    page,
-  }) => {
-    await onboard(page)
+  test('remembers the person, and deletes the account on request', async ({ page }) => {
+    const supabase = await onboard(page)
     await page.reload()
     await expect(page.getByRole('heading', { name: 'Hi, Sam' })).toBeVisible()
     await page.getByRole('link', { name: 'You', exact: true }).click()
     await expectAccessible(page)
-    await page.getByRole('button', { name: 'Delete my data' }).click()
+    await page.getByRole('button', { name: 'Delete my account' }).click()
     await page.getByRole('button', { name: 'Delete everything' }).click()
-    await expect(page).toHaveURL(/\/app\/start\/welcome$/)
+    await expect(page).toHaveURL(/\/app\/welcome$/)
+    expect(supabase.rows.size).toBe(0)
     expect(await page.evaluate(() => localStorage.length)).toBe(0)
+  })
+
+  test('logs back in with a link, straight to the feed', async ({ page }) => {
+    const supabase = await onboard(page)
+    await page.getByRole('link', { name: 'You', exact: true }).click()
+    await page.getByRole('button', { name: 'Log out' }).click()
+    await expect(page).toHaveURL(/\/app\/welcome$/)
+    await page.getByRole('link', { name: 'I already have an account' }).click()
+    await page.getByLabel('Welcome back').fill('sam@example.com')
+    await page.getByRole('button', { name: 'Send link' }).click()
+    await openEmailedLink(page, supabase)
+    await expect(page.getByRole('heading', { name: 'Hi, Sam' })).toBeVisible()
+    expect(new URL(page.url()).hash).toBe('')
+  })
+
+  test('says so when a link has expired', async ({ page }) => {
+    await fakeSupabase(page)
+    await page.goto('/app/sign-in#error=access_denied&error_code=otp_expired')
+    await expect(page.getByRole('alert')).toContainText('expired or was already used')
+    await expectAccessible(page)
   })
 
   test('navigation is a bottom tab bar on phones and a header on wide screens', async ({

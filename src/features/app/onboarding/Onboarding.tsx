@@ -1,27 +1,40 @@
-import { useState, type JSX } from 'react'
-import { Navigate, useNavigate, useParams } from 'react-router'
+import { useEffect, useState, type JSX } from 'react'
+import { Link, Navigate, useNavigate, useParams } from 'react-router'
 import { ArrowIcon } from '../../../components/ArrowIcon.tsx'
 import { FireflyMark } from '../../../components/FireflyMark.tsx'
+import { loadDraft, saveDraft } from '../../../data/onboardingDraft.ts'
 import {
   draftFromProfile,
   emptyDraft,
   firstIncompleteStep,
   isStepId,
-  STEPS,
+  resolveStep,
+  stepAnswered,
   stepComplete,
+  stepPosition,
   toProfile,
   type Draft,
   type StepId,
 } from '../../../lib/onboarding.ts'
 import { useAppState } from '../appState.ts'
 import { useClock } from '../clock.ts'
-import { StepExtras } from './StepExtras.tsx'
+import { GateScreen } from '../GateScreen.tsx'
+import { StepAccess } from './StepAccess.tsx'
+import { StepApproach } from './StepApproach.tsx'
+import { StepBudget } from './StepBudget.tsx'
 import { StepFree } from './StepFree.tsx'
+import { StepGroups } from './StepGroups.tsx'
 import { StepIntents } from './StepIntents.tsx'
 import { StepInterests } from './StepInterests.tsx'
+import { StepLanguages } from './StepLanguages.tsx'
 import { StepName } from './StepName.tsx'
+import { StepNewcomer } from './StepNewcomer.tsx'
+import { StepPace } from './StepPace.tsx'
+import { StepPlaces } from './StepPlaces.tsx'
 import { StepPledge } from './StepPledge.tsx'
-import { StepWelcome } from './StepWelcome.tsx'
+import { StepProject } from './StepProject.tsx'
+import { StepStyle } from './StepStyle.tsx'
+import { StepWork } from './StepWork.tsx'
 
 export interface StepProps {
   draft: Draft
@@ -29,62 +42,107 @@ export interface StepProps {
 }
 
 const STEP_VIEWS: Record<StepId, (props: StepProps) => JSX.Element> = {
-  welcome: StepWelcome,
   pledge: StepPledge,
   name: StepName,
   brings: StepIntents,
+  work: StepWork,
+  project: StepProject,
   interests: StepInterests,
+  style: StepStyle,
+  groups: StepGroups,
+  approach: StepApproach,
+  languages: StepLanguages,
   free: StepFree,
-  extras: StepExtras,
+  pace: StepPace,
+  places: StepPlaces,
+  budget: StepBudget,
+  newcomer: StepNewcomer,
+  access: StepAccess,
+}
+
+/** Onboarding for a signed-in person. Sends everyone else where they belong. */
+export function Onboarding() {
+  const { gate } = useAppState()
+  if (gate === 'onboarding' || gate === 'ready') return <OnboardingSteps />
+  return <GateScreen gate={gate} />
 }
 
 /**
- * Onboarding (v4 §0), paced like Duolingo's: one question per screen, a progress bar, and the
- * personal feed at the end. Each step has its own URL, so the phone's back gesture works.
+ * One question per screen, grouped into short sections, with a progress bar and the personal feed
+ * at the end. Each step has its own URL, so the phone's back gesture works. Answers in progress
+ * stay on this device until the last screen saves them to the account; someone changing their
+ * answers starts from their saved profile instead.
  */
-export function Onboarding() {
-  const { step } = useParams()
+function OnboardingSteps() {
+  const { step: param } = useParams()
   const navigate = useNavigate()
   const clock = useClock()
   const { profile, city, completeOnboarding } = useAppState()
+  const editing = profile !== null
   const [draft, setDraft] = useState<Draft>(() =>
-    profile ? draftFromProfile(profile) : emptyDraft(),
+    profile ? draftFromProfile(profile) : (loadDraft()?.draft ?? emptyDraft()),
   )
+  const [saving, setSaving] = useState(false)
+  const [saveFailed, setSaveFailed] = useState(false)
 
-  if (!isStepId(step)) return <Navigate to="/app/start/welcome" replace />
-  const index = STEPS.indexOf(step)
+  const step = isStepId(param) ? resolveStep(param, draft) : null
+
+  useEffect(() => {
+    if (!editing && step) saveDraft(draft, step.id)
+  }, [editing, draft, step])
+
+  if (!step) return <Navigate to="/app/start/pledge" replace />
+  // A step that doesn't apply to this person (the project questions) moves on to the next one.
+  if (step.id !== param) return <Navigate to={`/app/start/${step.id}`} replace />
   const missing = firstIncompleteStep(draft)
-  // Reloading part-way loses the draft, so send the person back to the first unanswered step.
-  if (missing !== null && STEPS.indexOf(missing) < index) {
+  const position = stepPosition(step, draft)
+  // Opening a later step directly: go back to the first required answer still missing.
+  if (
+    missing !== null &&
+    stepPosition(resolveStep(missing, draft), draft).number < position.number
+  ) {
     return <Navigate to={`/app/start/${missing}`} replace />
   }
 
   const update = (change: Partial<Draft>) => {
+    setSaveFailed(false)
     setDraft((d) => ({ ...d, ...change }))
   }
-  const next = STEPS[index + 1]
-  const canContinue = stepComplete(step, draft)
-  const View = STEP_VIEWS[step]
+  const View = STEP_VIEWS[step.id]
+  const { next } = position
 
-  const onContinue = () => {
+  const onContinue = async () => {
     if (next) {
       void navigate(`/app/start/${next}`)
       return
     }
     // Every earlier step is complete here (see the redirect above), so the draft is finished.
-    completeOnboarding(toProfile(draft, city.id, profile?.pledgedAt ?? clock().toISOString()))
-    void navigate('/app/feed', { replace: true })
+    setSaving(true)
+    const saved = await completeOnboarding(
+      toProfile(draft, city.id, profile?.pledgedAt ?? clock().toISOString()),
+    )
+    if (saved) {
+      void navigate('/app/feed', { replace: true })
+      return
+    }
+    setSaving(false)
+    setSaveFailed(true)
   }
 
+  let label = 'Continue'
+  if (!next) label = editing ? 'Save changes' : 'Show my feed'
+  else if (!step.required && !stepAnswered(step.id, draft)) label = 'Skip'
+  if (saving) label = 'Saving…'
+
   return (
-    <main className={index === 0 ? 'onboarding onboarding--first' : 'onboarding'} id="main">
+    <main className="onboarding" id="main">
       <div className="onboarding__top">
         <p className="lockup wide-only">
           <FireflyMark className="lockup__mark" cropped />
           <span>Firefly</span>
         </p>
-        {index > 0 && (
-          <div className="onboarding__progress">
+        <div className="onboarding__progress">
+          {position.number > 1 ? (
             <button
               type="button"
               className="text-link back"
@@ -95,31 +153,50 @@ export function Onboarding() {
               <ArrowIcon direction="left" />
               Back
             </button>
-            <div
-              className="progress"
-              role="progressbar"
-              aria-label="Setup progress"
-              aria-valuemin={1}
-              aria-valuemax={STEPS.length - 1}
-              aria-valuenow={index}
-            >
-              <span style={{ width: `${String((index / (STEPS.length - 1)) * 100)}%` }} />
-            </div>
-            <span className="ctx wide-only" aria-hidden="true">
-              Step {index} of {STEPS.length - 1}
-            </span>
+          ) : editing ? (
+            <Link className="text-link back" to="/app/you">
+              <ArrowIcon direction="left" />
+              Cancel
+            </Link>
+          ) : (
+            <span aria-hidden="true" />
+          )}
+          <div
+            className="progress"
+            role="progressbar"
+            aria-label="Setup progress"
+            aria-valuemin={1}
+            aria-valuemax={position.total}
+            aria-valuenow={position.number}
+            aria-valuetext={`Step ${String(position.number)} of ${String(position.total)}: ${position.sectionLabel}`}
+          >
+            <span style={{ width: `${String((position.number / position.total) * 100)}%` }} />
           </div>
-        )}
+        </div>
+        <p className="ctx onboarding__section" aria-hidden="true">
+          {position.sectionLabel}
+          <span className="wide-only">
+            {' '}
+            · Step {position.number} of {position.total}
+          </span>
+        </p>
       </div>
       <View draft={draft} update={update} />
-      <div className="onboarding__foot">
+      <div className="onboarding__foot stack stack--tight">
+        {saveFailed && (
+          <p className="field-error" role="alert">
+            We couldn’t save your answers. Check your connection and try again.
+          </p>
+        )}
         <button
           type="button"
-          className="btn btn--glow"
-          disabled={!canContinue}
-          onClick={onContinue}
+          className={label === 'Skip' ? 'btn' : 'btn btn--glow'}
+          disabled={saving || !stepComplete(step.id, draft)}
+          onClick={() => {
+            void onContinue()
+          }}
         >
-          <span>{step === 'welcome' ? 'Get started' : next ? 'Continue' : 'Show my feed'}</span>
+          <span>{label}</span>
           <ArrowIcon direction="right" />
         </button>
       </div>
