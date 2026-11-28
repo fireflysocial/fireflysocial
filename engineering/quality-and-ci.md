@@ -24,6 +24,16 @@ Firefly is a phone-first product: QR check-in at the event, push notifications f
 | **Android** | Google Play app (Capacitor shell around the web build) | Primary attendee app |
 | **Web** | The Vite build, hosted | Day-to-day development and testing; early pilots before store release; possibly host tools on desktop (open decision) |
 
+### Web hosting (Cloudflare Workers, added 2026-11-28)
+
+The web build is served as static assets by Cloudflare Workers, configured in `wrangler.jsonc` at the repo root. No Worker script runs: the app talks to Supabase directly, so the backend is the hosted Supabase project ([supabase-setup.md](supabase-setup.md) §2). Chosen over Vercel because Cloudflare's free plan allows commercial use and doesn't meter static-asset bandwidth.
+
+- **Build:** Cloudflare Workers Builds, connected to the GitHub repo. Build command `npm run build`, deploy command `npx wrangler deploy`, root path `/`. Node comes from `.nvmrc`.
+- **Build variables:** `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` only. Vite bakes them in at build time, so a change needs a rebuild. The secret / service-role key is never set in Cloudflare.
+- **Single-page routing:** `not_found_handling: "single-page-application"` serves `index.html` for every client route. Without it, opening `/app/sign-in` directly, which is where the emailed sign-in link lands, returns a 404.
+- **Supabase redirect URLs:** each address the site is served from (the `*.workers.dev` address, preview URLs, the custom domain) must be in Authentication > URL Configuration, ending in `/**`, or sign-in links land on the Site URL signed out.
+- **Previews share production data** while the Preview environment uses the same Supabase variables. Give previews their own Supabase project before real users sign up.
+
 ### Why Capacitor (and not React Native)
 - One codebase and one UI for all three platforms; everything already set up (Vite, Vitest, Playwright, CI) keeps working.
 - Firefly's screens (event lists, pod cards, check-in, picks, chat) are standard app UI and don't need React Native's native rendering.

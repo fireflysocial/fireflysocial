@@ -1,0 +1,12 @@
+// Cloudflare Workers hosting for the web build (engineering/quality-and-ci.md §0, "Web hosting").
+// Static assets only: no Worker script runs, the backend is Supabase.
+{
+  "name": "fireflysocial",
+  "compatibility_date": "2026-11-28",
+  "assets": {
+    "directory": "./dist",
+    // Every route lives in the client (createBrowserRouter), so unknown paths such as
+    // /app/sign-in (where the emailed sign-in link lands) must serve index.html, not a 404.
+    "not_found_handling": "single-page-application",
+  },
+}
