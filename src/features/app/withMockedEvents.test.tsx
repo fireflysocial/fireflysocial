@@ -6,6 +6,8 @@ import type { CityEvent } from '../../lib/events.ts'
 import { EMPTY_PLANS, plansReducer, type PlansAction } from '../../lib/plans.ts'
 import { inHours, makeEvent } from '../../test/fixtures.ts'
 import { renderApp, vancouverProfile } from '../../test/renderApp.tsx'
+import { fakeAccount } from '../../test/fakeAccount.ts'
+import { AccountContext } from './accountContext.ts'
 import { useAppState, useProfile } from './appState.ts'
 import { AppStateProvider } from './AppStateProvider.tsx'
 
@@ -192,6 +194,38 @@ describe('app state hooks', () => {
     useProfile()
     return null
   }
+
+  it('won’t save a profile for nobody', async () => {
+    mockedList.mockReturnValue(new Promise(() => undefined))
+    let saved: boolean | null = null
+    function Saves() {
+      const { completeOnboarding } = useAppState()
+      return (
+        <button
+          type="button"
+          onClick={() => {
+            void completeOnboarding(vancouverProfile()).then((ok) => {
+              saved = ok
+            })
+          }}
+        >
+          Save
+        </button>
+      )
+    }
+    render(
+      <AccountContext.Provider value={fakeAccount().service}>
+        <AppStateProvider>
+          <Saves />
+        </AppStateProvider>
+      </AccountContext.Provider>,
+    )
+    await act(async () => {
+      screen.getByRole('button', { name: 'Save' }).click()
+      await Promise.resolve()
+    })
+    expect(saved).toBe(false)
+  })
 
   it('fail loudly when used in the wrong place', () => {
     vi.spyOn(console, 'error').mockImplementation(() => undefined)

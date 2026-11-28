@@ -987,3 +987,56 @@ html:has(.app) {
     min-width: 20rem;
   }
 }
+
+/* ---------- Accounts and longer onboarding ---------- */
+
+/* Loading, and the retry when the profile couldn't load: centred, quiet. */
+.gate {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 16px;
+  min-height: 100dvh;
+  max-width: calc(var(--column) + 2 * var(--gutter));
+  margin: 0 auto;
+  padding: calc(var(--safe-top) + 24px) var(--gutter-right) calc(var(--safe-bottom) + 24px)
+    var(--gutter-left);
+}
+
+.gate__mark {
+  width: auto;
+  height: 40px;
+}
+
+.gate__alt {
+  align-self: center;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* The section the step belongs to, under the progress bar. */
+.onboarding__section {
+  margin-top: 12px;
+}
+
+/* Pick-one rows reuse the square checks; a radio is the same square, filled when chosen. */
+.choices {
+  margin: 0;
+  padding: 0;
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+  min-inline-size: 0;
+}
+
+.choice {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.a-field--code {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.3em;
+}

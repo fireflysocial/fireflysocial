@@ -1,8 +1,9 @@
 import { Navigate } from 'react-router'
 import { useAppState } from './appState.ts'
+import { GateScreen } from './GateScreen.tsx'
 
-/** /app opens the feed for someone who's onboarded, and onboarding for everyone else. */
+/** /app opens the feed for someone signed in and onboarded; everyone else goes where they belong. */
 export function AppIndex() {
-  const { profile } = useAppState()
-  return <Navigate to={profile ? '/app/feed' : '/app/start/welcome'} replace />
+  const { gate } = useAppState()
+  return gate === 'ready' ? <Navigate to="/app/feed" replace /> : <GateScreen gate={gate} />
 }

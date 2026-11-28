@@ -1,7 +1,8 @@
-import { Link, Navigate, NavLink, Outlet } from 'react-router'
+import { Link, NavLink, Outlet } from 'react-router'
 import { FireflyMark } from '../../components/FireflyMark.tsx'
 import { useAppState } from './appState.ts'
 import { GoingPrompt } from './event/GoingPrompt.tsx'
+import { GateScreen } from './GateScreen.tsx'
 
 /** Each tab's context line is shown only on wide screens, where the bar becomes a block header. */
 const TABS = [
@@ -13,11 +14,11 @@ const TABS = [
 /**
  * The onboarded app. One navigation, two shapes: a bottom tab bar on phones (thumb reach), and
  * from 900px a block header like the landing page's, with the mark cell and two-line labels.
- * Sends anyone not onboarded to the start.
+ * Sends anyone not signed in and onboarded where they belong.
  */
 export function TabLayout() {
-  const { profile, returnPromptFor } = useAppState()
-  if (!profile) return <Navigate to="/app/start/welcome" replace />
+  const { gate, returnPromptFor } = useAppState()
+  if (gate !== 'ready') return <GateScreen gate={gate} />
   return (
     <>
       <nav className="appbar" aria-label="Main">

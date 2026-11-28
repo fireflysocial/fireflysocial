@@ -89,14 +89,14 @@ spacing:
   target: '44px'
   control: '56px'
 components:
-  header-cell-invite:
+  header-cell-cta:
     backgroundColor: '{colors.ink}'
     textColor: '{colors.black}'
     typography: '{typography.label}'
     rounded: '{rounded.none}'
     padding: '0 clamp(16px, 2.4vw, 32px)'
     height: '{spacing.header}'
-  header-cell-invite-hover:
+  header-cell-cta-hover:
     backgroundColor: '{colors.ink-hover}'
   button-submit:
     backgroundColor: '{colors.glow}'
@@ -197,7 +197,7 @@ three-tone motes.
 ### Primary
 
 - **Glow** (glow): the light. In the interface, exactly one Glow highlight per screen: the
-  best-fit dot in the feed demo, the pod in the story field, the invite submit block. Also the
+  best-fit dot in the feed demo, the pod in the story field, the Get started block. Also the
   focus ring, the input focus underline, the text caret and text selection, which appear only on
   interaction. Its hover, Glow Hover (glow-hover), is used only on the submit block. In the cloud,
   Glow is one of three mote tones.
@@ -216,8 +216,8 @@ three-tone motes.
 - **Raised** (raised): the one raised surface, the drawn phone's screen. Depth by tone, never by
   shadow.
 - **Ink** (ink): warm-white primary text, the fact line of every two-line label, and the solid
-  fill of the header invite cell and the skip link. Its hover is pure white (ink-hover), used only
-  on the invite cell.
+  fill of the header Get started cell and the skip link. Its hover is pure white (ink-hover), used only
+  on the Get started cell.
 - **Muted** (muted): context lines, ledes, row bodies, sources, captions, the input underline at
   rest, the disabled submit block, and the pod's names and ring in the field.
 - **Placeholder** (placeholder): input placeholder text only; dimmer than Muted so it reads as a
@@ -237,7 +237,7 @@ three-tone motes.
 ### Named Rules
 
 **The One Light Rule.** Each screen of interface has exactly one Glow highlight: in the feed demo
-the best-fit dot, in the story the pod, in the invite section the submit block. The hero has no
+the best-fit dot, in the story the pod, in the closing section the Get started block. The hero has no
 Glow interface element; its light is the cloud. Glow motes in the cloud are atmosphere and do
 not count, but no interface element other than the one highlight may be Glow.
 
@@ -266,7 +266,7 @@ big, tight, regular weight, warm white on black. Tabular figures are on across t
 
 ### Hierarchy
 
-- **Display** (400, 2.75rem to 6rem by 13vw, 0.94, -0.04em): the H1 (max 13ch), the invite H2,
+- **Display** (400, 2.75rem to 6rem by 13vw, 0.94, -0.04em): the H1 (max 13ch), the closing "Get started." H2,
   and the footer wordmark (at 0.9 line height and -0.045em). Balanced wrapping.
 - **Headline** (400, 2.25rem to 4.5rem, 1, -0.035em): section H2s and the marquee line.
 - **Statement** (400, 1.875rem to 3.5rem, 1.06, -0.03em, max 20ch): each story chapter's single
@@ -284,7 +284,7 @@ big, tight, regular weight, warm white on black. Tabular figures are on across t
   bar, footer meta.
 
 The phone's one-line heading ("For you this week") sits between Item and Title at 1.5rem, 1.2
-line height, -0.02em. The only weight above 400 is 500: the header invite cell, the submit block,
+line height, -0.02em. The only weight above 400 is 500: the header Get started cell, the Get started block,
 the phone status bar and the field's canvas name labels.
 
 ### Named Rules
@@ -299,7 +299,7 @@ at title, -0.03em at statement, -0.035em at headline, -0.04em at display.
 
 Phone first at 360px, then 600px (form field and button side by side), 720px (the field's wide
 layout) and 900px (header grows from 56px to 72px, header nav appears, rows, the feed demo and
-the invite body split into two equal columns). Side gutters are a fluid `clamp(16px, 2.4vw,
+the closing section's body split into two equal columns). Side gutters are a fluid `clamp(16px, 2.4vw,
 32px)` plus the safe-area insets; sections are separated by a fluid 96px to 200px. Edge-to-edge
 bands (header, strip, footer) run full width with hairlines; content columns are not boxed.
 
@@ -363,7 +363,7 @@ stroke, square caps) drawn to match the hairlines.
 Square cells on a black bar with a hairline bottom, fixed to the top under the safe area. A mark
 cell (header-height square, hairline right), the name ("Firefly"),
 two-line nav links on wide screens (muted context over the link, underline on hover), and a
-solid warm-white invite cell flush right with black 500 text and an arrow. The invite cell lifts
+solid warm-white Get started cell flush right with black 500 text and an arrow. The Get started cell lifts
 to pure white over 200ms ease-out; its focus ring is black, inset 4px, so it shows on Ink.
 
 ### Two-line label
@@ -401,7 +401,7 @@ row describing something unlaunched uses "Coming next" as its `when`.
 - **Hover / Focus:** Glow Hover over 200ms ease-out; focus ring switches to Ink so it shows
   against Glow.
 - **Disabled (sending):** Muted block, progress cursor.
-- **Secondary:** the header invite cell (above). Elsewhere, links are plain text with an arrow,
+- **Secondary:** the header Get started cell (above). Elsewhere, links are plain text with an arrow,
   like the scroll cue.
 
 ### Drawn phone with ranked feed (signature)

@@ -6,7 +6,7 @@ Firefly brings together people who share a sense of purpose, at the events happe
 
 ## Status
 
-- **Built:** tooling and CI, and the public landing page (`src/features/landing/`), frontend only. Its invite form is not connected yet: `src/data/invites.ts` is a stub that always fails honestly until the waitlist table lands.
+- **Built:** tooling and CI, and the public landing page (`src/features/landing/`), frontend only. Its Get started and Log in links go straight to sign-up at `/app/sign-in` (no invite waitlist, decided 2026-11-28).
 - **Launch flow (frontend):** onboarding, the personal feed, going and plans under `/app`, running on made-up example events and on-device storage until the backend and event pipeline exist.
 - **Next:** the backend (auth, profiles, the going list) and the event pipeline.
 - **Native apps:** Capacitor 8 with `ios/` and `android/` projects (2026-11-27). Run `npm run cap:ios` or `npm run cap:android` (needs Xcode / Android Studio). Supabase is initialised locally with no migrations.
@@ -74,7 +74,7 @@ engineering/
 pitch/                 # pitch deck source and README (live deck linked above)
 src/
   lib/                 # pure logic (feed ranking, email checks, the landing page's firefly maths)
-  data/                # data access; stubs for now (invites, example events, on-device answers)
+  data/                # data access; accounts and profiles (Supabase), stubs for example events and on-device plans
   components/          # shared UI (FireflyMark)
   features/landing/    # the public landing page
                        # tests sit next to the code as *.test.ts(x)

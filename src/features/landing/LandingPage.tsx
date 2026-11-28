@@ -1,35 +1,29 @@
 import { useEffect } from 'react'
-import { requestInvite, type RequestInvite } from '../../data/invites.ts'
 import { EventStrip } from './EventStrip.tsx'
 import { FeedDemo } from './FeedDemo.tsx'
 import { Hero } from './Hero.tsx'
 import { HowItWorks } from './HowItWorks.tsx'
-import { InviteSection } from './InviteSection.tsx'
 import { SafetySection } from './SafetySection.tsx'
 import { SiteFooter } from './SiteFooter.tsx'
 import { SiteHeader } from './SiteHeader.tsx'
+import { StartSection } from './StartSection.tsx'
 import { SyncStory } from './SyncStory.tsx'
 import './landing.css'
 
 /** The page's ground: soft black (decided 2026-11-25). */
 const GROUND = '#050505'
 
-interface LandingPageProps {
-  /** Where invite requests go. Defaults to the real data function; tests pass their own. */
-  onRequestInvite?: RequestInvite
-}
-
 /**
  * The public landing page. Always dark (soft black), whatever the visitor's light/dark setting:
  * the dark is the concept (decided 2026-11-25). App screens follow the system setting as usual.
  */
-export function LandingPage({ onRequestInvite = requestInvite }: LandingPageProps) {
+export function LandingPage() {
   useNightBrowserChrome()
 
   return (
     <div className="landing">
-      <a className="skip" href="#invite">
-        Skip to the invite form
+      <a className="skip" href="#start">
+        Skip to getting started
       </a>
       <SiteHeader />
       <main>
@@ -39,7 +33,7 @@ export function LandingPage({ onRequestInvite = requestInvite }: LandingPageProp
         <SyncStory />
         <EventStrip />
         <SafetySection />
-        <InviteSection onRequest={onRequestInvite} />
+        <StartSection />
       </main>
       <SiteFooter />
     </div>

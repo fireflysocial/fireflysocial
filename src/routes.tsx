@@ -10,7 +10,9 @@ import { PlansPage } from './features/app/plans/PlansPage.tsx'
 import { MeetPage } from './features/app/pods/MeetPage.tsx'
 import { PersonPage } from './features/app/pods/PersonPage.tsx'
 import { PodPage } from './features/app/pods/PodPage.tsx'
+import { SignInPage } from './features/app/SignInPage.tsx'
 import { TabLayout } from './features/app/TabLayout.tsx'
+import { WelcomePage } from './features/app/WelcomePage.tsx'
 import { YouPage } from './features/app/you/YouPage.tsx'
 
 /**
@@ -24,6 +26,8 @@ export const routes: RouteObject[] = [
     element: <AppRoot />,
     children: [
       { index: true, element: <AppIndex /> },
+      { path: 'welcome', element: <WelcomePage /> },
+      { path: 'sign-in', element: <SignInPage /> },
       { path: 'start/:step', element: <Onboarding /> },
       {
         element: <TabLayout />,

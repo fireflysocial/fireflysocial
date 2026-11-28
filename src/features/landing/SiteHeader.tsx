@@ -1,7 +1,8 @@
+import { Link } from 'react-router'
 import { FireflyMark } from '../../components/FireflyMark.tsx'
 import { ArrowIcon } from '../../components/ArrowIcon.tsx'
 
-/** Block header: mark cell, name, section links (wider screens), invite cell. */
+/** Block header: mark cell, name, section links and log in (wider screens), Get started cell. */
 export function SiteHeader() {
   return (
     <header className="header">
@@ -26,11 +27,15 @@ export function SiteHeader() {
           <span className="muted">Built in</span>
           <span>Safety</span>
         </a>
+        <Link to="/app/sign-in?mode=login">
+          <span className="muted">Have an account</span>
+          <span>Log in</span>
+        </Link>
       </nav>
-      <a className="header__invite" href="#invite">
-        Get an invite
+      <Link className="header__cta" to="/app/sign-in">
+        Get started
         <ArrowIcon />
-      </a>
+      </Link>
     </header>
   )
 }
